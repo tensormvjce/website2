@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, MinusSquare, Info, UserPlus, Users, Calendar, Award, Phone } from 'lucide-react';
+import { MessageSquare, X, Send, MinusSquare, Info, UserPlus, Users, Calendar, Award, Phone, ChevronUp } from 'lucide-react';
 import { clubData } from '../data/clubData';
 
 interface Message {
@@ -17,11 +17,29 @@ const ChatBot = () => {
   const [inputValue, setInputValue] = useState('');
   const [showTooltip, setShowTooltip] = useState(true);  
   const [isHovering, setIsHovering] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScroll = () => {
+    if (messagesContainerRef.current) {
+      const { scrollTop } = messagesContainerRef.current;
+      setShowScrollTop(scrollTop > 200);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
@@ -351,7 +369,7 @@ I'm here to help you learn more about Tensor!`;
             </div>
 
             {/* Predefined Questions Scrollable Container */}
-            <div className="w-full overflow-x-auto px-4 py-1">
+            <div className="w-full overflow-x-auto px-4 py-1 custom-scrollbar">
               <div className="flex space-x-2">
                 {[
                   { 
@@ -420,7 +438,14 @@ I'm here to help you learn more about Tensor!`;
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div 
+              ref={messagesContainerRef}
+              onScroll={handleScroll}
+              className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.9) 100%)',
+              }}
+            >
               {messages.map((message, index) => (
                 <motion.div
                   key={index}
@@ -434,6 +459,7 @@ I'm here to help you learn more about Tensor!`;
                       p-3 
                       rounded-lg 
                       break-words 
+                      shadow-md
                       ${
                         message.type === 'user'
                           ? 'bg-blue-600 text-white'
@@ -442,7 +468,7 @@ I'm here to help you learn more about Tensor!`;
                     `}
                     style={{ 
                       wordWrap: 'break-word', 
-                      overflowWrap: 'break-word' 
+                      overflowWrap: 'break-word'
                     }}
                   >
                     <p className="text-sm leading-relaxed">{message.content}</p>
@@ -450,10 +476,29 @@ I'm here to help you learn more about Tensor!`;
                 </motion.div>
               ))}
               <div ref={messagesEndRef} />
+              
+              {/* Scroll to Top Button */}
+              <AnimatePresence>
+                {showScrollTop && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    onClick={scrollToTop}
+                    className="absolute bottom-4 right-2 p-2 rounded-full shadow-lg transition-all duration-300 group
+                             bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 hover:shadow-xl
+                             hover:shadow-purple-500/30 hover:scale-110"
+                    whileHover={{ y: -2, rotate: 360 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronUp className="w-4 h-4 group-hover:animate-bounce text-white" />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Chat Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-white/10">
+            <form onSubmit={handleSubmit} className="p-4 border-t border-white/10 bg-gradient-to-b from-black/90 to-black/70">
               <div className="flex items-center space-x-2">
                 <input
                   ref={inputRef}
@@ -461,16 +506,105 @@ I'm here to help you learn more about Tensor!`;
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type your message..."
-                  className="flex-1 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 
+                           focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/10
+                           transition-all duration-300 backdrop-blur-sm"
                 />
                 <button
                   type="submit"
-                  className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="p-2 rounded-lg transition-all duration-300
+                           bg-gradient-to-r from-purple-600 to-pink-500 text-white
+                           hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105"
                 >
                   <Send className="w-4 h-4" />
                 </button>
               </div>
             </form>
+
+            <style jsx global>{`
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+                margin-right: 2px;
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+                border-radius: 10px;
+                margin: 8px 0;
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-track:hover {
+                background: rgba(255, 255, 255, 0.05);
+                box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.1);
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: linear-gradient(45deg, 
+                  #ff3366,
+                  #ff33ff,
+                  #3366ff,
+                  #33ffff,
+                  #33ff66
+                );
+                background-size: 200% 200%;
+                animation: gradient-scroll 5s ease infinite;
+                border-radius: 10px;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 
+                  0 0 10px rgba(255, 255, 255, 0.2),
+                  inset 0 0 6px rgba(255, 255, 255, 0.3);
+                transition: all 0.3s ease;
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background-size: 100% 100%;
+                box-shadow: 
+                  0 0 20px rgba(255, 255, 255, 0.4),
+                  inset 0 0 10px rgba(255, 255, 255, 0.5);
+              }
+
+              @keyframes gradient-scroll {
+                0% {
+                  background-position: 0% 50%;
+                }
+                50% {
+                  background-position: 100% 50%;
+                }
+                100% {
+                  background-position: 0% 50%;
+                }
+              }
+              
+              .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: #ff3366 transparent;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-button {
+                display: none;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-corner {
+                background: transparent;
+                border-radius: 10px;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-thumb:active {
+                background: linear-gradient(45deg, 
+                  #ff3366 0%,
+                  #ff33ff 25%,
+                  #3366ff 50%,
+                  #33ffff 75%,
+                  #33ff66 100%
+                );
+                box-shadow: 
+                  0 0 30px rgba(255, 255, 255, 0.6),
+                  inset 0 0 15px rgba(255, 255, 255, 0.7);
+              }
+            `}</style>
           </motion.div>
         )}
       </AnimatePresence>

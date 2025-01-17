@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import LoadingScreen from './components/LoadingScreen';
+import LoadingAnimation from './components/LoadingAnimation';
 import StarryNightTransition from './components/StarryNightTransition';
 import AppRoutes from './AppRoutes';
 import Navbar from './components/Navbar';
@@ -33,7 +33,7 @@ function App() {
         <AnimatePresence mode="wait">
           {loading && (
             <div className="relative z-50">
-              <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+              <LoadingAnimation onLoadingComplete={handleLoadingComplete} />
             </div>
           )}
         </AnimatePresence>

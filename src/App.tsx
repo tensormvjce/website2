@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Blog from './pages/Blog';
 import Registrations from './pages/Registrations';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,7 @@ function App() {
 
   return (
     <Router>
+      <CustomCursor />
       <div className="relative min-h-screen bg-black">
         {/* Loading Screen */}
         <AnimatePresence mode="wait">

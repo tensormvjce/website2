@@ -1,10 +1,15 @@
+:root {
+  --cursor-color: #fff;
+}
+
 * {
   cursor: none !important;
 }
 
 a, button, [role="button"], .clickable, 
 .spline-canvas, canvas, 
-input[type="submit"], input[type="button"] {
+input[type="submit"], input[type="button"],
+[data-clickable="true"] {
   cursor: none !important;
 }
 
@@ -12,13 +17,17 @@ input[type="submit"], input[type="button"] {
 .cursor-dot-outline {
   pointer-events: none;
   position: fixed;
+  top: 0;
+  left: 0;
   transform: translate(-50%, -50%);
-  transition: width 0.3s ease-in-out,
-              height 0.3s ease-in-out,
-              background-color 0.3s ease-in-out,
-              border-color 0.3s ease-in-out,
-              transform 0.1s ease-out;
-  z-index: 99999;
+  transition: opacity 0.15s ease-in-out,
+              width 0.15s ease-in-out,
+              height 0.15s ease-in-out,
+              background-color 0.15s ease-in-out,
+              border-color 0.15s ease-in-out,
+              transform 0.07s ease-out;
+  z-index: 999999;
+  pointer-events: none;
   will-change: transform;
   mix-blend-mode: difference;
 }
@@ -26,7 +35,7 @@ input[type="submit"], input[type="button"] {
 .cursor-dot {
   width: 6px;
   height: 6px;
-  background-color: #fff;
+  background-color: var(--cursor-color);
   border-radius: 50%;
 }
 
@@ -45,25 +54,26 @@ input[type="submit"], input[type="button"] {
   
   a, button, [role="button"], .clickable,
   .spline-canvas, canvas,
-  input[type="submit"], input[type="button"] {
+  input[type="submit"], input[type="button"],
+  [data-clickable="true"] {
     cursor: pointer !important;
   }
   
   .cursor-dot,
   .cursor-dot-outline {
-    display: none;
+    display: none !important;
   }
 }
 
 .cursor-dot.hover {
   transform: translate(-50%, -50%) scale(1.5);
-  background-color: #fff;
+  background-color: var(--cursor-color);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .cursor-dot-outline.hover {
   transform: translate(-50%, -50%) scale(1.2);
-  border-color: #fff;
+  border-color: var(--cursor-color);
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(1px);
 }

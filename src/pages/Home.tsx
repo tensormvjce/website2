@@ -1,13 +1,60 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Users, Lightbulb, Code, Cpu, Bot, Sparkles, GraduationCap, ArrowRight, Calendar, Clock } from 'lucide-react';
+import { Brain, Users, Lightbulb, Code, Cpu, Bot, Sparkles, GraduationCap} from 'lucide-react';
 import Spline from '@splinetool/react-spline';
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
+import * as THREE from 'three';
+import { Canvas } from '@react-three/fiber';
 import { Link } from 'react-router-dom';
 import LockedButton from '../components/LockedButton';
 import { events } from '../data/eventsData';
 import { blogs } from '../data/blogData';
 import { previewMembers } from '../data/previewTeamData';
 import { scrollToTop } from '../utils/scrollUtils';
+import { Suspense } from 'react';
+import { OrbitControls } from '@react-three/drei';
+import HeroText from '../components/HeroText';
+
+function BlackHoleBackground() {
+  const points = useRef<THREE.Points>(null!);
+  const particleCount = 8000;
+  const sphere = new Float32Array(particleCount * 3);
+  
+  for (let i = 0; i < particleCount; i++) {
+    const i3 = i * 3;
+    const radius = Math.random() * 2.5 + 0.2;
+    const spinAngle = Math.random() * Math.PI * 2;
+    const branchAngle = ((i % 5) * 2 * Math.PI) / 5;
+    
+    const randomness = (Math.random() - 0.5) * 0.5;
+    const curve = radius * 0.5;
+    
+    sphere[i3] = Math.cos(branchAngle + spinAngle) * radius + randomness;
+    sphere[i3 + 1] = Math.sin(branchAngle + spinAngle) * radius + randomness;
+    sphere[i3 + 2] = (Math.random() - 0.5) * curve;
+  }
+
+  useFrame((state, delta) => {
+    points.current.rotation.z += delta * 0.1;
+    points.current.rotation.x = state.clock.elapsedTime * 0.05;
+    points.current.rotation.y = state.clock.elapsedTime * 0.08;
+  });
+
+  return (
+    <Points ref={points} positions={sphere} stride={3} frustumCulled={false}>
+      <PointMaterial
+        transparent
+        color="#4444ff"
+        size={0.02}
+        sizeAttenuation={true}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </Points>
+  );
+}
+
 
 const Home = () => {
   // Custom SVG Icons
@@ -89,7 +136,91 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-black text-white">
+      {/* Hero Section */}
+      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative h-screen w-full overflow-hidden">
+  <div className="w-full h-screen relative">
+    <div className="absolute inset-0">
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 75 }}
+        style={{ background: '#000000' }}
+      >
+        <Suspense fallback={null}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <BlackHoleBackground />
+          <HeroText />
+          <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+        </Suspense>
+      </Canvas>
+    </div>
+  </div>
+</div>
+
+        {/* Welcome Text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+        <motion.h1
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.5, duration: 1 }}
+  className="text-6xl md:text-8xl font-bold text-white text-center mb-6 tracking-wider glitch"
+  data-text="WELCOME TO"
+>
+  WELCOME TO
+</motion.h1>
+
+<motion.div
+  initial={{ opacity: 0, scale: 0.8 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ delay: 0.8, duration: 1 }}
+  className="relative"
+>
+  <h1 
+    className="text-7xl md:text-9xl font-extrabold text-transparent bg-clip-text bg-white tracking-tight glitch"
+    data-text="TENSOR CLUB"
+  >
+    TENSOR CLUB
+  </h1>
+  <div className="absolute -inset-1 blur-xl bg-gradient-to-r from-blue-400/30 to-purple-600/30 -z-10" />
+</motion.div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-white/70 text-sm tracking-widest uppercase">Scroll to Explore</span>
+            <motion.div
+              animate={{
+                y: [0, 10, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="w-6 h-10 border-2 border-white/30 rounded-full p-1"
+            >
+              <motion.div
+                className="w-1.5 h-1.5 bg-white rounded-full mx-auto"
+                animate={{
+                  y: [0, 20, 0],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
       {/* Background Elements */}
       <div className="noise" />
       <div className="grid-background fixed inset-0" />

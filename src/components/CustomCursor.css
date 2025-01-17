@@ -29,22 +29,74 @@ input[type="submit"], input[type="button"],
   z-index: 999999;
   pointer-events: none;
   will-change: transform;
+  backdrop-filter: invert(1);
   mix-blend-mode: difference;
 }
 
 .cursor-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background-color: var(--cursor-color);
   border-radius: 50%;
 }
 
 .cursor-dot-outline {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 50%;
+}
+
+/* Hover effects */
+.clickable:hover ~ .cursor-dot {
+  transform: translate(-50%, -50%) scale(0.5);
+  background-color: var(--cursor-color);
+}
+
+.clickable:hover ~ .cursor-dot-outline {
+  transform: translate(-50%, -50%) scale(1.5);
+  border-color: var(--cursor-color);
+  opacity: 0.5;
+}
+
+/* Text selection effect */
+.cursor-dot-outline.selecting {
+  transform: translate(-50%, -50%) scale(2);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+}
+
+/* Magnetic effect on buttons */
+button:hover ~ .cursor-dot-outline,
+a:hover ~ .cursor-dot-outline,
+[role="button"]:hover ~ .cursor-dot-outline {
+  animation: magnetic 0.3s forwards;
+}
+
+@keyframes magnetic {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.cursor-dot.hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  background-color: var(--cursor-color);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.cursor-dot-outline.hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  border-color: var(--cursor-color);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(1px);
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -63,17 +115,4 @@ input[type="submit"], input[type="button"],
   .cursor-dot-outline {
     display: none !important;
   }
-}
-
-.cursor-dot.hover {
-  transform: translate(-50%, -50%) scale(1.5);
-  background-color: var(--cursor-color);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.cursor-dot-outline.hover {
-  transform: translate(-50%, -50%) scale(1.2);
-  border-color: var(--cursor-color);
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(1px);
 }

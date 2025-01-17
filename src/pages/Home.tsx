@@ -15,20 +15,21 @@ import { scrollToTop } from '../utils/scrollUtils';
 import { Suspense } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import HeroText from '../components/HeroText';
+import Layout from '../components/Layout';
 
 function BlackHoleBackground() {
   const points = useRef<THREE.Points>(null!);
-  const particleCount = 8000;
+  const particleCount = 12000;
   const sphere = new Float32Array(particleCount * 3);
   
   for (let i = 0; i < particleCount; i++) {
     const i3 = i * 3;
-    const radius = Math.random() * 2.5 + 0.2;
+    const radius = Math.random() * 4 + 0.2;
     const spinAngle = Math.random() * Math.PI * 2;
     const branchAngle = ((i % 5) * 2 * Math.PI) / 5;
     
-    const randomness = (Math.random() - 0.5) * 0.5;
-    const curve = radius * 0.5;
+    const randomness = (Math.random() - 0.5) * 0.8;
+    const curve = radius * 0.7;
     
     sphere[i3] = Math.cos(branchAngle + spinAngle) * radius + randomness;
     sphere[i3 + 1] = Math.sin(branchAngle + spinAngle) * radius + randomness;
@@ -36,22 +37,25 @@ function BlackHoleBackground() {
   }
 
   useFrame((state, delta) => {
-    points.current.rotation.z += delta * 0.1;
-    points.current.rotation.x = state.clock.elapsedTime * 0.05;
-    points.current.rotation.y = state.clock.elapsedTime * 0.08;
+    points.current.rotation.z += delta * 0.08;
+    points.current.rotation.x = state.clock.elapsedTime * 0.04;
+    points.current.rotation.y = state.clock.elapsedTime * 0.06;
   });
 
   return (
-    <Points ref={points} positions={sphere} stride={3} frustumCulled={false}>
-      <PointMaterial
-        transparent
-        color="#4444ff"
-        size={0.02}
-        sizeAttenuation={true}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </Points>
+    <group scale={[1.5, 1.5, 1.5]}>
+      <Points ref={points} positions={sphere} stride={3} frustumCulled={false}>
+        <PointMaterial
+          transparent
+          color="#4444ff"
+          size={0.015}
+          sizeAttenuation={true}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          opacity={0.8}
+        />
+      </Points>
+    </group>
   );
 }
 
@@ -136,54 +140,55 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <Layout>
+    <div className="relative min-h-screen bg-transparent text-white">
       {/* Hero Section */}
       <div className="relative h-screen w-full overflow-hidden">
-      <div className="relative h-screen w-full overflow-hidden">
-  <div className="w-full h-screen relative">
-    <div className="absolute inset-0">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        style={{ background: '#000000' }}
-      >
-        <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <BlackHoleBackground />
-          <HeroText />
-          <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
-        </Suspense>
-      </Canvas>
-    </div>
-  </div>
-</div>
+        <div className="relative h-screen w-full overflow-hidden">
+          <div className="w-full h-screen relative">
+            <div className="absolute inset-0">
+              <Canvas
+                camera={{ position: [0, 0, 5], fov: 75 }}
+                style={{ background: '#000000' }}
+              >
+                <Suspense fallback={null}>
+                  <ambientLight intensity={0.5} />
+                  <pointLight position={[10, 10, 10]} intensity={1} />
+                  <BlackHoleBackground />
+                  <HeroText />
+                  <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+                </Suspense>
+              </Canvas>
+            </div>
+          </div>
+        </div>
 
         {/* Welcome Text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-        <motion.h1
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: 0.5, duration: 1 }}
-  className="text-6xl md:text-8xl font-bold text-white text-center mb-6 tracking-wider glitch"
-  data-text="WELCOME TO"
->
-  WELCOME TO
-</motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="text-6xl md:text-8xl font-bold text-white text-center mb-6 tracking-wider glitch"
+            data-text="WELCOME TO"
+          >
+            WELCOME TO
+          </motion.h1>
 
-<motion.div
-  initial={{ opacity: 0, scale: 0.8 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ delay: 0.8, duration: 1 }}
-  className="relative"
->
-  <h1 
-    className="text-7xl md:text-9xl font-extrabold text-transparent bg-clip-text bg-white tracking-tight glitch"
-    data-text="TENSOR CLUB"
-  >
-    TENSOR CLUB
-  </h1>
-  <div className="absolute -inset-1 blur-xl bg-gradient-to-r from-blue-400/30 to-purple-600/30 -z-10" />
-</motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8, duration: 1 }}
+            className="relative"
+          >
+            <h1 
+              className="text-7xl md:text-9xl font-extrabold text-transparent bg-clip-text bg-white tracking-tight glitch"
+              data-text="TENSOR CLUB"
+            >
+              TENSOR CLUB
+            </h1>
+            <div className="absolute -inset-1 blur-xl bg-gradient-to-r from-blue-400/30 to-purple-600/30 -z-10" />
+          </motion.div>
         </div>
 
         {/* Scroll Indicator */}
@@ -221,6 +226,7 @@ const Home = () => {
           </div>
         </motion.div>
       </div>
+      
       {/* Background Elements */}
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
@@ -273,18 +279,23 @@ const Home = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="relative py-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-32">
+        {/* Semi-transparent overlay to keep particles visible */}
+        <div className="absolute inset-0 bg-black/70" />
+        
+        <div className="container relative z-10 mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-4 glow-text">Why Join Us?</h2>
-            <p className="text-xl text-gray-400 terminal-text">
-              Experience the future of AI with Bangalore's most innovative student community
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+              Why Join Us?
+            </h2>
+            <p className="text-gray-300 max-w-2xl mx-auto">
+              Be part of a community that's shaping the future of AI technology
             </p>
           </motion.div>
 
@@ -686,6 +697,7 @@ const Home = () => {
 
       {/* Footer */}
     </div>
+    </Layout>
   );
 };
 

@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Blog from './pages/Blog';
 import Registrations from './pages/Registrations';
 import CustomCursor from './components/CustomCursor';
+import ChatBot from './components/ChatBot';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -74,6 +75,7 @@ function App() {
                 </Routes>
               </div>
               <Footer />
+              <ChatBot />
             </motion.div>
           )}
         </AnimatePresence>

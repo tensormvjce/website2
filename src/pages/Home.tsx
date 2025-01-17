@@ -15,7 +15,6 @@ import { scrollToTop } from '../utils/scrollUtils';
 import { Suspense } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import HeroText from '../components/HeroText';
-import Layout from '../components/Layout';
 
 function BlackHoleBackground() {
   const points = useRef<THREE.Points>(null!);
@@ -140,7 +139,6 @@ const Home = () => {
   ];
 
   return (
-    <Layout>
     <div className="relative min-h-screen bg-transparent text-white">
       {/* Hero Section */}
       <div className="relative h-screen w-full overflow-hidden">
@@ -697,7 +695,6 @@ const Home = () => {
 
       {/* Footer */}
     </div>
-    </Layout>
   );
 };
 

@@ -1,0 +1,69 @@
+* {
+  cursor: none !important;
+}
+
+a, button, [role="button"], .clickable, 
+.spline-canvas, canvas, 
+input[type="submit"], input[type="button"] {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-dot-outline {
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease-in-out,
+              height 0.3s ease-in-out,
+              background-color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out,
+              transform 0.1s ease-out;
+  z-index: 99999;
+  will-change: transform;
+  mix-blend-mode: difference;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.cursor-dot-outline {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  * {
+    cursor: auto !important;
+  }
+  
+  a, button, [role="button"], .clickable,
+  .spline-canvas, canvas,
+  input[type="submit"], input[type="button"] {
+    cursor: pointer !important;
+  }
+  
+  .cursor-dot,
+  .cursor-dot-outline {
+    display: none;
+  }
+}
+
+.cursor-dot.hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.cursor-dot-outline.hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  border-color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(1px);
+}

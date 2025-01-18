@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite --verbose",
+    "build": "tsc && vite build --verbose",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "debug": "echo \"Node version: $(node -v)\" && echo \"NPM version: $(npm -v)\" && npm run build --verbose && echo \"Build completed successfully\"",
+    "prebuild": "npm install && tsc --noEmit"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

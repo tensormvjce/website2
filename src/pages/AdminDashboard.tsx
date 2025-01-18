@@ -18,6 +18,7 @@ const AdminDashboard: React.FC = () => {
     date: '',
     image: '',
     author: '',
+    websiteUrl: '',
     tags: [] as string[],
     // New event-specific fields
     slug: '',
@@ -86,6 +87,7 @@ const AdminDashboard: React.FC = () => {
         date: '',
         image: '',
         author: '',
+        websiteUrl: '',
         tags: [],
         slug: '',
         bannerImg: '',
@@ -212,17 +214,30 @@ const AdminDashboard: React.FC = () => {
           />
         </div>
         {activeTab === 'projects' && (
-          <div className="mb-4">
-            <label className="block mb-2">Author</label>
-            <input
-              type="text"
-              name="author"
-              value={newItem.author}
-              onChange={handleInputChange}
-              className="w-full bg-gray-800 p-2 rounded"
-              placeholder="Enter project author"
-            />
-          </div>
+          <>
+            <div className="mb-4">
+              <label className="block mb-2">Author</label>
+              <input
+                type="text"
+                name="author"
+                value={newItem.author}
+                onChange={handleInputChange}
+                className="w-full bg-gray-800 p-2 rounded"
+                placeholder="Enter project author"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Website URL</label>
+              <input
+                type="url"
+                name="websiteUrl"
+                value={newItem.websiteUrl}
+                onChange={handleInputChange}
+                className="w-full bg-gray-800 p-2 rounded"
+                placeholder="https://example.com"
+              />
+            </div>
+          </>
         )}
         <div className="mb-4">
           <label className="block mb-2">Tags (comma-separated)</label>

@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform, useEffect, useState } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Brain, Users, Lightbulb, Code, Cpu, Bot, Sparkles, GraduationCap} from 'lucide-react';
 import Spline from '@splinetool/react-spline';
-import { useRef } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
@@ -18,32 +18,38 @@ import HeroText from '../components/HeroText';
 
 function BlackHoleBackground() {
   const points = useRef<THREE.Points>(null!);
-  const particleCount = 12000;
-  const sphere = new Float32Array(particleCount * 3);
-  
-  for (let i = 0; i < particleCount; i++) {
-    const i3 = i * 3;
-    const radius = Math.random() * 4 + 0.2;
-    const spinAngle = Math.random() * Math.PI * 2;
-    const branchAngle = ((i % 5) * 2 * Math.PI) / 5;
-    
-    const randomness = (Math.random() - 0.5) * 0.8;
-    const curve = radius * 0.7;
-    
-    sphere[i3] = Math.cos(branchAngle + spinAngle) * radius + randomness;
-    sphere[i3 + 1] = Math.sin(branchAngle + spinAngle) * radius + randomness;
-    sphere[i3 + 2] = (Math.random() - 0.5) * curve;
-  }
+  const [isReady, setIsReady] = useState(false);
+  const particleCount = 8000; 
+  const sphere = useMemo(() => {
+    const positions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      const i3 = i * 3;
+      const radius = Math.random() * 4 + 0.2;
+      const spinAngle = Math.random() * Math.PI * 2;
+      const branchAngle = ((i % 5) * 2 * Math.PI) / 5;
+      const randomness = (Math.random() - 0.5) * 0.8;
+      const curve = radius * 0.7;
+      positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomness;
+      positions[i3 + 1] = Math.sin(branchAngle + spinAngle) * radius + randomness;
+      positions[i3 + 2] = (Math.random() - 0.5) * curve;
+    }
+    setIsReady(true);
+    return positions;
+  }, []);
 
   useFrame((state, delta) => {
-    points.current.rotation.z += delta * 0.08;
-    points.current.rotation.x = state.clock.elapsedTime * 0.04;
-    points.current.rotation.y = state.clock.elapsedTime * 0.06;
+    if (points.current) {
+      points.current.rotation.z += delta * 0.08;
+      points.current.rotation.x = state.clock.elapsedTime * 0.04;
+      points.current.rotation.y = state.clock.elapsedTime * 0.06;
+    }
   });
+
+  if (!isReady) return null;
 
   return (
     <group scale={[1.5, 1.5, 1.5]}>
-      <Points ref={points} positions={sphere} stride={3} frustumCulled={false}>
+      <Points ref={points} positions={sphere} stride={3} frustumCulled={true}>
         <PointMaterial
           transparent
           color="#4444ff"
@@ -59,45 +65,23 @@ function BlackHoleBackground() {
 }
 
 const Home = () => {
-  const { scrollYProgress } = useScroll({
-    smooth: 0.8
-  });
+  const { scrollYProgress } = useScroll({ smooth: true });
 
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [1, 2.5, 2.5, 1],
-    {
-      clamp: false
-    }
-  );
+  const scale = useMemo(() =>
+    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [1, 1.6, 1.6, 1], { clamp: false })
+  , [scrollYProgress]);
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [1, 0.7, 0.7, 1],
-    {
-      clamp: false
-    }
-  );
+  const opacity = useMemo(() =>
+    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [1, 0.85, 0.85, 1], { clamp: false })
+  , [scrollYProgress]);
 
-  const translateZ = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [0, 1000, 1000, 0],
-    {
-      clamp: false
-    }
-  );
+  const translateZ = useMemo(() =>
+    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0, 300, 300, 0], { clamp: false })
+  , [scrollYProgress]);
 
-  const rotate = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [0, 3, -3, 0],
-    {
-      clamp: false
-    }
-  );
+  const rotate = useMemo(() =>
+    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0, 1, -1, 0], { clamp: false })
+  , [scrollYProgress]);
 
   const CustomIcons = {
     Projects: () => (
@@ -177,7 +161,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-black text-white perspective-[3000px]">
+    <div className="relative min-h-screen bg-black text-white perspective-[2000px]">
       <motion.div 
         className="fixed inset-0 w-full h-screen will-change-transform"
         style={{ 
@@ -190,9 +174,9 @@ const Home = () => {
         }}
       >
         <Canvas 
-          camera={{ position: [0, 0, 3.5], fov: 75 }}
-          dpr={[1, 2]}  
-          performance={{ min: 0.5 }}  
+          camera={{ position: [0, 0, 3.5], fov: 70 }}
+          dpr={1}
+          performance={{ min: 0.5 }}
         >
           <Suspense fallback={null}>
             <BlackHoleBackground />
@@ -200,7 +184,7 @@ const Home = () => {
               enableZoom={false} 
               enablePan={false} 
               enableRotate={false}
-              makeDefault  
+              makeDefault
             />
           </Suspense>
         </Canvas>
@@ -209,9 +193,7 @@ const Home = () => {
       <motion.div 
         className="relative z-10"
         style={{
-          y: useTransform(scrollYProgress, [0, 0.5, 1], [0, -20, 0], {
-            clamp: false
-          })
+          y: useTransform(scrollYProgress, [0, 0.5, 1], [0, -10, 0], { clamp: false })
         }}
       >
         {/* Hero Section */}

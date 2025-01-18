@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../services/firebase';
-import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
+import { useFirestoreCollection, FirestoreItem } from '../hooks/useFirestoreCollection';
 
 const Blog: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
@@ -11,22 +11,29 @@ const Blog: React.FC = () => {
   // Fetch blogs from Firestore
   const { items: blogs, loading, error } = useFirestoreCollection(db, 'blogs');
 
-  // Extract unique tags from blogs, handling undefined case
-  const tags = ["All", ...new Set(
-    blogs
-      .flatMap(blog => blog.tags || [])
-      .filter(tag => tag !== undefined)
-  )];
+  // Extract unique tags from blogs with type safety
+  const tags = useMemo(() => {
+    const allTags = blogs.reduce<string[]>((acc, blog) => {
+      if (blog.tags && Array.isArray(blog.tags)) {
+        acc.push(...blog.tags);
+      }
+      return acc;
+    }, []);
+    
+    return ["All", ...new Set(allTags)];
+  }, [blogs]);
 
-  // Filter blogs based on search and tag, with null/undefined checks
-  const filteredBlogs = blogs.filter(blog => {
-    const blogTags = blog.tags || [];
-    const matchesTag = selectedTag === "All" || blogTags.includes(selectedTag);
-    const matchesSearch = 
-      (blog.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (blog.description || '').toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTag && matchesSearch;
-  });
+  // Filter blogs based on search and tag with type safety
+  const filteredBlogs = useMemo(() => {
+    return blogs.filter(blog => {
+      const blogTags = blog.tags || [];
+      const matchesTag = selectedTag === "All" || blogTags.includes(selectedTag);
+      const matchesSearch = 
+        (blog.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (blog.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesTag && matchesSearch;
+    });
+  }, [blogs, selectedTag, searchQuery]);
 
   const handleLoadMore = () => {
     setVisibleBlogs(prev => Math.min(prev + 4, filteredBlogs.length));
@@ -81,7 +88,7 @@ const Blog: React.FC = () => {
             placeholder="Search blogs..."
             className="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 rounded-lg focus:outline-none focus:border-purple-500 text-white"
             value={searchQuery}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setSearchQuery(e.target.value);
               setVisibleBlogs(4);
             }}
@@ -108,47 +115,43 @@ const Blog: React.FC = () => {
           ))}
         </div>
 
-        {/* Blogs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
+        {/* Blog Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence>
             {filteredBlogs.slice(0, visibleBlogs).map((blog, index) => (
               <motion.div
-                key={blog.id}
+                key={blog.id || index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gray-900/50 rounded-xl overflow-hidden backdrop-blur-sm border border-gray-800 hover:border-purple-500/50 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
               >
-                {/* Blog Image */}
-                <div className="relative w-full h-48 overflow-hidden bg-gray-800">
-                  <img
-                    src={blog.image || './blogs/placeholder.webp'}
-                    alt={blog.title}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = './blogs/placeholder.webp';
-                      target.onerror = null;
-                    }}
-                  />
-                </div>
-                
-                {/* Blog Content */}
-                <div className="p-6">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {blog.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 bg-purple-500/20 rounded-md text-xs font-medium text-purple-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                  {blog.image && (
+                    <div className="h-48 overflow-hidden">
+                      <img 
+                        src={blog.image} 
+                        alt={blog.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-2">{blog.title}</h3>
+                    <p className="text-gray-400 mb-4">{blog.description}</p>
+                    {blog.tags && (
+                      <div className="flex flex-wrap gap-2">
+                        {blog.tags.map((tag, tagIndex) => (
+                          <span 
+                            key={`${blog.id}-${tag}-${tagIndex}`}
+                            className="text-sm bg-purple-500/20 text-purple-300 px-2 py-1 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-                  <p className="text-purple-400 mb-3">{blog.date}</p>
-                  <p className="text-gray-400 text-sm">{blog.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -157,19 +160,14 @@ const Blog: React.FC = () => {
 
         {/* Load More Button */}
         {visibleBlogs < filteredBlogs.length && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex justify-center mt-12"
-          >
+          <div className="text-center mt-12">
             <button
               onClick={handleLoadMore}
-              className="px-8 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
-                       rounded-lg text-white font-medium transition-all duration-300 hover:scale-105"
+              className="bg-purple-500/20 text-purple-300 px-6 py-3 rounded-lg hover:bg-purple-500/30 transition-all duration-300"
             >
-              Load More Blogs
+              Load More
             </button>
-          </motion.div>
+          </div>
         )}
       </div>
     </div>

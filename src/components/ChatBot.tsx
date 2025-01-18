@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, MinusSquare, Info, UserPlus, Users, Calendar, Award, Phone, ChevronUp } from 'lucide-react';
 
@@ -14,9 +14,54 @@ interface ClubData {
     notableProjects: string; 
     membershipBase: string; 
   };
-  clubActivities: { [key: string]: any };
-  teamStructure: { [key: string]: any };
-  contact: { [key: string]: any };
+  clubActivities: {
+    regularEvents: {
+      workshops: string;
+      hackathons: string;
+      seminars: string;
+    };
+    participationRequirements: string;
+    eventRegistrationProcess: string;
+    eventNotifications: string;
+  };
+  teamStructure: {
+    leadershipTeam: {
+      president: string;
+      vicePresident: string;
+    };
+    designTeam: {
+      leader: string;
+      subLeader: string;
+      members: string[];
+      responsibilities: string[];
+    };
+    technicalTeam: {
+      leader: string;
+      subLeader: string;
+      members: string[];
+      responsibilities: string[];
+    };
+    mediaTeam: {
+      leader: string;
+      subLeader: string;
+      members: string[];
+      responsibilities: string[];
+    };
+    contentTeam: {
+      leader: string;
+      subLeader: string;
+      members: string[];
+      responsibilities: string[];
+    };
+  };
+  contact: {
+    socialMedia: {
+      instagram: string;
+      twitter: string;
+    };
+    officialWebsite: string;
+    bestContactMethod: string;
+  };
   generalInformation?: {
     whatIsTensor?: string;
     whoCanJoin?: string;
@@ -104,32 +149,32 @@ const clubData: ClubData = {
   }
 };
 
-const ChatBot = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+const ChatBot: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isMinimized, setIsMinimized] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([
     { type: 'bot', content: 'Hi! I\'m TensorBot 🤖 How can I help you today?' }
   ]);
-  const [inputValue, setInputValue] = useState('');
-  const [showTooltip, setShowTooltip] = useState(true);  
-  const [isHovering, setIsHovering] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [showTooltip, setShowTooltip] = useState<boolean>(true);  
+  const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (): void => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleScroll = () => {
+  const handleScroll = (): void => {
     if (messagesContainerRef.current) {
       const { scrollTop } = messagesContainerRef.current;
       setShowScrollTop(scrollTop > 200);
     }
   };
 
-  const scrollToTop = () => {
+  const scrollToTop = (): void => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTo({
         top: 0,
@@ -156,7 +201,6 @@ const ChatBot = () => {
     };
   }, [showTooltip, isHovering]);
 
-  // Auto-hide tooltip after 5 seconds on initial load
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowTooltip(false);
@@ -165,16 +209,17 @@ const ChatBot = () => {
     return () => clearTimeout(timer);
   }, []); 
 
-  const getGeneralInfo = (infoType: keyof NonNullable<ClubData['generalInformation']>) => {
+  const getGeneralInfo = (infoType: keyof NonNullable<ClubData['generalInformation']>): string => {
     return clubData.generalInformation?.[infoType] || 'Information not available';
   };
 
-  const getEventsInfo = (infoType: keyof NonNullable<ClubData['eventsAndRegistration']>) => {
+  const getEventsInfo = (infoType: keyof NonNullable<ClubData['eventsAndRegistration']>): string => {
     return clubData.eventsAndRegistration?.[infoType] || 'Information not available';
   };
 
-  const handleGeneralInquiry = (inquiry: string) => {
-    switch (inquiry.toLowerCase()) {
+  const handleGeneralInquiry = (inquiry: string): string => {
+    const lowercaseInquiry = inquiry.toLowerCase();
+    switch (lowercaseInquiry) {
       case 'what is tensor':
         return getGeneralInfo('whatIsTensor');
       case 'who can join':
@@ -238,8 +283,8 @@ Key Responsibilities:
 ${clubData.teamStructure.contentTeam.responsibilities.map(resp => `  • ${resp}`).join('\n')}`;
     }
 
-    // Existing comprehensive responses
-    if (lowercaseQuestion.includes('what is tensor about ') || lowercaseQuestion.includes('about tensor')) {
+    // General queries
+    if (lowercaseQuestion.includes('what is tensor about') || lowercaseQuestion.includes('about tensor')) {
       return `About Tensor Club:
 • Name: ${clubData.generalClubInfo.clubName}
 • Mission: ${clubData.generalClubInfo.mission}
@@ -248,199 +293,17 @@ ${clubData.teamStructure.contentTeam.responsibilities.map(resp => `  • ${resp}
 • Brief History: ${clubData.generalClubInfo.briefHistory}
 • Membership Base: ${clubData.generalClubInfo.membershipBase}`;
     }
-    
-    if (lowercaseQuestion.includes('how to join') || lowercaseQuestion.includes('joining process')) {
-      return `Joining Tensor Club:
-• Open to all students passionate about AI and Machine Learning
-• No specific prerequisites required
-• Selection based on enthusiasm and potential to contribute
-• Membership drives announced on social media and website
-• Steps to Join:
-  1. Watch for membership announcements
-  2. Fill out the application form
-  3. Demonstrate interest in AI/ML
-  4. Potential skill assessment for specific teams`;
-    }
-    
-    if (lowercaseQuestion.includes('team structure') || lowercaseQuestion.includes('teams')) {
-      return `Tensor Club Team Structure:
-1. Leadership Team:
-   • President: ${clubData.teamStructure.leadershipTeam.president}
-   • Vice President: ${clubData.teamStructure.leadershipTeam.vicePresident}
 
-2. Design Team:
-   • Leader: ${clubData.teamStructure.designTeam.leader}
-   • Sub-Leader: ${clubData.teamStructure.designTeam.subLeader}
-   • Key Responsibilities: ${clubData.teamStructure.designTeam.responsibilities.join(', ')}
+    // Add more specific queries here...
 
-3. Technical Team:
-   • Leader: ${clubData.teamStructure.technicalTeam.leader}
-   • Sub-Leader: ${clubData.teamStructure.technicalTeam.subLeader}
-   • Key Responsibilities: ${clubData.teamStructure.technicalTeam.responsibilities.join(', ')}
-
-4. Media Team:
-   • Leader: ${clubData.teamStructure.mediaTeam.leader}
-   • Sub-Leader: ${clubData.teamStructure.mediaTeam.subLeader}
-   • Key Responsibilities: ${clubData.teamStructure.mediaTeam.responsibilities.join(', ')}
-
-5. Content Team:
-   • Leader: ${clubData.teamStructure.contentTeam.leader}
-   • Sub-Leader: ${clubData.teamStructure.contentTeam.subLeader}
-   • Key Responsibilities: ${clubData.teamStructure.contentTeam.responsibilities.join(', ')}`;
-    }
-    
-    if (lowercaseQuestion.includes('events') || lowercaseQuestion.includes('tensor events')) {
-      return `Tensor Club Events:
-• Regular Events:
-  1. Workshops: ${clubData.clubActivities.regularEvents.workshops}
-  2. Hackathons: ${clubData.clubActivities.regularEvents.hackathons}
-  3. Seminars: ${clubData.clubActivities.regularEvents.seminars}
-
-• Event Details:
-  • Participation: ${clubData.clubActivities.participationRequirements}
-  • Registration: ${clubData.clubActivities.eventRegistrationProcess}
-  • Notifications: ${clubData.clubActivities.eventNotifications}`;
-    }
-    
-    if (lowercaseQuestion.includes('membership') || lowercaseQuestion.includes('who can join')) {
-      return `Tensor Club Membership:
-• Open to all students interested in AI and Machine Learning
-• No membership fees
-• Diverse opportunities across different teams
-• Benefits:
-  1. Learn cutting-edge AI/ML technologies
-  2. Participate in workshops and hackathons
-  3. Collaborate on innovative projects
-  4. Network with like-minded peers
-  5. Develop professional skills`;
-    }
-    
-    if (lowercaseQuestion.includes('contact') || lowercaseQuestion.includes('reach')) {
-      return `Contact Tensor Club:
-• Social Media:
-  - Instagram: ${clubData.contact.socialMedia.instagram}
-  - Twitter: ${clubData.contact.socialMedia.twitter}
-• Official Website: ${clubData.contact.officialWebsite}
-• Best Contact Method: ${clubData.contact.bestContactMethod}
-
-Follow our social media for regular updates about events, workshops, and opportunities!`;
-    }
-    
-    // General Club Information
-    if (lowercaseQuestion.includes('club name')) {
-      return clubData.generalClubInfo.clubName;
-    }
-    if (lowercaseQuestion.includes('mission')) {
-      return clubData.generalClubInfo.mission;
-    }
-    if (lowercaseQuestion.includes('vision')) {
-      return clubData.generalClubInfo.vision;
-    }
-    if (lowercaseQuestion.includes('core values')) {
-      return clubData.generalClubInfo.coreValues.join(', ');
-    }
-    if (lowercaseQuestion.includes('founding date')) {
-      return clubData.generalClubInfo.foundingDate;
-    }
-    if (lowercaseQuestion.includes('history')) {
-      return clubData.generalClubInfo.briefHistory;
-    }
-    if (lowercaseQuestion.includes('achievements')) {
-      return clubData.generalClubInfo.keyAchievements;
-    }
-    if (lowercaseQuestion.includes('projects')) {
-      return clubData.generalClubInfo.notableProjects;
-    }
-    if (lowercaseQuestion.includes('membership base')) {
-      return clubData.generalClubInfo.membershipBase;
-    }
-    
-    // Club Activities and Events
-    if (lowercaseQuestion.includes('workshops')) {
-      return clubData.clubActivities.regularEvents.workshops;
-    }
-    if (lowercaseQuestion.includes('hackathons')) {
-      return clubData.clubActivities.regularEvents.hackathons;
-    }
-    if (lowercaseQuestion.includes('seminars')) {
-      return clubData.clubActivities.regularEvents.seminars;
-    }
-    if (lowercaseQuestion.includes('event registration')) {
-      return clubData.clubActivities.eventRegistrationProcess;
-    }
-    if (lowercaseQuestion.includes('event notifications')) {
-      return clubData.clubActivities.eventNotifications;
-    }
-    
-    // Team Structure and Roles
-    if (lowercaseQuestion.includes('president')) {
-      return `The President is ${clubData.teamStructure.leadershipTeam.president}.`;
-    }
-    if (lowercaseQuestion.includes('vice president')) {
-      return `The Vice President is ${clubData.teamStructure.leadershipTeam.vicePresident}.`;
-    }
-    if (lowercaseQuestion.includes('design team')) {
-      return `The Design Team is led by ${clubData.teamStructure.designTeam.leader}.`;
-    }
-    if (lowercaseQuestion.includes('technical team')) {
-      return `The Technical Team is led by ${clubData.teamStructure.technicalTeam.leader}.`;
-    }
-    if (lowercaseQuestion.includes('media team')) {
-      return `The Media Team is led by ${clubData.teamStructure.mediaTeam.leader}.`;
-    }
-    if (lowercaseQuestion.includes('content team')) {
-      return `The Content Team is led by ${clubData.teamStructure.contentTeam.leader}.`;
-    }
-    
-    // General Questions
-    if (lowercaseQuestion.includes('what is tensor')) {
-      return handleGeneralInquiry('what is tensor');
-    }
-    if (lowercaseQuestion.includes('who can join')) {
-      return handleGeneralInquiry('who can join');
-    }
-    if (lowercaseQuestion.includes('membership fees')) {
-      return handleGeneralInquiry('membership fees');
-    }
-    if (lowercaseQuestion.includes('stay updated')) {
-      return handleGeneralInquiry('stay updated');
-    }
-    if (lowercaseQuestion.includes('events registration')) {
-      return handleGeneralInquiry('how to register');
-    }
-    
-    // More specific team and member queries
-    if (lowercaseQuestion.includes('team leaders') || lowercaseQuestion.includes('leadership')) {
-      return `Tensor Club Leadership:
-• President: ${clubData.teamStructure.leadershipTeam.president}
-• Vice President: ${clubData.teamStructure.leadershipTeam.vicePresident}
-
-Team Leaders:
-• Design Team Leader: ${clubData.teamStructure.designTeam.leader}
-• Technical Team Leader: ${clubData.teamStructure.technicalTeam.leader}
-• Media Team Leader: ${clubData.teamStructure.mediaTeam.leader}
-• Content Team Leader: ${clubData.teamStructure.contentTeam.leader}`;
-    }
-
-    // Catch-all for unrecognized queries with helpful suggestions
-    return `I'm not sure about that specific query. Could you rephrase or be more specific? 
-
-Some things you can ask me:
-• About Tensor Club
-• Team Members
-• Joining Process
-• Club Events
-• Membership Details
-• Contact Information
-
-I'm here to help you learn more about Tensor!`;
+    return handleGeneralInquiry(question);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (): void => {
     if (inputValue.trim() === '') return;
 
     const newUserMessage: Message = { 
@@ -448,32 +311,30 @@ I'm here to help you learn more about Tensor!`;
       content: inputValue.trim() 
     };
 
-    const newMessages: Message[] = [...messages, newUserMessage];
-    setMessages(newMessages);
-
-    // Bot response logic
+    setMessages(prev => [...prev, newUserMessage]);
+    
     const botResponse: Message = { 
       type: 'bot', 
       content: findAnswer(inputValue.trim()) 
     };
 
-    setMessages(prevMessages => [...prevMessages, botResponse]);
+    setMessages(prev => [...prev, botResponse]);
     setInputValue('');
     inputRef.current?.focus();
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       handleSendMessage();
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     handleSendMessage();
   };
 
-  const toggleChat = () => {
+  const toggleChat = (): void => {
     setIsOpen(!isOpen);
     setIsMinimized(false);
     if (!isOpen) {

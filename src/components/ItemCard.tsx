@@ -10,15 +10,23 @@ const ItemCard: React.FC<ItemCardProps> = ({
   description, 
   date, 
   image, 
-  tags, 
+  tags = [], // Default to empty array
   type 
 }) => {
-  // Format date
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  // Format date with type safety
+  const formattedDate = React.useMemo(() => {
+    if (!date) return '';
+    try {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
+  }, [date]);
 
   return (
     <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-105">
@@ -26,7 +34,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
         <div className="h-48 w-full overflow-hidden">
           <img 
             src={image} 
-            alt={title} 
+            alt={title || 'Item image'} 
             className="w-full h-full object-cover"
           />
         </div>
@@ -38,12 +46,14 @@ const ItemCard: React.FC<ItemCardProps> = ({
         </div>
         <p className="text-gray-300 mb-4">{description}</p>
         <div className="flex justify-between items-center">
-          <span className="text-sm text-purple-400">{formattedDate}</span>
-          {tags && tags.length > 0 && (
+          {formattedDate && (
+            <span className="text-sm text-purple-400">{formattedDate}</span>
+          )}
+          {tags.length > 0 && (
             <div className="flex space-x-2">
               {tags.map((tag, index) => (
                 <span 
-                  key={index} 
+                  key={`${tag}-${index}`}
                   className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded"
                 >
                   {tag}

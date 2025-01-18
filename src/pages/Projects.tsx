@@ -1,27 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { db } from '../services/firebase';
-import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
+import { useFirestoreCollection, FirestoreItem } from '../hooks/useFirestoreCollection';
 
-const ProjectCard = ({ 
+interface ProjectCardProps extends Partial<FirestoreItem> {
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  websiteUrl?: string;
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = ({ 
   title, 
   description, 
   image, 
-  tags, 
+  tags = [], 
   websiteUrl 
-}: {
-  title: string, 
-  description: string, 
-  image: string, 
-  tags: string[], 
-  websiteUrl?: string
 }) => {
-  const handleVisitWebsite = () => {
+  const handleVisitWebsite = useCallback((): void => {
     if (websiteUrl) {
       window.open(websiteUrl, '_blank', 'noopener,noreferrer');
     }
-  };
+  }, [websiteUrl]);
 
   return (
     <motion.article
@@ -36,8 +38,8 @@ const ProjectCard = ({
             src={image}
             alt={title}
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+              const target = e.currentTarget;
               target.src = 'https://via.placeholder.com/800x400?text=Project+Image';
             }}
           />
@@ -78,31 +80,44 @@ const ProjectCard = ({
 const Projects: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [visibleProjects, setVisibleProjects] = useState(3);
+  const [visibleProjects, setVisibleProjects] = useState<number>(3);
 
   // Fetch projects from Firestore
   const { items: projects, loading, error } = useFirestoreCollection(db, 'projects');
 
-  // Extract unique tags from projects
-  const tags = ["All", ...new Set(projects.flatMap(project => project.tags))];
+  // Extract unique tags from projects with type safety
+  const tags = React.useMemo(() => {
+    const allTags = projects.reduce<string[]>((acc, project) => {
+      if (project.tags && Array.isArray(project.tags)) {
+        acc.push(...project.tags);
+      }
+      return acc;
+    }, []);
+    
+    return ["All", ...new Set(allTags)];
+  }, [projects]);
 
-  // Filter projects based on search query and selected tag
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesTag = selectedTag === "All" || project.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
-  });
+  // Filter projects based on search query and selected tag with type safety
+  const filteredProjects = React.useMemo(() => {
+    return projects.filter(project => {
+      const projectTags = project.tags || [];
+      const matchesSearch = 
+        (project.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (project.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        projectTags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesTag = selectedTag === "All" || projectTags.includes(selectedTag);
+      return matchesSearch && matchesTag;
+    });
+  }, [projects, searchQuery, selectedTag]);
 
   // Reset visible projects when search query or tag changes
-  React.useEffect(() => {
+  useEffect(() => {
     setVisibleProjects(3);
   }, [searchQuery, selectedTag]);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback((): void => {
     setVisibleProjects(prev => Math.min(prev + 3, filteredProjects.length));
-  };
+  }, [filteredProjects.length]);
 
   const visibleProjectPosts = filteredProjects.slice(0, visibleProjects);
   const hasMoreProjects = visibleProjects < filteredProjects.length;
@@ -153,7 +168,7 @@ const Projects: React.FC = () => {
             type="text"
             placeholder="Search projects..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             className="w-full px-4 py-2 rounded-lg bg-gray-900/50 border border-gray-800 focus:border-purple-500/50 
                      focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm text-white 
                      placeholder-gray-400 transition-all duration-300"
@@ -182,11 +197,11 @@ const Projects: React.FC = () => {
           <AnimatePresence mode="wait">
             {visibleProjectPosts.map((project) => (
               <ProjectCard 
-                key={project.title} 
+                key={project.id || project.title}
                 title={project.title}
                 description={project.description}
-                image={project.image}
-                tags={project.tags}
+                image={project.image || ''}
+                tags={project.tags || []}
                 websiteUrl={project.websiteUrl}
               />
             ))}

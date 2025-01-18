@@ -11,6 +11,7 @@ interface Project extends FirestoreItem {
   image: string;
   tags?: string[];
   websiteUrl?: string;
+  author: string;
 }
 
 interface ProjectCardProps {
@@ -19,6 +20,7 @@ interface ProjectCardProps {
   image: string;
   tags: string[];
   websiteUrl?: string;
+  author: string;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
@@ -26,7 +28,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   description, 
   image, 
   tags = [], 
-  websiteUrl 
+  websiteUrl,
+  author 
 }) => {
   const handleVisitWebsite = useCallback((): void => {
     if (websiteUrl) {
@@ -66,6 +69,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <h2 className="text-xl font-semibold mb-2 glow-text group-hover:text-purple-400 transition-colors">
           {title}
         </h2>
+        <p className="text-sm text-purple-400 mb-2">by {author}</p>
         <p className="text-gray-400 terminal-text text-sm mb-4">
           {description}
         </p>
@@ -206,6 +210,7 @@ const Projects: React.FC = () => {
                 image={project.image || ''}
                 tags={project.tags || []}
                 websiteUrl={project.websiteUrl}
+                author={project.author}
               />
             ))}
           </AnimatePresence>

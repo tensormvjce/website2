@@ -1,174 +1,796 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, ChevronUp, Info } from 'lucide-react';
+import { X, Send, MinusSquare, Info, UserPlus, Users, Calendar, Award, Phone, ChevronUp } from 'lucide-react';
+
+interface ClubData {
+  generalClubInfo: { 
+    clubName: string; 
+    mission: string; 
+    vision: string; 
+    coreValues: string[]; 
+    foundingDate: string; 
+    briefHistory: string; 
+    keyAchievements: string; 
+    notableProjects: string; 
+    membershipBase: string; 
+  };
+  clubActivities: { [key: string]: any };
+  teamStructure: { [key: string]: any };
+  contact: { [key: string]: any };
+  generalInformation?: {
+    whatIsTensor?: string;
+    whoCanJoin?: string;
+    membershipFees?: string;
+    stayUpdated?: string;
+  };
+  eventsAndRegistration?: {
+    howToRegister?: string;
+  };
+}
 
 interface Message {
   type: 'user' | 'bot';
   content: string;
 }
 
-const ChatBot: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { type: 'bot', content: 'Hi! I\'m TensorBot. How can I help you today?' }
-  ]);
-  const [input, setInput] = useState<string>('');
-  const [showScrollButton, setShowScrollButton] = useState<boolean>(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  const handleScroll = () => {
-    if (chatContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-      setShowScrollButton(scrollHeight - scrollTop - clientHeight > 100);
+const clubData: ClubData = {
+  generalClubInfo: {
+    clubName: 'Tensor Club',
+    mission: 'To promote AI and Machine Learning',
+    vision: 'To be a leading AI and Machine Learning community',
+    coreValues: ['Innovation', 'Collaboration', 'Excellence'],
+    foundingDate: '2020',
+    briefHistory: 'Tensor Club was founded in 2020 by a group of students passionate about AI and Machine Learning.',
+    keyAchievements: 'Tensor Club has achieved several milestones, including hosting successful workshops and hackathons.',
+    notableProjects: 'Tensor Club has worked on several notable projects, including a chatbot and a machine learning model.',
+    membershipBase: 'Tensor Club has a diverse membership base of students from various disciplines.'
+  },
+  clubActivities: {
+    regularEvents: {
+      workshops: 'Tensor Club hosts regular workshops on AI and Machine Learning topics.',
+      hackathons: 'Tensor Club hosts regular hackathons to encourage innovation and collaboration.',
+      seminars: 'Tensor Club hosts regular seminars to promote knowledge sharing and discussion.'
+    },
+    participationRequirements: 'Participation in Tensor Club events is open to all students.',
+    eventRegistrationProcess: 'Registration for Tensor Club events is done through our website.',
+    eventNotifications: 'Notifications for Tensor Club events are sent through our social media channels.'
+  },
+  teamStructure: {
+    leadershipTeam: {
+      president: 'John Doe',
+      vicePresident: 'Jane Doe'
+    },
+    designTeam: {
+      leader: 'Bob Smith',
+      subLeader: 'Alice Johnson',
+      members: ['Mike Brown', 'Emily Davis'],
+      responsibilities: ['Designing marketing materials', 'Creating visual content']
+    },
+    technicalTeam: {
+      leader: 'David Lee',
+      subLeader: 'Sophia Patel',
+      members: ['Kevin White', 'Olivia Martin'],
+      responsibilities: ['Developing software', 'Maintaining infrastructure']
+    },
+    mediaTeam: {
+      leader: 'Emily Chen',
+      subLeader: 'Michael Kim',
+      members: ['Sarah Taylor', 'William Hall'],
+      responsibilities: ['Managing social media', 'Creating video content']
+    },
+    contentTeam: {
+      leader: 'James Davis',
+      subLeader: 'Jessica Brown',
+      members: ['Robert Miller', 'Lisa Nguyen'],
+      responsibilities: ['Creating blog posts', 'Developing educational content']
     }
-  };
+  },
+  contact: {
+    socialMedia: {
+      instagram: 'https://www.instagram.com/tensorclub',
+      twitter: 'https://www.twitter.com/tensorclub'
+    },
+    officialWebsite: 'https://www.tensorclub.com',
+    bestContactMethod: 'Email'
+  },
+  generalInformation: {
+    whatIsTensor: 'Tensor Club is a student organization that promotes AI and Machine Learning.',
+    whoCanJoin: 'Any student can join Tensor Club.',
+    membershipFees: 'There are no membership fees.',
+    stayUpdated: 'Follow us on social media to stay updated.'
+  },
+  eventsAndRegistration: {
+    howToRegister: 'Registration for events is done through our website.'
+  }
+};
+
+const ChatBot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    { type: 'bot', content: 'Hi! I\'m TensorBot 🤖 How can I help you today?' }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [showTooltip, setShowTooltip] = useState(true);  
+  const [isHovering, setIsHovering] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScroll = () => {
+    if (messagesContainerRef.current) {
+      const { scrollTop } = messagesContainerRef.current;
+      setShowScrollTop(scrollTop > 200);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  useEffect(() => {
+    let tooltipTimer: NodeJS.Timeout;
+    if (showTooltip && !isHovering) {
+      tooltipTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 5000);
+    }
+    return () => {
+      if (tooltipTimer) {
+        clearTimeout(tooltipTimer);
+      }
+    };
+  }, [showTooltip, isHovering]);
 
-    const userMessage: Message = { type: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+  // Auto-hide tooltip after 5 seconds on initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 5000);
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = getBotResponse(input.toLowerCase());
-      setMessages(prev => [...prev, { type: 'bot', content: botResponse }]);
-    }, 1000);
+    return () => clearTimeout(timer);
+  }, []); 
+
+  const getGeneralInfo = (infoType: keyof NonNullable<ClubData['generalInformation']>) => {
+    return clubData.generalInformation?.[infoType] || 'Information not available';
   };
 
-  const getBotResponse = (query: string): string => {
-    if (query.includes('hi') || query.includes('hello')) {
-      return 'Hello! How can I assist you today?';
+  const getEventsInfo = (infoType: keyof NonNullable<ClubData['eventsAndRegistration']>) => {
+    return clubData.eventsAndRegistration?.[infoType] || 'Information not available';
+  };
+
+  const handleGeneralInquiry = (inquiry: string) => {
+    switch (inquiry.toLowerCase()) {
+      case 'what is tensor':
+        return getGeneralInfo('whatIsTensor');
+      case 'who can join':
+        return getGeneralInfo('whoCanJoin');
+      case 'membership fees':
+        return getGeneralInfo('membershipFees');
+      case 'stay updated':
+        return getGeneralInfo('stayUpdated');
+      case 'how to register':
+        return getEventsInfo('howToRegister');
+      default:
+        return 'I could not find information about that topic.';
     }
-    if (query.includes('club') || query.includes('tensor')) {
-      return 'Tensor Club is a student-led AI research club at MVJCE. We focus on machine learning, deep learning, and their applications.';
+  };
+
+  const findAnswer = (question: string): string => {
+    const lowercaseQuestion = question.toLowerCase();
+    
+    // Team Members Specific Queries
+    if (lowercaseQuestion.includes('design team members')) {
+      return `Design Team Members:
+• Leader: ${clubData.teamStructure.designTeam.leader}
+• Sub-Leader: ${clubData.teamStructure.designTeam.subLeader}
+• Full Team: 
+${clubData.teamStructure.designTeam.members.map((member: string) => `  - ${member}`).join('\n')}
+
+Key Responsibilities:
+${clubData.teamStructure.designTeam.responsibilities.map((resp: string) => `  • ${resp}`).join('\n')}`;
     }
-    if (query.includes('join')) {
-      return 'To join Tensor Club, please fill out the application form on our website and attend our next orientation session!';
+
+    if (lowercaseQuestion.includes('technical team members')) {
+      return `Technical Team Members:
+• Leader: ${clubData.teamStructure.technicalTeam.leader}
+• Sub-Leader: ${clubData.teamStructure.technicalTeam.subLeader}
+• Full Team: 
+${clubData.teamStructure.technicalTeam.members.map((member: string) => `  - ${member}`).join('\n')}
+
+Key Responsibilities:
+${clubData.teamStructure.technicalTeam.responsibilities.map((resp: string) => `  • ${resp}`).join('\n')}`;
     }
-    if (query.includes('project') || query.includes('work')) {
-      return 'We work on various AI projects including computer vision, natural language processing, and robotics. Check out our Projects page for more details!';
+
+    if (lowercaseQuestion.includes('media team members')) {
+      return `Media Team Members:
+• Leader: ${clubData.teamStructure.mediaTeam.leader}
+• Sub-Leader: ${clubData.teamStructure.mediaTeam.subLeader}
+• Full Team: 
+${clubData.teamStructure.mediaTeam.members.map((member: string) => `  - ${member}`).join('\n')}
+
+Key Responsibilities:
+${clubData.teamStructure.mediaTeam.responsibilities.map((resp: string) => `  • ${resp}`).join('\n')}`;
     }
-    if (query.includes('event') || query.includes('workshop')) {
-      return 'We regularly organize workshops, hackathons, and tech talks. Visit our Events page to see upcoming events!';
+
+    if (lowercaseQuestion.includes('content team members')) {
+      return `Content Team Members:
+• Leader: ${clubData.teamStructure.contentTeam.leader}
+• Sub-Leader: ${clubData.teamStructure.contentTeam.subLeader}
+• Full Team: 
+${clubData.teamStructure.contentTeam.members.map((member: string) => `  - ${member}`).join('\n')}
+
+Key Responsibilities:
+${clubData.teamStructure.contentTeam.responsibilities.map((resp: string) => `  • ${resp}`).join('\n')}`;
     }
-    if (query.includes('team') || query.includes('member')) {
-      return 'Our team consists of passionate students and mentors. Visit our Team page to learn more about us!';
+
+    // Existing comprehensive responses
+    if (lowercaseQuestion.includes('what is tensor about ') || lowercaseQuestion.includes('about tensor')) {
+      return `About Tensor Club:
+• Name: ${clubData.generalClubInfo.clubName}
+• Mission: ${clubData.generalClubInfo.mission}
+• Vision: ${clubData.generalClubInfo.vision}
+• Core Values: ${clubData.generalClubInfo.coreValues.join(', ')}
+• Brief History: ${clubData.generalClubInfo.briefHistory}
+• Membership Base: ${clubData.generalClubInfo.membershipBase}`;
     }
-    return "I'm not sure about that. Could you try asking something about our club, projects, events, or team?";
+    
+    if (lowercaseQuestion.includes('how to join') || lowercaseQuestion.includes('joining process')) {
+      return `Joining Tensor Club:
+• Open to all students passionate about AI and Machine Learning
+• No specific prerequisites required
+• Selection based on enthusiasm and potential to contribute
+• Membership drives announced on social media and website
+• Steps to Join:
+  1. Watch for membership announcements
+  2. Fill out the application form
+  3. Demonstrate interest in AI/ML
+  4. Potential skill assessment for specific teams`;
+    }
+    
+    if (lowercaseQuestion.includes('team structure') || lowercaseQuestion.includes('teams')) {
+      return `Tensor Club Team Structure:
+1. Leadership Team:
+   • President: ${clubData.teamStructure.leadershipTeam.president}
+   • Vice President: ${clubData.teamStructure.leadershipTeam.vicePresident}
+
+2. Design Team:
+   • Leader: ${clubData.teamStructure.designTeam.leader}
+   • Sub-Leader: ${clubData.teamStructure.designTeam.subLeader}
+   • Key Responsibilities: ${clubData.teamStructure.designTeam.responsibilities.join(', ')}
+
+3. Technical Team:
+   • Leader: ${clubData.teamStructure.technicalTeam.leader}
+   • Sub-Leader: ${clubData.teamStructure.technicalTeam.subLeader}
+   • Key Responsibilities: ${clubData.teamStructure.technicalTeam.responsibilities.join(', ')}
+
+4. Media Team:
+   • Leader: ${clubData.teamStructure.mediaTeam.leader}
+   • Sub-Leader: ${clubData.teamStructure.mediaTeam.subLeader}
+   • Key Responsibilities: ${clubData.teamStructure.mediaTeam.responsibilities.join(', ')}
+
+5. Content Team:
+   • Leader: ${clubData.teamStructure.contentTeam.leader}
+   • Sub-Leader: ${clubData.teamStructure.contentTeam.subLeader}
+   • Key Responsibilities: ${clubData.teamStructure.contentTeam.responsibilities.join(', ')}`;
+    }
+    
+    if (lowercaseQuestion.includes('events') || lowercaseQuestion.includes('tensor events')) {
+      return `Tensor Club Events:
+• Regular Events:
+  1. Workshops: ${clubData.clubActivities.regularEvents.workshops}
+  2. Hackathons: ${clubData.clubActivities.regularEvents.hackathons}
+  3. Seminars: ${clubData.clubActivities.regularEvents.seminars}
+
+• Event Details:
+  • Participation: ${clubData.clubActivities.participationRequirements}
+  • Registration: ${clubData.clubActivities.eventRegistrationProcess}
+  • Notifications: ${clubData.clubActivities.eventNotifications}`;
+    }
+    
+    if (lowercaseQuestion.includes('membership') || lowercaseQuestion.includes('who can join')) {
+      return `Tensor Club Membership:
+• Open to all students interested in AI and Machine Learning
+• No membership fees
+• Diverse opportunities across different teams
+• Benefits:
+  1. Learn cutting-edge AI/ML technologies
+  2. Participate in workshops and hackathons
+  3. Collaborate on innovative projects
+  4. Network with like-minded peers
+  5. Develop professional skills`;
+    }
+    
+    if (lowercaseQuestion.includes('contact') || lowercaseQuestion.includes('reach')) {
+      return `Contact Tensor Club:
+• Social Media:
+  - Instagram: ${clubData.contact.socialMedia.instagram}
+  - Twitter: ${clubData.contact.socialMedia.twitter}
+• Official Website: ${clubData.contact.officialWebsite}
+• Best Contact Method: ${clubData.contact.bestContactMethod}
+
+Follow our social media for regular updates about events, workshops, and opportunities!`;
+    }
+    
+    // General Club Information
+    if (lowercaseQuestion.includes('club name')) {
+      return clubData.generalClubInfo.clubName;
+    }
+    if (lowercaseQuestion.includes('mission')) {
+      return clubData.generalClubInfo.mission;
+    }
+    if (lowercaseQuestion.includes('vision')) {
+      return clubData.generalClubInfo.vision;
+    }
+    if (lowercaseQuestion.includes('core values')) {
+      return clubData.generalClubInfo.coreValues.join(', ');
+    }
+    if (lowercaseQuestion.includes('founding date')) {
+      return clubData.generalClubInfo.foundingDate;
+    }
+    if (lowercaseQuestion.includes('history')) {
+      return clubData.generalClubInfo.briefHistory;
+    }
+    if (lowercaseQuestion.includes('achievements')) {
+      return clubData.generalClubInfo.keyAchievements;
+    }
+    if (lowercaseQuestion.includes('projects')) {
+      return clubData.generalClubInfo.notableProjects;
+    }
+    if (lowercaseQuestion.includes('membership base')) {
+      return clubData.generalClubInfo.membershipBase;
+    }
+    
+    // Club Activities and Events
+    if (lowercaseQuestion.includes('workshops')) {
+      return clubData.clubActivities.regularEvents.workshops;
+    }
+    if (lowercaseQuestion.includes('hackathons')) {
+      return clubData.clubActivities.regularEvents.hackathons;
+    }
+    if (lowercaseQuestion.includes('seminars')) {
+      return clubData.clubActivities.regularEvents.seminars;
+    }
+    if (lowercaseQuestion.includes('event registration')) {
+      return clubData.clubActivities.eventRegistrationProcess;
+    }
+    if (lowercaseQuestion.includes('event notifications')) {
+      return clubData.clubActivities.eventNotifications;
+    }
+    
+    // Team Structure and Roles
+    if (lowercaseQuestion.includes('president')) {
+      return `The President is ${clubData.teamStructure.leadershipTeam.president}.`;
+    }
+    if (lowercaseQuestion.includes('vice president')) {
+      return `The Vice President is ${clubData.teamStructure.leadershipTeam.vicePresident}.`;
+    }
+    if (lowercaseQuestion.includes('design team')) {
+      return `The Design Team is led by ${clubData.teamStructure.designTeam.leader}.`;
+    }
+    if (lowercaseQuestion.includes('technical team')) {
+      return `The Technical Team is led by ${clubData.teamStructure.technicalTeam.leader}.`;
+    }
+    if (lowercaseQuestion.includes('media team')) {
+      return `The Media Team is led by ${clubData.teamStructure.mediaTeam.leader}.`;
+    }
+    if (lowercaseQuestion.includes('content team')) {
+      return `The Content Team is led by ${clubData.teamStructure.contentTeam.leader}.`;
+    }
+    
+    // General Questions
+    if (lowercaseQuestion.includes('what is tensor')) {
+      return handleGeneralInquiry('what is tensor');
+    }
+    if (lowercaseQuestion.includes('who can join')) {
+      return handleGeneralInquiry('who can join');
+    }
+    if (lowercaseQuestion.includes('membership fees')) {
+      return handleGeneralInquiry('membership fees');
+    }
+    if (lowercaseQuestion.includes('stay updated')) {
+      return handleGeneralInquiry('stay updated');
+    }
+    if (lowercaseQuestion.includes('events registration')) {
+      return handleGeneralInquiry('how to register');
+    }
+    
+    // More specific team and member queries
+    if (lowercaseQuestion.includes('team leaders') || lowercaseQuestion.includes('leadership')) {
+      return `Tensor Club Leadership:
+• President: ${clubData.teamStructure.leadershipTeam.president}
+• Vice President: ${clubData.teamStructure.leadershipTeam.vicePresident}
+
+Team Leaders:
+• Design Team Leader: ${clubData.teamStructure.designTeam.leader}
+• Technical Team Leader: ${clubData.teamStructure.technicalTeam.leader}
+• Media Team Leader: ${clubData.teamStructure.mediaTeam.leader}
+• Content Team Leader: ${clubData.teamStructure.contentTeam.leader}`;
+    }
+
+    // Catch-all for unrecognized queries with helpful suggestions
+    return `I'm not sure about that specific query. Could you rephrase or be more specific? 
+
+Some things you can ask me:
+• About Tensor Club
+• Team Members
+• Joining Process
+• Club Events
+• Membership Details
+• Contact Information
+
+I'm here to help you learn more about Tensor!`;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    const userMessage: Message = { type: 'user', content: inputValue };
+    const botMessage: Message = { type: 'bot', content: findAnswer(inputValue) };
+
+    setMessages(prev => [...prev, userMessage, botMessage]);
+    setInputValue('');
+  };
+
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
+    setIsMinimized(false);
+    if (!isOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
   };
 
   return (
-    <>
-      {/* Chat Button */}
-      <motion.button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-4 right-4 p-4 bg-purple-500 text-white rounded-full shadow-lg hover:bg-purple-600 transition-colors duration-300 z-50 ${isOpen ? 'hidden' : ''}`}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <MessageCircle size={24} />
-      </motion.button>
-
-      {/* Chat Window */}
+    <div 
+      className="fixed bottom-4 right-4 z-50"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && !isMinimized && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-4 right-4 w-80 h-96 bg-gray-900 rounded-lg shadow-xl overflow-hidden z-50 border border-gray-800"
+            className="mb-4 w-[400px] h-[600px] bg-black/90 backdrop-blur-lg rounded-lg border border-white/10 shadow-xl flex flex-col"
           >
             {/* Chat Header */}
-            <div className="p-4 bg-purple-500 flex justify-between items-center">
-              <h3 className="text-white font-medium">TensorBot</h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:text-gray-200 transition-colors"
-              >
-                <X size={20} />
-              </button>
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <div className="flex items-center space-x-2">
+                <img src="/logo_white.png" alt="Tensor Logo" className="w-6 h-6" />
+                <span className="font-semibold text-white">TensorBot</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setIsMinimized(true)}
+                  className="p-1 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <MinusSquare className="w-4 h-4 text-white/70" />
+                </button>
+                <button
+                  onClick={toggleChat}
+                  className="p-1 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
+            </div>
+
+            {/* Predefined Questions Scrollable Container */}
+            <div className="w-full overflow-x-auto px-4 py-1 custom-scrollbar">
+              <div className="flex space-x-2">
+                {[
+                  { 
+                    question: 'About Tensor', 
+                    query: 'About Tensor',
+                    icon: <Info size={14} className="mr-1 inline" />
+                  },
+                  { 
+                    question: 'Joining', 
+                    query: 'How to join?',
+                    icon: <UserPlus size={14} className="mr-1 inline" />
+                  },
+                  { 
+                    question: 'Teams', 
+                    query: 'Tell me about Tensor teams',
+                    icon: <Users size={14} className="mr-1 inline" />
+                  },
+                  { 
+                    question: 'Events', 
+                    query: 'What events does Tensor organize?',
+                    icon: <Calendar size={14} className="mr-1 inline" />
+                  },
+                  { 
+                    question: 'Membership', 
+                    query: 'Who can join Tensor?',
+                    icon: <Award size={14} className="mr-1 inline" />
+                  },
+                  { 
+                    question: 'Contact', 
+                    query: 'How to contact Tensor?',
+                    icon: <Phone size={14} className="mr-1 inline" />
+                  }
+                ].map((item) => (
+                  <button 
+                    key={item.question}
+                    onClick={() => {
+                      const answer = findAnswer(item.query);
+                      setMessages(prev => [
+                        ...prev, 
+                        { type: 'user', content: item.query },
+                        { type: 'bot', content: answer }
+                      ]);
+                      setTimeout(() => {
+                        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="
+                      flex 
+                      items-center 
+                      whitespace-nowrap 
+                      bg-white/10 
+                      text-white 
+                      px-2 
+                      py-1 
+                      rounded-md 
+                      text-xs 
+                      hover:bg-white/20 
+                      transition-colors
+                    "
+                  >
+                    {item.icon}
+                    {item.question}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Chat Messages */}
-            <div
-              ref={chatContainerRef}
+            <div 
+              ref={messagesContainerRef}
               onScroll={handleScroll}
-              className="h-64 overflow-y-auto p-4 space-y-4"
+              className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.9) 100%)',
+              }}
             >
               {messages.map((message, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} w-full`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
-                      message.type === 'user'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-gray-800 text-gray-200'
-                    }`}
+                    className={`
+                      max-w-[80%] 
+                      p-3 
+                      rounded-lg 
+                      break-words 
+                      shadow-md
+                      ${
+                        message.type === 'user'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/10 text-white'
+                      }
+                    `}
+                    style={{ 
+                      wordWrap: 'break-word', 
+                      overflowWrap: 'break-word'
+                    }}
                   >
-                    {message.content}
+                    <p className="text-sm leading-relaxed">{message.content}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
               <div ref={messagesEndRef} />
+              
+              {/* Scroll to Top Button */}
+              <AnimatePresence>
+                {showScrollTop && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    onClick={scrollToTop}
+                    className="absolute bottom-4 right-2 p-2 rounded-full shadow-lg transition-all duration-300 group
+                             bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 hover:shadow-xl
+                             hover:shadow-purple-500/30 hover:scale-110"
+                    whileHover={{ y: -2, rotate: 360 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronUp className="w-4 h-4 group-hover:animate-bounce text-white" />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Scroll to Bottom Button */}
-            <AnimatePresence>
-              {showScrollButton && (
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={scrollToBottom}
-                  className="absolute bottom-20 right-4 p-2 bg-purple-500 text-white rounded-full shadow-lg hover:bg-purple-600 transition-colors"
-                >
-                  <ChevronUp size={20} />
-                </motion.button>
-              )}
-            </AnimatePresence>
-
             {/* Chat Input */}
-            <form onSubmit={handleSubmit} className="p-4 bg-gray-800">
-              <div className="relative">
+            <form onSubmit={handleSubmit} className="p-4 border-t border-white/10 bg-gradient-to-b from-black/90 to-black/70">
+              <div className="flex items-center space-x-2">
                 <input
+                  ref={inputRef}
                   type="text"
-                  value={input}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type your message..."
-                  className="w-full p-2 pr-10 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="flex-1 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 
+                           focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/10
+                           transition-all duration-300 backdrop-blur-sm"
                 />
-                <div className="absolute right-2 top-2 text-gray-400 cursor-help group">
-                  <Info size={20} />
-                  <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-gray-800 text-xs text-gray-300 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    Try asking about:
-                    <ul className="mt-1 list-disc list-inside">
-                      <li>Tensor Club</li>
-                      <li>Our projects</li>
-                      <li>Events</li>
-                      <li>How to join</li>
-                    </ul>
-                  </div>
-                </div>
+                <button
+                  type="submit"
+                  className="p-2 rounded-lg transition-all duration-300
+                           bg-gradient-to-r from-purple-600 to-pink-500 text-white
+                           hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
               </div>
             </form>
+
+            <style>{`
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+                margin-right: 2px;
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+                border-radius: 10px;
+                margin: 8px 0;
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-track:hover {
+                background: rgba(255, 255, 255, 0.05);
+                box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.1);
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: linear-gradient(45deg, 
+                  #ff3366,
+                  #ff33ff,
+                  #3366ff,
+                  #33ffff,
+                  #33ff66
+                );
+                background-size: 200% 200%;
+                animation: gradient-scroll 5s ease infinite;
+                border-radius: 10px;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 
+                  0 0 10px rgba(255, 255, 255, 0.2),
+                  inset 0 0 6px rgba(255, 255, 255, 0.3);
+                transition: all 0.3s ease;
+              }
+              
+              .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background-size: 100% 100%;
+                box-shadow: 
+                  0 0 20px rgba(255, 255, 255, 0.4),
+                  inset 0 0 10px rgba(255, 255, 255, 0.5);
+              }
+
+              @keyframes gradient-scroll {
+                0% {
+                  background-position: 0% 50%;
+                }
+                50% {
+                  background-position: 100% 50%;
+                }
+                100% {
+                  background-position: 0% 50%;
+                }
+              }
+              
+              .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: #ff3366 transparent;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-button {
+                display: none;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-corner {
+                background: transparent;
+                border-radius: 10px;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-thumb:active {
+                background: linear-gradient(45deg, 
+                  #ff3366 0%,
+                  #ff33ff 25%,
+                  #3366ff 50%,
+                  #33ffff 75%,
+                  #33ff66 100%
+                );
+                box-shadow: 
+                  0 0 30px rgba(255, 255, 255, 0.6),
+                  inset 0 0 15px rgba(255, 255, 255, 0.7);
+              }
+            `}</style>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+
+      {/* Chat Toggle Button */}
+      <div className="relative">
+        <motion.button
+          onClick={toggleChat}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={`p-3 bg-black/90 backdrop-blur-lg rounded-full shadow-lg border border-white/10 ${
+            isOpen ? 'hidden' : ''
+          }`}
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        >
+          <img src="/logo_white.png" alt="Tensor Logo" className="w-8 h-8" />
+        </motion.button>
+        
+        <AnimatePresence>
+          {showTooltip && !isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="
+                absolute 
+                bottom-full 
+                right-0 
+                mb-2 
+                bg-white/90 
+                text-black 
+                px-3 
+                py-2 
+                rounded-lg 
+                shadow-lg 
+                text-xs 
+                whitespace-nowrap
+                z-50
+              "
+            >
+              Need help? Chat with TensorBot!
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Minimized Chat Indicator */}
+      {isMinimized && (
+        <motion.button
+          onClick={() => setIsMinimized(false)}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          className="flex items-center space-x-2 p-2 bg-black/90 backdrop-blur-lg rounded-lg border border-white/10 shadow-lg"
+        >
+          <img src="/logo_white.png" alt="Tensor Logo" className="w-6 h-6" />
+          <span className="text-white font-semibold">TensorBot</span>
+        </motion.button>
+      )}
+    </div>
   );
 };
 

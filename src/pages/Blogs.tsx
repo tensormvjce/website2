@@ -3,8 +3,19 @@ import { db } from '../services/firebase';
 import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import ItemCard from '../components/ItemCard';
 
+interface Blog {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  content: string;
+  author: string;
+  tags?: string[];
+}
+
 const Blogs: React.FC = () => {
-  const { items: blogs, loading, error } = useFirestoreCollection(db, 'blogs');
+  const { items: blogs, loading, error } = useFirestoreCollection<Blog>(db, 'blogs');
 
   if (loading) {
     return (
@@ -34,7 +45,11 @@ const Blogs: React.FC = () => {
             <ItemCard 
               key={blog.id} 
               type="blog"
-              {...blog}
+              title={blog.title}
+              description={blog.description}
+              image={blog.image}
+              date={blog.date}
+              author={blog.author}
             />
           ))}
         </div>

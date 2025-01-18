@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { db } from '../services/firebase';
 import { 
   collection, 
   addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  doc 
 } from 'firebase/firestore';
-import { db } from '../services/firebase';
 
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'blogs' | 'projects' | 'events'>('blogs');
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +34,6 @@ const AdminDashboard: React.FC = () => {
       avatar: string; 
       linkedin: string 
     }[],
-    websiteUrl: '', // Add this line
   });
 
   useEffect(() => {
@@ -100,7 +94,6 @@ const AdminDashboard: React.FC = () => {
         duration: '',
         registrationStatus: 'Open',
         speakers: [],
-        websiteUrl: '', // Reset this field
       });
       setError(null);
     } catch (error) {
@@ -418,17 +411,6 @@ const AdminDashboard: React.FC = () => {
               </button>
             </div>
           </>
-        )}
-        {activeTab === 'projects' && (
-          <div className="mb-4">
-            <label className="block mb-2">Project Website URL (optional)</label>
-            <input
-              type="text"
-              value={newItem.websiteUrl}
-              onChange={(e) => setNewItem(prev => ({ ...prev, websiteUrl: e.target.value }))}
-              className="w-full bg-gray-800 p-2 rounded"
-            />
-          </div>
         )}
         <button
           type="button"

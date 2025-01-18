@@ -1,9 +1,7 @@
 "use client";
 
-import React from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaInstagram, FaTwitter, FaReact } from 'react-icons/fa';
-import { SiTensorflow } from 'react-icons/si';
+import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 import logo from "../logo_white.png";
 import likith from "../assets/team/likith1.png";
 import yusha from "../assets/team/yusha.jpg";
@@ -19,11 +17,6 @@ const Footer = () => {
       icon: <FaGithub className="w-6 h-6" />,
       href: "https://github.com/tensormvjce",
       color: "hover:text-gray-400"
-    },
-    {
-      icon: <FaInstagram className="w-6 h-6" />,
-      href: "https://www.instagram.com/tensor.mvjce",
-      color: "hover:text-pink-500"
     },
     {
       icon: <FaTwitter className="w-6 h-6" />,

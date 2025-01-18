@@ -8,16 +8,12 @@ interface LoadingScreenProps {
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isExiting, setIsExiting] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsExiting(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        onLoadingComplete?.();
-      }, 800); // Match this with exit animation duration
+      setIsLoading(false);
+      onLoadingComplete?.();
     }, 2500);
 
     // Progress animation

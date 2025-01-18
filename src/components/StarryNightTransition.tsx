@@ -222,7 +222,7 @@ const StarField = ({ count = 5000, radius = 1.5 }: StarFieldProps) => {
     new Float32Array(random.inSphere(new Float32Array(count), { radius: radius }))
   );
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (ref.current) {
       ref.current.rotation.x -= delta / 10;
       ref.current.rotation.y -= delta / 15;

@@ -20,7 +20,7 @@ const EventDetails = lazy(() => import('./pages/EventDetails'));
 const AppRoutes: React.FC = () => {
   return (
     <AuthProvider>
-      <Suspense fallback={<LoadingAnimation />}>
+      <Suspense fallback={<LoadingAnimation onLoadingComplete={() => {}} />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />

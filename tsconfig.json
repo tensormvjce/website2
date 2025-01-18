@@ -1,19 +1,26 @@
 {
+  "extends": "./tsconfig.node.json",
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -24,14 +31,9 @@
       "react-dom",
       "three",
       "@react-three/fiber",
-      "@react-three/drei"
-    ],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "allowImportingTsExtensions": true
+      "@react-three/drei",
+      "vite/client"
+    ]
   },
-  "include": ["src"],
-  "references": [
-    { "path": "./tsconfig.node.json" }
-  ]
+  "include": ["src"]
 }

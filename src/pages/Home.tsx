@@ -65,23 +65,31 @@ function BlackHoleBackground() {
 }
 
 const Home = () => {
-  const { scrollYProgress } = useScroll({ smooth: true });
+  const { scrollYProgress } = useScroll();
 
-  const scale = useMemo(() =>
-    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [1, 1.6, 1.6, 1], { clamp: false })
-  , [scrollYProgress]);
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 0.4, 0.6, 1],
+    [1, 1.3, 1.3, 1]
+  );
 
-  const opacity = useMemo(() =>
-    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [1, 0.85, 0.85, 1], { clamp: false })
-  , [scrollYProgress]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.4, 0.6, 1],
+    [1, 0.9, 0.9, 1]
+  );
 
-  const translateZ = useMemo(() =>
-    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0, 300, 300, 0], { clamp: false })
-  , [scrollYProgress]);
+  const translateZ = useTransform(
+    scrollYProgress,
+    [0, 0.4, 0.6, 1],
+    [0, 200, 200, 0]
+  );
 
-  const rotate = useMemo(() =>
-    useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0, 1, -1, 0], { clamp: false })
-  , [scrollYProgress]);
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 0.4, 0.6, 1],
+    [0, 0.5, -0.5, 0]
+  );
 
   const CustomIcons = {
     Projects: () => (
@@ -161,7 +169,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-black text-white perspective-[2000px]">
+    <div className="relative min-h-screen bg-black text-white perspective-[1500px]">
       <motion.div 
         className="fixed inset-0 w-full h-screen will-change-transform"
         style={{ 
@@ -174,7 +182,7 @@ const Home = () => {
         }}
       >
         <Canvas 
-          camera={{ position: [0, 0, 3.5], fov: 70 }}
+          camera={{ position: [0, 0, 3.5], fov: 65 }}
           dpr={1}
           performance={{ min: 0.5 }}
         >

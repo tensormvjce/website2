@@ -15,6 +15,7 @@ interface Event {
   location: string;
   registrationLink?: string;
   slug: string;
+  status: 'Open' | 'Closed' | 'Ended';
 }
 
 const Events: React.FC = () => {
@@ -144,21 +145,71 @@ const Events: React.FC = () => {
                     />
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
-                    <p className="text-gray-400 mb-4">{event.description}</p>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-xl font-semibold">{event.title}</h3>
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        event.status === 'Open' 
+                          ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                          : event.status === 'Ended' 
+                            ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
+                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                      }`}>
+                        {event.status === 'Open' ? 'Registration Open' : 
+                         event.status === 'Ended' ? 'Event Ended' : 
+                         'Registration Closed'}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {event.tags?.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs text-purple-400 px-2 py-1 rounded-full border border-purple-400/30 terminal-text"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-gray-400 mb-4 line-clamp-2">{event.description}</p>
+                    <div className="flex items-center justify-between mb-4">
                       <span className="text-purple-400">{event.date}</span>
                       {event.registrationLink && (
-                        <a
-                          href={event.registrationLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
-                                   rounded-lg text-white font-medium transition-all duration-300"
-                        >
-                          Register
-                        </a>
+                        event.status === 'Open' ? (
+                          <a
+                            href={event.registrationLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
+                                     rounded-lg text-white font-medium transition-all duration-300"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Register
+                          </a>
+                        ) : (
+                          <span className="px-4 py-2 bg-gray-800/50 border border-gray-700 
+                                         rounded-lg text-gray-500 font-medium cursor-not-allowed">
+                            {event.status === 'Ended' ? 'Event Ended' : 'Registration Closed'}
+                          </span>
+                        )
                       )}
+                    </div>
+                    <div className="flex items-center justify-end mt-2">
+                      <button className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-2 group transition-all duration-300">
+                        Read More
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M13 7l5 5m0 0l-5 5m5-5H6" 
+                          />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>

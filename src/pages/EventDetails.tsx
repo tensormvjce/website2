@@ -94,13 +94,46 @@ const EventDetails: React.FC = () => {
           
           {/* Event Title Overlay */}
           <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-6">
-            <h1 className="text-4xl font-bold text-white">{event.title}</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-4xl font-bold text-white">{event.title}</h1>
+              <div className={`px-4 py-2 rounded-full text-sm font-medium ${
+                event.status === 'Open' 
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                  : event.status === 'Ended'
+                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                    : 'bg-red-500/20 text-red-400 border border-red-500/30'
+              }`}>
+                {event.status === 'Open' ? 'Registration Open' : 
+                 event.status === 'Ended' ? 'Event Ended' : 
+                 'Registration Closed'}
+              </div>
+            </div>
             <div className="flex items-center mt-4 space-x-4">
               <span className="text-purple-400">{event.date}</span>
-              <span className="text-green-400 bg-green-500/20 px-2 py-1 rounded-full text-sm">
-                {event.registrationStatus}
-              </span>
+              <span className="text-gray-400">•</span>
+              <span className="text-purple-400">{event.location}</span>
             </div>
+            {event.registrationLink && (
+              <div className="mt-4">
+                {event.status === 'Open' ? (
+                  <a
+                    href={event.registrationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-6 py-2 bg-purple-500/20 hover:bg-purple-500/30 
+                             border border-purple-500/50 rounded-lg text-white font-medium 
+                             transition-all duration-300"
+                  >
+                    Register Now
+                  </a>
+                ) : (
+                  <span className="inline-block px-6 py-2 bg-gray-800/50 border border-gray-700 
+                                 rounded-lg text-gray-500 font-medium cursor-not-allowed">
+                    {event.status === 'Ended' ? 'Event Ended' : 'Registration Closed'}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -125,7 +158,7 @@ const EventDetails: React.FC = () => {
           {/* Event Venue */}
           <div className="bg-gray-900/50 rounded-xl p-6">
             <h3 className="text-xl font-semibold text-white mb-4">Venue</h3>
-            <p className="text-gray-300">{event.venue || 'TBA'}</p>
+            <p className="text-gray-300">{event.venue || event.location || 'TBA'}</p>
           </div>
 
           {/* Event Duration */}

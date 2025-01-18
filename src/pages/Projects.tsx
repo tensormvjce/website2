@@ -150,39 +150,63 @@ const Projects: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 glow-text">Projects</h1>
-        
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      <div className="noise" />
+      <div className="grid-background fixed inset-0" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className="text-center mb-12">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold mb-6 glitch"
+            data-text="Our Projects"
+          >
+            Our Projects
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 terminal-text max-w-2xl mx-auto"
+          >
+            Innovative Solutions Transforming Tomorrow
+          </motion.p>
+        </div>
+
         {/* Search and Filter Section */}
-        <div className="mb-8 space-y-4">
+        <div className="max-w-xl mx-auto mb-12">
           <input
             type="text"
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 rounded-lg bg-gray-900/50 border border-gray-800 focus:border-purple-500/50 
+                     focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm text-white 
+                     placeholder-gray-400 transition-all duration-300"
           />
-          
-          <div className="flex flex-wrap gap-2">
-            {uniqueTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setSelectedTag(tag)}
-                className={`px-4 py-2 rounded-full text-sm transition-colors ${
-                  selectedTag.toLowerCase() === tag.toLowerCase()
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                }`}
-              >
-                {tag === "All" ? tag : tag.charAt(0).toUpperCase() + tag.slice(1)}
-              </button>
-            ))}
-          </div>
+        </div>
+
+        <div className="mb-12 flex flex-wrap justify-center gap-2">
+          {uniqueTags.map((tag) => (
+            <motion.button
+              key={tag}
+              onClick={() => setSelectedTag(tag)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                selectedTag.toLowerCase() === tag.toLowerCase()
+                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/50'
+                  : 'bg-gray-900/50 text-gray-400 border-gray-800 hover:border-purple-500/30 hover:text-purple-400'
+              } border backdrop-blur-sm`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {tag === "All" ? tag : tag.charAt(0).toUpperCase() + tag.slice(1)}
+            </motion.button>
+          ))}
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="wait">
             {filteredProjects.slice(0, visibleProjects).map((project) => (
               <ProjectCard 

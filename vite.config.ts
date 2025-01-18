@@ -57,12 +57,6 @@ export default defineConfig(({ mode }) => {
       port: 3000,
     },
     define: {
-      'import.meta.env.VITE_FIREBASE_API_KEY': JSON.stringify(env.VITE_FIREBASE_API_KEY),
-      'import.meta.env.VITE_FIREBASE_AUTH_DOMAIN': JSON.stringify(env.VITE_FIREBASE_AUTH_DOMAIN),
-      'import.meta.env.VITE_FIREBASE_PROJECT_ID': JSON.stringify(env.VITE_FIREBASE_PROJECT_ID),
-      'import.meta.env.VITE_FIREBASE_STORAGE_BUCKET': JSON.stringify(env.VITE_FIREBASE_STORAGE_BUCKET),
-      'import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID': JSON.stringify(env.VITE_FIREBASE_MESSAGING_SENDER_ID),
-      'import.meta.env.VITE_FIREBASE_APP_ID': JSON.stringify(env.VITE_FIREBASE_APP_ID),
       'process.env': env
     },
     optimizeDeps: {
@@ -75,8 +69,13 @@ export default defineConfig(({ mode }) => {
         '@react-three/drei',
         'three',
         'leaflet',
-        'lucide-react'
-      ]
+        'lucide-react',
+        'firebase',
+        'gsap'
+      ],
+      esbuildOptions: {
+        target: 'es2020'
+      }
     }
   };
 });

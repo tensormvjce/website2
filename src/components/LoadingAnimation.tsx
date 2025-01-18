@@ -113,55 +113,35 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
     <AnimatePresence>
       {isLoading && (
         <div className="loading-wrapper">
-          {/* Background puzzle pieces */}
-          {showPuzzleOut && (
-            <div className="puzzle-container">
-              {Array.from({ length: 25 }).map((_, index) => (
-                <motion.div
-                  key={index}
-                  className="puzzle-piece"
-                  style={{
-                    position: 'absolute',
-                    width: '20%',
-                    height: '20%',
-                    left: `${(index % 5) * 20}%`,
-                    top: `${Math.floor(index / 5) * 20}%`,
-                    backgroundColor: '#000',
-                  }}
-                  initial={{ 
-                    x: 0, 
-                    y: 0, 
-                    opacity: 1,
-                  }}
-                  animate={{
-                    x: (index % 5 - 2) * 60,
-                    y: (Math.floor(index / 5) - 2) * 60,
-                    opacity: 0,
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    ease: [0.23, 1, 0.32, 1],
-                    delay: Math.sqrt(Math.pow(index % 5 - 2, 2) + Math.pow(Math.floor(index / 5) - 2, 2)) * 0.1,
-                    opacity: { duration: 0.8, delay: 0.4 }
-                  }}
-                />
-              ))}
-            </div>
-          )}
-
           {/* Main content with logo and progress bar */}
           <motion.div
             className="loading-container"
             initial={{ scale: 1 }}
             animate={containerControls}
             style={{
-              background: showPuzzleOut ? 'transparent' : '#000'
+              pointerEvents: 'none',
+              userSelect: 'none',
+              backgroundColor: 'transparent'
             }}
           >
             {/* Logo */}
-            <div className="logo-container">
+            <div 
+              className="logo-container"
+              style={{
+                pointerEvents: 'none',
+                userSelect: 'none',
+                backgroundColor: 'transparent'
+              }}
+            >
               {isSplitting ? (
-                <div className="split-logo-container">
+                <div 
+                  className="split-logo-container"
+                  style={{
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    backgroundColor: 'transparent'
+                  }}
+                >
                   {/* Top-right part */}
                   <motion.div
                     className="split-half top-part"
@@ -176,6 +156,11 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
                       ease: [0.4, 0, 0.2, 1],
                       opacity: { duration: 0.6, delay: 0.2 }
                     }}
+                    style={{
+                      pointerEvents: 'none',
+                      userSelect: 'none',
+                      backgroundColor: 'transparent'
+                    }}
                   >
                     <svg width="100%" height="100%" viewBox="0 0 128 128">
                       <defs>
@@ -188,6 +173,10 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
                         width="128"
                         height="128"
                         clipPath="url(#topMask)"
+                        style={{
+                          pointerEvents: 'none',
+                          userSelect: 'none'
+                        }}
                       />
                     </svg>
                   </motion.div>
@@ -206,6 +195,11 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
                       ease: [0.4, 0, 0.2, 1],
                       opacity: { duration: 0.6, delay: 0.2 }
                     }}
+                    style={{
+                      pointerEvents: 'none',
+                      userSelect: 'none',
+                      backgroundColor: 'transparent'
+                    }}
                   >
                     <svg width="100%" height="100%" viewBox="0 0 128 128">
                       <defs>
@@ -218,6 +212,10 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
                         width="128"
                         height="128"
                         clipPath="url(#bottomMask)"
+                        style={{
+                          pointerEvents: 'none',
+                          userSelect: 'none'
+                        }}
                       />
                     </svg>
                   </motion.div>
@@ -236,6 +234,11 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
                       damping: 20,
                       duration: 0.8
                     }
+                  }}
+                  style={{
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    backgroundColor: 'transparent'
                   }}
                 />
               )}

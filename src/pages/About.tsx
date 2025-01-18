@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Rocket, Users, Code, Award, Globe } from 'lucide-react';
 
@@ -62,8 +61,8 @@ const About = () => {
           transition={{ delay: 0.4 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20"
         >
-          {stats.map((stat, index) => (
-            <div 
+          {stats.map((stat) => (
+            <motion.div
               key={stat.label}
               className="relative group"
             >
@@ -72,7 +71,7 @@ const About = () => {
                 <div className="text-3xl font-bold glow-text mb-2">{stat.value}</div>
                 <div className="text-gray-400 terminal-text text-sm">{stat.label}</div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
 
@@ -122,8 +121,11 @@ const About = () => {
         >
           <h2 className="text-2xl font-bold mb-8 glow-text text-center">Our Achievements</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {achievements.map((achievement, index) => (
-              <div key={achievement.title} className="relative group">
+            {achievements.map((achievement) => (
+              <motion.div
+                key={achievement.title}
+                className="relative group"
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative p-6 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
                   <div className="p-3 bg-purple-500/10 rounded-lg w-fit mb-4">
@@ -132,7 +134,7 @@ const About = () => {
                   <h3 className="text-lg font-semibold mb-2">{achievement.title}</h3>
                   <p className="text-gray-400 terminal-text text-sm">{achievement.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>

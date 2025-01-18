@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { teamData, TeamYear, TeamMember } from '../data/teamData';
 import TeamCard from '../components/TeamCard';
@@ -59,7 +59,7 @@ const Teams = () => {
           {/* Continuous Timeline Line */}
           <div className="absolute top-12 bottom-0 w-0.5 bg-gradient-to-b from-purple-500/50 via-purple-500/50 to-transparent" />
 
-          {[...teamData].reverse().map((yearData: TeamYear, index) => (
+          {[...teamData].reverse().map((yearData: TeamYear) => (
             <div key={yearData.year} className="relative w-full flex flex-col items-center">
               {/* Year Button */}
               <div className="relative z-10">

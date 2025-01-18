@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { db } from '../services/firebase';
 import { useFirestoreCollection, FirestoreItem } from '../hooks/useFirestoreCollection';
+import ContentLoader from '../components/ContentLoader'; // Import the ContentLoader component
 
 interface Project extends FirestoreItem {
   title: string;
@@ -129,11 +130,7 @@ const Projects: React.FC = () => {
   const hasMoreProjects = visibleProjects < filteredProjects.length;
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-2xl">Loading projects...</div>
-      </div>
-    );
+    return <ContentLoader type="project" />;
   }
 
   if (error) {

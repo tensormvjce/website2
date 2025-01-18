@@ -1,14 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { events } from '../data/eventsData';
+import { db } from '../services/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { FirestoreItem } from '../hooks/useFirestoreCollection';
 
-const EventDetails = () => {
+const EventDetails: React.FC = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const event = events.find(e => e.slug === slug);
+  const [event, setEvent] = useState<FirestoreItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!event) {
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const q = query(
+          collection(db, 'events'), 
+          where('slug', '==', slug)
+        );
+
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          const eventData = querySnapshot.docs[0].data() as FirestoreItem;
+          setEvent({
+            id: querySnapshot.docs[0].id,
+            ...eventData
+          });
+        } else {
+          setError('Event not found');
+        }
+      } catch (err) {
+        console.error('Error fetching event:', err);
+        setError('Failed to fetch event details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-2xl">Loading event details...</div>
+      </div>
+    );
+  }
+
+  if (error || !event) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white text-center">
@@ -30,123 +72,35 @@ const EventDetails = () => {
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Banner Image */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Event Banner */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full h-[400px] rounded-xl overflow-hidden mb-8"
+          className="mb-12 relative"
         >
-          <img
-            src={event.bannerImg}
-            alt={event.title}
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
-
-        {/* Title and Basic Info */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mb-12"
-        >
-          <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
-          <p className="text-gray-400 text-lg mb-6">{event.longDescription}</p>
-          <div className="flex flex-wrap gap-2">
-            {event.tags.map(tag => (
-              <span
-                key={tag}
-                className="px-3 py-1 bg-purple-500/20 rounded-full text-sm font-medium text-purple-300"
-              >
-                {tag}
+          <div className="w-full h-[400px] overflow-hidden rounded-2xl">
+            <img
+              src={event.bannerImg || event.image}
+              alt={event.title}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = './events/placeholder.webp';
+                target.onerror = null;
+              }}
+            />
+          </div>
+          
+          {/* Event Title Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-6">
+            <h1 className="text-4xl font-bold text-white">{event.title}</h1>
+            <div className="flex items-center mt-4 space-x-4">
+              <span className="text-purple-400">{event.date}</span>
+              <span className="text-green-400 bg-green-500/20 px-2 py-1 rounded-full text-sm">
+                {event.registrationStatus}
               </span>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Agenda */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mb-12"
-        >
-          <h2 className="text-2xl font-bold mb-6">Agenda</h2>
-          <div className="space-y-8">
-            {event.agenda.map((day, index) => (
-              <div key={index} className="bg-gray-900/50 rounded-xl p-6 backdrop-blur-sm">
-                <h3 className="text-xl font-semibold mb-4 text-purple-400">{day.day}: {day.title}</h3>
-                <ul className="list-disc list-inside space-y-2 text-gray-300">
-                  {day.details.map((detail, i) => (
-                    <li key={i}>{detail}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Why Attend */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="mb-12"
-        >
-          <h2 className="text-2xl font-bold mb-6">Why Attend?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {event.whyAttend.map((reason, index) => (
-              <div
-                key={index}
-                className="bg-gray-900/50 rounded-xl p-6 backdrop-blur-sm border border-purple-500/20"
-              >
-                <p className="text-gray-300">{reason}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Speakers */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-12"
-        >
-          <h2 className="text-2xl font-bold mb-6">Speakers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {event.speakers.map((speaker, index) => (
-              <div
-                key={index}
-                onClick={() => window.open(speaker.linkedin, '_blank')}
-                className="bg-gray-900/50 rounded-xl p-6 backdrop-blur-sm border border-purple-500/20 
-                         cursor-pointer transform hover:scale-105 transition-all duration-300 
-                         hover:border-purple-500/50 group"
-              >
-                <img
-                  src={speaker.avatar}
-                  alt={speaker.name}
-                  className="w-24 h-24 rounded-full mb-4 object-cover mx-auto 
-                           group-hover:ring-2 group-hover:ring-purple-500 transition-all duration-300"
-                />
-                <h3 className="text-xl font-semibold text-center mb-2 group-hover:text-purple-400 
-                             transition-all duration-300">{speaker.name}</h3>
-                <p className="text-purple-400 text-center mb-4">{speaker.role}</p>
-                <p className="text-gray-400 text-center text-sm">{speaker.bio}</p>
-                
-                {/* LinkedIn Icon */}
-                <div className="mt-4 flex justify-center">
-                  <svg
-                    className="w-6 h-6 text-gray-400 group-hover:text-purple-400 transition-all duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                  </svg>
-                </div>
-              </div>
-            ))}
+            </div>
           </div>
         </motion.div>
 
@@ -154,34 +108,146 @@ const EventDetails = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+          transition={{ delay: 0.2 }}
+          className="bg-gray-900/50 rounded-xl p-8 mb-12"
         >
-          <div className="bg-gray-900/50 rounded-xl p-6 backdrop-blur-sm text-center">
-            <h3 className="text-lg font-semibold mb-2">Date</h3>
-            <p className="text-purple-400">{event.date}</p>
-          </div>
-          <div className="bg-gray-900/50 rounded-xl p-6 backdrop-blur-sm text-center">
-            <h3 className="text-lg font-semibold mb-2">Venue</h3>
-            <p className="text-purple-400">{event.venue}</p>
-          </div>
-          <div className="bg-gray-900/50 rounded-xl p-6 backdrop-blur-sm text-center">
-            <h3 className="text-lg font-semibold mb-2">Registration</h3>
-            <p className="text-purple-400">{event.registrationStatus}</p>
-          </div>
+          <h2 className="text-2xl font-semibold text-white mb-6">Event Description</h2>
+          <p className="text-gray-300 leading-relaxed">{event.longDescription || event.description}</p>
         </motion.div>
 
-        {/* Back Button */}
+        {/* Event Details Grid */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="flex justify-center"
+          transition={{ delay: 0.4 }}
+          className="grid md:grid-cols-2 gap-8 mb-12"
+        >
+          {/* Event Venue */}
+          <div className="bg-gray-900/50 rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-white mb-4">Venue</h3>
+            <p className="text-gray-300">{event.venue || 'TBA'}</p>
+          </div>
+
+          {/* Event Duration */}
+          <div className="bg-gray-900/50 rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-white mb-4">Duration</h3>
+            <p className="text-gray-300">{event.duration || 'TBA'}</p>
+          </div>
+        </motion.div>
+
+        {/* Agenda */}
+        {event.agenda && event.agenda.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="bg-gray-900/50 rounded-xl p-8 mb-12"
+          >
+            <h2 className="text-2xl font-semibold text-white mb-6">Event Agenda</h2>
+            {event.agenda.map((agendaItem, index) => (
+              <div key={index} className="mb-4 pb-4 border-b border-gray-700 last:border-b-0">
+                <h3 className="text-lg font-medium text-purple-400 mb-2">{agendaItem.day}</h3>
+                <h4 className="text-white mb-2">{agendaItem.title}</h4>
+                <ul className="list-disc list-inside text-gray-300">
+                  {agendaItem.details.map((detail, detailIndex) => (
+                    <li key={detailIndex}>{detail}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </motion.div>
+        )}
+
+        {/* Why Attend */}
+        {event.whyAttend && event.whyAttend.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="bg-gray-900/50 rounded-xl p-8"
+          >
+            <h2 className="text-2xl font-semibold text-white mb-6">Why Attend</h2>
+            <ul className="space-y-3">
+              {event.whyAttend.map((reason, index) => (
+                <li key={index} className="flex items-start">
+                  <svg 
+                    className="w-6 h-6 text-purple-500 mr-3 mt-1 flex-shrink-0" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth="2" 
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
+                    />
+                  </svg>
+                  <span className="text-gray-300">{reason}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Speakers */}
+        {event.speakers && event.speakers.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-12"
+          >
+            <h2 className="text-3xl font-semibold text-white text-center mb-8">Speakers</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {event.speakers.map((speaker, index) => (
+                <div 
+                  key={index} 
+                  className="bg-gray-900/50 rounded-xl p-6 text-center"
+                >
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-500">
+                    <img 
+                      src={speaker.avatar} 
+                      alt={speaker.name} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = './speakers/placeholder.webp';
+                        target.onerror = null;
+                      }}
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-2">{speaker.name}</h3>
+                  <p className="text-purple-400 mb-4">{speaker.role}</p>
+                  <p className="text-gray-300 text-sm">{speaker.bio}</p>
+                  {speaker.linkedin && (
+                    <a 
+                      href={speaker.linkedin} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-block text-blue-400 hover:text-blue-300"
+                    >
+                      LinkedIn Profile
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Back to Events Button */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="text-center mt-12"
         >
           <button
             onClick={() => navigate('/events')}
             className="px-8 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
-                     rounded-lg text-white font-medium transition-all duration-300 hover:scale-105"
+                       rounded-lg text-white font-medium transition-all duration-300 hover:scale-105"
           >
             Back to Events
           </button>

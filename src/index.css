@@ -7,6 +7,15 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
     --accent: 270 100% 60%;
+    cursor: default;
+  }
+
+  * {
+    cursor: default;
+  }
+
+  input, textarea, button, a, [contenteditable] {
+    cursor: pointer;
   }
 
   body {
@@ -16,6 +25,7 @@
       rgba(0, 0, 0, 0.9) 50%,
       rgba(0, 0, 0, 1) 100%
     );
+    cursor: default;
   }
 
   ::selection {

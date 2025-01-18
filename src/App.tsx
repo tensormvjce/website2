@@ -69,7 +69,7 @@ function App() {
               <Navbar />
               <div className="min-h-screen text-white">
                 <Routes>
-                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blogs" element={<Blog />} />
                   <Route path="/registrations" element={<Registrations />} />
                   <Route path="*" element={<AppRoutes />} />
                 </Routes>

@@ -254,7 +254,7 @@ const Home = () => {
               <LockedButton 
                 text="Join Our Club"
               />
-              <Link to="/blog" onClick={scrollToTop}>
+              <Link to="/projects" onClick={scrollToTop}>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -284,7 +284,7 @@ const Home = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {benefits.map((benefit, index) => (
-                  <div key={benefit.title} className="relative group">
+                  <div key={`benefit-${index}`} className="relative group">
                     <div className={`absolute inset-0 bg-gradient-to-r ${benefit.color} rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                     <div className="relative p-6 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
                       <div className="mb-4 p-3 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg w-fit">
@@ -311,7 +311,7 @@ const Home = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {features.map((feature, index) => (
-                  <div key={feature.title} className="relative group">
+                  <div key={`feature-${index}`} className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="relative p-8 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
                       <div className="flex items-start space-x-4">
@@ -463,8 +463,8 @@ const Home = () => {
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <div className="flex justify-center gap-4 mb-6">
-                {previewMembers.map((member) => (
-                  <div key={member.id} className="w-20 h-20 rounded-full overflow-hidden border-2 border-purple-500/50 hover:border-purple-500 transition-all duration-300 transform hover:scale-105">
+                {previewMembers.map((member, index) => (
+                  <div key={`member-${index}`} className="w-20 h-20 rounded-full overflow-hidden border-2 border-purple-500/50 hover:border-purple-500 transition-all duration-300 transform hover:scale-105">
                     <img
                       src={member.image}
                       alt={member.name}
@@ -499,7 +499,7 @@ const Home = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {events.slice(0, 3).map((event, index) => (
-                <div key={event.id} className="bg-black/50 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden 
+                <div key={`event-${index}`} className="bg-black/50 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden 
                        hover:border-purple-500/40 transition-all duration-300 group">
                   <div className="aspect-[16/9] relative overflow-hidden">
                     <img
@@ -554,7 +554,7 @@ const Home = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogs.slice(0, 3).map((blog, index) => (
-                <div key={blog.id} className="bg-black/50 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden 
+                <div key={`blog-${index}`} className="bg-black/50 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden 
                        hover:border-purple-500/40 transition-all duration-300 group">
                   <div className="aspect-[16/9] relative overflow-hidden">
                     <img

@@ -24,17 +24,6 @@ export const tags = [
 export const blogs: Blog[] = [
   {
     id: "1",
-    title: 'Sirius AI Assistant',
-    excerpt: 'An AI Assistant that responds to users voice and finds data based on queries. Built with Flask, HTML, CSS, and JavaScript.',
-    date: '2024-01-17',
-    readTime: '3 min read',
-    image: '/projects/sirius-ai.png',
-    category: 'AI Project',
-    link: 'https://sirius-ai-liard.vercel.app/',
-    tags: ['AI Project', 'Programming']
-  },
-  {
-    id: "2",
     title: 'The Future of AI in 2025',
     excerpt: 'Exploring the latest breakthroughs in artificial intelligence and their impact on society.',
     date: '2024-01-16',
@@ -44,7 +33,7 @@ export const blogs: Blog[] = [
     tags: ['AI Research']
   },
   {
-    id: "3",
+    id: "2",
     title: 'Machine Learning Best Practices',
     excerpt: 'A comprehensive guide to implementing machine learning models effectively.',
     date: '2024-01-15',
@@ -54,7 +43,7 @@ export const blogs: Blog[] = [
     tags: ['Machine Learning']
   },
   {
-    id: "4",
+    id: "3",
     title: 'Neural Networks Explained',
     excerpt: 'Understanding the fundamentals of neural networks and deep learning.',
     date: '2024-01-14',
@@ -64,7 +53,7 @@ export const blogs: Blog[] = [
     tags: ['Deep Learning', 'Machine Learning']
   },
   {
-    id: "5",
+    id: "4",
     title: 'Data Science Workflows',
     excerpt: 'Best practices for organizing and managing data science projects effectively.',
     date: '2024-01-13',
@@ -74,7 +63,7 @@ export const blogs: Blog[] = [
     tags: ['Data Science']
   },
   {
-    id: "6",
+    id: "5",
     title: 'Python for AI Development',
     excerpt: 'A comprehensive guide to using Python for artificial intelligence development.',
     date: '2024-01-12',
@@ -84,7 +73,7 @@ export const blogs: Blog[] = [
     tags: ['Programming', 'AI Research']
   },
   {
-    id: "7",
+    id: "6",
     title: 'Ethics in AI',
     excerpt: 'Exploring the ethical considerations in artificial intelligence development.',
     date: '2024-01-11',
@@ -94,7 +83,7 @@ export const blogs: Blog[] = [
     tags: ['AI Ethics']
   },
   {
-    id: "8",
+    id: "7",
     title: 'Deep Learning Frameworks',
     excerpt: 'Comparing popular deep learning frameworks and their use cases.',
     date: '2024-01-10',

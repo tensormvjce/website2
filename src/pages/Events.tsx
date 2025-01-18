@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { events, tags, Event } from '../data/eventsData';
+import { db } from '../services/firebase';
+import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 
-const Events = () => {
+const Events: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [visibleEvents, setVisibleEvents] = useState<number>(4);
 
+  // Fetch events from Firestore
+  const { items: events, loading, error } = useFirestoreCollection(db, 'events');
+
+  // Extract unique tags from events
+  const tags = ["All", ...new Set(events.flatMap(event => event.tags))];
+
+  // Filter events based on search and tag
   const filteredEvents = events.filter(event => {
     const matchesTag = selectedTag === "All" || event.tags.includes(selectedTag);
     const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -19,6 +27,22 @@ const Events = () => {
   const handleLoadMore = () => {
     setVisibleEvents(prev => Math.min(prev + 4, filteredEvents.length));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-2xl">Loading events...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-red-500 text-2xl">Error loading events: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden py-24">
@@ -55,7 +79,7 @@ const Events = () => {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setVisibleEvents(4); // Reset visible events when searching
+              setVisibleEvents(4);
             }}
           />
         </div>
@@ -67,7 +91,7 @@ const Events = () => {
               key={tag}
               onClick={() => {
                 setSelectedTag(tag);
-                setVisibleEvents(4); // Reset visible events when changing tag
+                setVisibleEvents(4);
               }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
                 ${selectedTag === tag 
@@ -85,7 +109,7 @@ const Events = () => {
           <AnimatePresence mode="popLayout">
             {filteredEvents.slice(0, visibleEvents).map((event, index) => (
               <motion.div
-                key={event.title}
+                key={event.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -96,7 +120,7 @@ const Events = () => {
                 {/* Event Image */}
                 <div className="relative w-full h-48 overflow-hidden bg-gray-800">
                   <img
-                    src={event.image}
+                    src={event.image || './events/placeholder.webp'}
                     alt={event.title}
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
                     onError={(e) => {

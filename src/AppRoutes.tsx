@@ -1,31 +1,60 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-import Home from './pages/Home';
-import Teams from './pages/Teams';
-import Blog from './pages/Blog';
-import About from './pages/About';
-import JoinClub from './pages/JoinClub';
-import Events from './pages/Events';
-import EventDetails from './pages/EventDetails';
-import { scrollToTop } from './utils/scrollUtils';
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoadingAnimation from './components/LoadingAnimation';
 
-const AppRoutes = () => {
-  const location = useLocation();
+// Lazy load pages
+const Home = lazy(() => import('./pages/Home'));
+const Blog = lazy(() => import('./pages/Blog'));
+const Events = lazy(() => import('./pages/Events'));
+const Projects = lazy(() => import('./pages/Projects'));
+const Teams = lazy(() => import('./pages/Teams'));
+const About = lazy(() => import('./pages/About'));
+const JoinClub = lazy(() => import('./pages/JoinClub'));
+const Login = lazy(() => import('./pages/Login'));
 
-  useEffect(() => {
-    scrollToTop();
-  }, [location]);
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const EventDetails = lazy(() => import('./pages/EventDetails'));
 
+const AppRoutes: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/teams" element={<Teams />} />
-      <Route path="/events" element={<Events />} />
-      <Route path="/events/:slug" element={<EventDetails />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/join" element={<JoinClub />} />
-    </Routes>
+    <AuthProvider>
+      <Suspense fallback={<LoadingAnimation />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/:slug" element={<EventDetails />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/join" element={<JoinClub />} />
+          <Route path="/login" element={<Login />} />
+          
+          {/* Protected Admin Route */}
+          <Route 
+            path="/admin-dashboard" 
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute adminOnly>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Catch-all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </AuthProvider>
   );
 };
 

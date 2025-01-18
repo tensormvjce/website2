@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
         'three': path.resolve(__dirname, 'node_modules/three'),
         '@react-three/fiber': path.resolve(__dirname, 'node_modules/@react-three/fiber'),
         '@react-three/drei': path.resolve(__dirname, 'node_modules/@react-three/drei')
-      },
+      }
     },
     build: {
       outDir: 'dist',
@@ -42,22 +42,25 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              if (id.includes('firebase')) {
+                return 'firebase';
+              }
               return 'vendor';
             }
           }
         }
       },
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1000
     },
     server: {
       port: 3000,
       open: true,
       hmr: {
-        overlay: true,
-      },
+        overlay: true
+      }
     },
     preview: {
-      port: 3000,
+      port: 3000
     },
     define: {
       'process.env': env
@@ -72,9 +75,13 @@ export default defineConfig(({ mode }) => {
         '@react-three/drei',
         'three',
         'lucide-react',
-        'firebase',
+        'firebase/app',
+        'firebase/auth',
+        'firebase/firestore',
+        'firebase/storage',
         'gsap'
       ],
+      exclude: ['firebase'],
       esbuildOptions: {
         target: 'es2020'
       }

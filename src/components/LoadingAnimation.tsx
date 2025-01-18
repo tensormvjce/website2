@@ -1,308 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import './LoadingAnimation.css';
+import React, { useState, useEffect } from 'react';
+import logo from '../logo_white.png';
 
 interface LoadingAnimationProps {
   onLoadingComplete: () => void;
 }
 
 const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [showPuzzleOut, setShowPuzzleOut] = useState(false);
-  const [isZooming, setIsZooming] = useState(false);
-  const [isSplitting, setIsSplitting] = useState(false);
-  const containerControls = useAnimation();
+  const [fadeOut, setFadeOut] = useState(false);
+  const [zoomIn, setZoomIn] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeout(() => {
-        setIsLoading(false);
-        onLoadingComplete?.();
-      }, 2500);
-    }, 3000);
+    // Show logo after a brief delay
+    setTimeout(() => setShowLogo(true), 500);
 
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => Math.min(prev + 10, 100));
-    }, 300);
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          setZoomIn(true);
+          setTimeout(() => {
+            setFadeOut(true);
+            setTimeout(() => {
+              setLoading(false);
+              onLoadingComplete();
+            }, 1500);
+          }, 1000);
+          return 100;
+        }
+        return prev + 0.5; // Slower progress for more premium feel
+      });
+    }, 50);
 
-    return () => {
-      clearTimeout(timer);
-      clearInterval(progressInterval);
-    };
+    return () => clearInterval(timer);
   }, [onLoadingComplete]);
 
-  useEffect(() => {
-    if (progress === 100) {
-      const startTransition = async () => {
-        // Start zoom
-        setIsZooming(true);
-        await containerControls.start({
-          scale: 1.6,
-          transition: { duration: 1.5, ease: [0.4, 0, 0.2, 1] }
-        });
-        
-        console.log("Zoom complete, starting split");
-        // Start split
-        setIsSplitting(true);
-        
-        // Start puzzle effect after split starts
-        setTimeout(() => {
-          console.log("Starting puzzle effect");
-          setShowPuzzleOut(true);
-        }, 400);
-      };
-      
-      setTimeout(startTransition, 500);
-    }
-  }, [progress, containerControls]);
-
-  // Helper function to calculate piece movement
-  const calculatePieceMovement = (index: number, gridSize: number) => {
-    const row = Math.floor(index / gridSize);
-    const col = index % gridSize;
-    const centerOffset = (gridSize - 1) / 2;
-    const centerX = col - centerOffset;
-    const centerY = row - centerOffset;
-    const angle = Math.atan2(centerY, centerX);
-    const distance = Math.sqrt(centerX * centerX + centerY * centerY);
-    const maxDistance = Math.sqrt(2) * centerOffset;
-    const normalizedDistance = distance / maxDistance;
-    
-    const moveDistance = 40 + (normalizedDistance * 80); // Gentler movement
-    const moveX = Math.cos(angle) * moveDistance;
-    const moveY = Math.sin(angle) * moveDistance;
-    
-    return {
-      x: moveX,
-      y: moveY,
-      rotate: (angle * (180 / Math.PI)) + (Math.random() * 15 - 7.5), // Reduced rotation
-      scale: 1 + (normalizedDistance * 0.15), // Subtle scale
-      delay: normalizedDistance * 0.4 // Smoother wave effect
-    };
-  };
-
-  // Create background pieces (5x5 grid)
-  const backgroundPieces = Array.from({ length: 25 }, (_, i) => {
-    const movement = calculatePieceMovement(i, 5);
-    return {
-      ...movement,
-      opacity: 0
-    };
-  });
-
-  // Create logo pieces (4x4 grid for more detail)
-  const logoPieces = Array.from({ length: 16 }, (_, i) => {
-    const movement = calculatePieceMovement(i, 4);
-    return {
-      ...movement,
-      opacity: 0
-    };
-  });
+  if (!loading) return null;
 
   return (
-    <AnimatePresence>
-      {isLoading && (
-        <div className="loading-wrapper">
-          {/* Background puzzle pieces */}
-          {showPuzzleOut && (
-            <div className="puzzle-container">
-              {Array.from({ length: 25 }).map((_, index) => (
-                <motion.div
-                  key={index}
-                  className="puzzle-piece"
-                  style={{
-                    position: 'absolute',
-                    width: '20%',
-                    height: '20%',
-                    left: `${(index % 5) * 20}%`,
-                    top: `${Math.floor(index / 5) * 20}%`,
-                    backgroundColor: '#000',
-                  }}
-                  initial={{ 
-                    x: 0, 
-                    y: 0, 
-                    opacity: 1,
-                  }}
-                  animate={{
-                    x: (index % 5 - 2) * 60,
-                    y: (Math.floor(index / 5) - 2) * 60,
-                    opacity: 0,
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    ease: [0.23, 1, 0.32, 1],
-                    delay: Math.sqrt(Math.pow(index % 5 - 2, 2) + Math.pow(Math.floor(index / 5) - 2, 2)) * 0.1,
-                    opacity: { duration: 0.8, delay: 0.4 }
-                  }}
-                />
-              ))}
-            </div>
-          )}
-          {/* Main content with logo and progress bar */}
-          <motion.div
-            className="loading-container"
-            initial={{ scale: 1 }}
-            animate={containerControls}
+    <div className={`min-h-screen bg-black flex items-center justify-center overflow-hidden transition-opacity duration-1000 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
+      <div className="relative">
+        {/* Constant glowing background effect */}
+        <div className="absolute inset-0 blur-[100px] bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30" />
+        <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-blue-500/20 to-purple-500/20" />
+        
+        {/* Grid background */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+        
+        {/* Logo */}
+        <div className={`relative transition-all duration-1000 ${showLogo ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="relative mb-12 flex justify-center">
+            <img 
+              src={logo}
+              alt="Tensor Logo"
+              className={`w-32 h-32 relative z-10 animate-float ${zoomIn ? 'animate-zoom-in' : ''}`}
+            />
+          </div>
+        </div>
+
+        <div className="relative mt-8">
+          {/* Base text layer */}
+          <div 
+            className="text-[120px] font-bold tracking-[1rem] text-blue-400 select-none font-orbitron"
             style={{
-              background: showPuzzleOut ? 'transparent' : '#000'
+              clipPath: `inset(${100 - progress}% 0 0 0)`,
+              WebkitClipPath: `inset(${100 - progress}% 0 0 0)`,
             }}
           >
-            {/* Logo */}
-            <div className="logo-container">
-              {isSplitting ? (
-                <div className="split-logo-container">
-                  {/* Top-right part */}
-                  <motion.div
-                    className="split-half top-part"
-                    initial={{ x: 0, opacity: 1, scale: 1.4 }}
-                    animate={{ 
-                      x: 80,
-                      opacity: 0,
-                      scale: 1.4
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      ease: [0.4, 0, 0.2, 1],
-                      opacity: { duration: 0.6, delay: 0.2 }
-                    }}
-                  >
-                    <svg width="100%" height="100%" viewBox="0 0 128 128">
-                      <defs>
-                        <clipPath id="topMask">
-                          <path d="M0 0 L128 0 L128 128 L32 52 Z" />
-                        </clipPath>
-                      </defs>
-                      <image
-                        href="/logo_white.png"
-                        width="128"
-                        height="128"
-                        clipPath="url(#topMask)"
-                      />
-                    </svg>
-                  </motion.div>
-                  
-                  {/* Bottom-left part */}
-                  <motion.div
-                    className="split-half bottom-part"
-                    initial={{ x: 0, opacity: 1, scale: 1.4 }}
-                    animate={{ 
-                      x: -80,
-                      opacity: 0,
-                      scale: 1.4
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      ease: [0.4, 0, 0.2, 1],
-                      opacity: { duration: 0.6, delay: 0.2 }
-                    }}
-                  >
-                    <svg width="100%" height="100%" viewBox="0 0 128 128">
-                      <defs>
-                        <clipPath id="bottomMask">
-                          <path d="M0 0 L32 52 L128 128 L0 128 Z" />
-                        </clipPath>
-                      </defs>
-                      <image
-                        href="/logo_white.png"
-                        width="128"
-                        height="128"
-                        clipPath="url(#bottomMask)"
-                      />
-                    </svg>
-                  </motion.div>
-                </div>
-              ) : (
-                <motion.img
-                  src="/logo_white.png"
-                  alt="Tensor Logo"
-                  className="w-32 h-32"
-                  initial={{ scale: 0 }}
-                  animate={{ 
-                    scale: 1.4,
-                    transition: {
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 20,
-                      duration: 0.8
-                    }
-                  }}
-                />
-              )}
-              {logoPieces.map((piece, index) => (
-                <motion.div
-                  key={index}
-                  className="logo-piece"
-                  style={{
-                    opacity: piece.opacity,
-                    transform: `translate(${piece.x}px, ${piece.y}px)`
-                  }}
-                />
-              ))}
-            </div>
-            {/* Progress Bar */}
-            <motion.div 
-              className="mt-32 w-64 absolute bottom-32 left-1/2 -translate-x-1/2"
-              animate={{
-                opacity: isZooming ? 0 : 1
+            T E N S O R
+          </div>
+
+          <div className="relative h-1 mt-8 bg-gray-800/50 rounded-full overflow-hidden backdrop-blur-sm">
+            <div 
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 via-purple-600 to-blue-500 transition-all duration-300 rounded-full"
+              style={{ 
+                width: `${progress}%`,
               }}
-              transition={{ duration: 0.3 }}
             >
-              <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
-                <motion.div
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-600 via-indigo-500 to-purple-600"
-                  style={{ width: `${progress}%` }}
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{
-                      x: [-100, 100],
-                    }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  />
-                </motion.div>
-              </div>
-              <motion.div
-                className="mt-2 text-center font-mono text-sm text-white"
-                animate={{
-                  color: ['#C4B5FD', '#818CF8', '#C4B5FD'],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                {progress < 25 && "Initializing..."}
-                {progress >= 25 && progress < 50 && "Loading Assets..."}
-                {progress >= 50 && progress < 75 && "Preparing UI..."}
-                {progress >= 75 && progress < 90 && "Almost Ready..."}
-                {progress >= 90 && progress < 100 && "Final Touches..."}
-                {progress === 100 && "Ready!"}
-              </motion.div>
-            </motion.div>
-            {/* Background pieces */}
-            {backgroundPieces.map((piece, index) => (
-              <motion.div
-                key={index}
-                className="background-piece"
-                style={{
-                  opacity: piece.opacity,
-                  transform: `translate(${piece.x}px, ${piece.y}px) rotate(${piece.rotate}deg) scale(${piece.scale})`,
-                }}
-              />
-            ))}
-          </motion.div>
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.2)_50%,transparent_100%)] animate-[shine_1s_linear_infinite]" />
+            </div>
+          </div>
+
+          {/* Enhanced loading text */}
+          <div className="mt-6 space-y-1">
+            <div className={`text-xs text-gray-400 font-orbitron transition-all duration-300 tracking-wider ${progress > 20 ? 'opacity-100' : 'opacity-0'}`}>
+              {">"} Initializing quantum processors... <span className="text-blue-400 font-bold">done</span>
+            </div>
+            <div className={`text-xs text-gray-400 font-orbitron transition-all duration-300 tracking-wider ${progress > 40 ? 'opacity-100' : 'opacity-0'}`}>
+              {">"} Calibrating neural networks... <span className="text-blue-400 font-bold">{progress > 60 ? 'done' : 'in progress'}</span>
+            </div>
+            <div className={`text-xs text-gray-400 font-orbitron transition-all duration-300 tracking-wider ${progress > 60 ? 'opacity-100' : 'opacity-0'}`}>
+              {">"} Optimizing tensor cores... <span className="text-blue-400 font-bold">{progress > 80 ? 'done' : 'in progress'}</span>
+            </div>
+            <div className={`text-xs text-gray-400 font-orbitron transition-all duration-300 tracking-wider ${progress > 80 ? 'opacity-100' : 'opacity-0'}`}>
+              {">"} Establishing secure protocols... <span className="text-blue-400 font-bold">{progress > 95 ? 'done' : 'in progress'}</span>
+            </div>
+          </div>
         </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 };
 

@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
               <img 
                 src={logo} 
                 alt="Tensor Logo" 
-                className="h-14 w-14 object-contain relative z-10"
+                className="h-18 w-16 object-contain relative z-10"
               />
             </Link>
           </div>

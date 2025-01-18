@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingAnimation from './components/LoadingAnimation';
 import StarryNightTransition from './components/StarryNightTransition';
@@ -10,6 +10,7 @@ import Blog from './pages/Blog';
 import Registrations from './pages/Registrations';
 import CustomCursor from './components/CustomCursor';
 import ChatBot from './components/ChatBot';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -66,16 +67,18 @@ function App() {
               }}
               className="relative z-30"
             >
-              <Navbar />
-              <div className="min-h-screen text-white">
-                <Routes>
-                  <Route path="/blogs" element={<Blog />} />
-                  <Route path="/registrations" element={<Registrations />} />
-                  <Route path="*" element={<AppRoutes />} />
-                </Routes>
-              </div>
-              <Footer />
-              <ChatBot />
+              <ErrorBoundary>
+                <Navbar />
+                <div className="min-h-screen text-white">
+                  <Routes>
+                    <Route path="/blogs" element={<Blog />} />
+                    <Route path="/registrations" element={<Registrations />} />
+                    <Route path="*" element={<AppRoutes />} />
+                  </Routes>
+                </div>
+                <Footer />
+                <ChatBot />
+              </ErrorBoundary>
             </motion.div>
           )}
         </AnimatePresence>

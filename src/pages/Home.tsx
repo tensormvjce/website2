@@ -1,19 +1,16 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Brain, Users, Lightbulb, Code, Cpu, Bot, Sparkles, GraduationCap} from 'lucide-react';
 import Spline from '@splinetool/react-spline';
-import { useRef, useMemo, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
+import { useRef, useMemo, useState, Suspense } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Points, PointMaterial, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
-import { Canvas } from '@react-three/fiber';
 import { Link } from 'react-router-dom';
 import LockedButton from '../components/LockedButton';
 import { events } from '../data/eventsData';
 import { blogs } from '../data/blogData';
 import { previewMembers } from '../data/previewTeamData';
 import { scrollToTop } from '../utils/scrollUtils';
-import { Suspense } from 'react';
-import { OrbitControls } from '@react-three/drei';
 import HeroText from '../components/HeroText';
 
 function BlackHoleBackground() {

@@ -219,7 +219,7 @@ interface StarFieldProps {
 const StarField = ({ count = 5000, radius = 1.5 }: StarFieldProps) => {
   const ref = useRef<any>();
   const [sphere] = useState(() =>
-    random.inSphere(new Float32Array(count), { radius: radius })
+    new Float32Array(random.inSphere(new Float32Array(count), { radius: radius }))
   );
 
   useFrame((state, delta) => {

@@ -44,9 +44,9 @@ const ParallaxHero: React.FC = () => {
           style={{ background: 'transparent' }}
         >
           <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
-          <motion.group scale={transforms.backgroundScale}>
+          <motion.div style={{ scale: transforms.backgroundScale }}>
             <BlackHoleBackground />
-          </motion.group>
+          </motion.div>
         </Canvas>
       </motion.div>
 

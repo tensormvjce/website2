@@ -1,6 +1,100 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
+interface WebGLExtension {
+  HALF_FLOAT_OES?: number;
+  ANGLE_instanced_arrays?: {
+    drawArraysInstancedANGLE: () => void;
+    drawElementsInstancedANGLE: () => void;
+    vertexAttribDivisorANGLE: () => void;
+    VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE?: number;
+  };
+}
+
+type WebGLContextType = WebGLRenderingContext;
+
+class PointerPrototype {
+  id: number;
+  texcoordX: number;
+  texcoordY: number;
+  prevTexcoordX: number;
+  prevTexcoordY: number;
+  deltaX: number;
+  deltaY: number;
+  down: boolean;
+  moved: boolean;
+  color: number[];
+
+  constructor() {
+    this.id = -1;
+    this.texcoordX = 0;
+    this.texcoordY = 0;
+    this.prevTexcoordX = 0;
+    this.prevTexcoordY = 0;
+    this.deltaX = 0;
+    this.deltaY = 0;
+    this.down = false;
+    this.moved = false;
+    this.color = [0, 0, 0];
+  }
+}
+
+function isWebGLContext(context: RenderingContext | null): context is WebGLRenderingContext {
+  return context !== null && 'drawingBufferWidth' in context;
+}
+
+function getWebGLContext(canvas: HTMLCanvasElement): WebGLRenderingContext {
+  const params = {
+    alpha: true,
+    depth: false,
+    stencil: false,
+    antialias: false,
+    preserveDrawingBuffer: false,
+  };
+
+  const context = canvas.getContext('webgl2', params) || 
+                  canvas.getContext('webgl', params);
+  
+  if (!isWebGLContext(context)) {
+    throw new Error('WebGL not supported');
+  }
+  
+  return context;
+}
+
+function createFBO(gl: WebGLRenderingContext, w: number, h: number, type: number, param: number) {
+  if (!gl) return null;
+
+  const texture = gl.createTexture();
+  if (!texture) return null;
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, param);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, param);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, type, null);
+
+  const fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+  return {
+    texture,
+    fbo,
+    width: w,
+    height: h,
+    attach(id: number) {
+      gl.activeTexture(gl.TEXTURE0 + id);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      return id;
+    },
+  };
+}
+
 function SplashCursor({
   SIM_RESOLUTION = 128,
   DYE_RESOLUTION = 1440,
@@ -23,18 +117,14 @@ function SplashCursor({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    function pointerPrototype() {
-      this.id = -1;
-      this.texcoordX = 0;
-      this.texcoordY = 0;
-      this.prevTexcoordX = 0;
-      this.prevTexcoordY = 0;
-      this.deltaX = 0;
-      this.deltaY = 0;
-      this.down = false;
-      this.moved = false;
-      this.color = [0, 0, 0];
-    }
+    const gl = getWebGLContext(canvas);
+    const halfFloat = gl.getExtension('OES_texture_half_float');
+    const supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+    const texType = halfFloat ? halfFloat.HALF_FLOAT_OES : gl.FLOAT;
+    const rgba = { internalFormat: gl.RGBA, format: gl.RGBA };
 
     let config = {
       SIM_RESOLUTION,
@@ -54,57 +144,12 @@ function SplashCursor({
       TRANSPARENT,
     };
 
-    let pointers = [new pointerPrototype()];
+    let pointers = [new PointerPrototype()];
     let lastUpdateTime = Date.now();
     let colorUpdateTimer = 0.0;
 
-    const params = {
-      alpha: true,
-      depth: false,
-      stencil: false,
-      antialias: false,
-      preserveDrawingBuffer: false,
-    };
-
-    let gl = canvas.getContext('webgl2', params) || canvas.getContext('webgl', params);
-    if (!gl) return;
-
-    const halfFloat = gl.getExtension('OES_texture_half_float');
-    const supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
-
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
-    const texType = halfFloat ? halfFloat.HALF_FLOAT_OES : gl.FLOAT;
-    const rgba = { internalFormat: gl.RGBA, format: gl.RGBA };
-
-    function createFBO(w: number, h: number, type: number, param: number) {
-      gl.activeTexture(gl.TEXTURE0);
-      const texture = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, param);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, param);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, type, null);
-
-      const fbo = gl.createFramebuffer();
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-
-      return {
-        texture,
-        fbo,
-        width: w,
-        height: h,
-        attach(id: number) {
-          gl.activeTexture(gl.TEXTURE0 + id);
-          gl.bindTexture(gl.TEXTURE_2D, texture);
-          return id;
-        },
-      };
-    }
-
     let dye = createFBO(
+      gl,
       config.DYE_RESOLUTION,
       config.DYE_RESOLUTION,
       texType,

@@ -12,6 +12,7 @@ import { auth, db } from '../services/firebase';
 interface AuthContextType {
   currentUser: User | null;
   isAdmin: boolean;
+  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setUserRole: (uid: string, role: 'admin' | 'user') => Promise<void>;
@@ -20,6 +21,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   isAdmin: false,
+  loading: true,
   login: async () => {},
   logout: async () => {},
   setUserRole: async () => {}
@@ -174,6 +176,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value = {
     currentUser,
     isAdmin,
+    loading,
     login,
     logout,
     setUserRole

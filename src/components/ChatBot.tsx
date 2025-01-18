@@ -1,12 +1,108 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, MinusSquare, Info, UserPlus, Users, Calendar, Award, Phone, ChevronUp } from 'lucide-react';
-import { clubData } from '../data/clubData';
+
+interface ClubData {
+  generalClubInfo: { 
+    clubName: string; 
+    mission: string; 
+    vision: string; 
+    coreValues: string[]; 
+    foundingDate: string; 
+    briefHistory: string; 
+    keyAchievements: string; 
+    notableProjects: string; 
+    membershipBase: string; 
+  };
+  clubActivities: { [key: string]: any };
+  teamStructure: { [key: string]: any };
+  contact: { [key: string]: any };
+  generalInformation?: {
+    whatIsTensor?: string;
+    whoCanJoin?: string;
+    membershipFees?: string;
+    stayUpdated?: string;
+  };
+  eventsAndRegistration?: {
+    howToRegister?: string;
+  };
+}
 
 interface Message {
   type: 'user' | 'bot';
   content: string;
 }
+
+const clubData: ClubData = {
+  generalClubInfo: {
+    clubName: 'Tensor Club',
+    mission: 'To promote AI and Machine Learning',
+    vision: 'To be a leading AI and Machine Learning community',
+    coreValues: ['Innovation', 'Collaboration', 'Excellence'],
+    foundingDate: '2020',
+    briefHistory: 'Tensor Club was founded in 2020 by a group of students passionate about AI and Machine Learning.',
+    keyAchievements: 'Tensor Club has achieved several milestones, including hosting successful workshops and hackathons.',
+    notableProjects: 'Tensor Club has worked on several notable projects, including a chatbot and a machine learning model.',
+    membershipBase: 'Tensor Club has a diverse membership base of students from various disciplines.'
+  },
+  clubActivities: {
+    regularEvents: {
+      workshops: 'Tensor Club hosts regular workshops on AI and Machine Learning topics.',
+      hackathons: 'Tensor Club hosts regular hackathons to encourage innovation and collaboration.',
+      seminars: 'Tensor Club hosts regular seminars to promote knowledge sharing and discussion.'
+    },
+    participationRequirements: 'Participation in Tensor Club events is open to all students.',
+    eventRegistrationProcess: 'Registration for Tensor Club events is done through our website.',
+    eventNotifications: 'Notifications for Tensor Club events are sent through our social media channels.'
+  },
+  teamStructure: {
+    leadershipTeam: {
+      president: 'John Doe',
+      vicePresident: 'Jane Doe'
+    },
+    designTeam: {
+      leader: 'Bob Smith',
+      subLeader: 'Alice Johnson',
+      members: ['Mike Brown', 'Emily Davis'],
+      responsibilities: ['Designing marketing materials', 'Creating visual content']
+    },
+    technicalTeam: {
+      leader: 'David Lee',
+      subLeader: 'Sophia Patel',
+      members: ['Kevin White', 'Olivia Martin'],
+      responsibilities: ['Developing software', 'Maintaining infrastructure']
+    },
+    mediaTeam: {
+      leader: 'Emily Chen',
+      subLeader: 'Michael Kim',
+      members: ['Sarah Taylor', 'William Hall'],
+      responsibilities: ['Managing social media', 'Creating video content']
+    },
+    contentTeam: {
+      leader: 'James Davis',
+      subLeader: 'Jessica Brown',
+      members: ['Robert Miller', 'Lisa Nguyen'],
+      responsibilities: ['Creating blog posts', 'Developing educational content']
+    }
+  },
+  contact: {
+    socialMedia: {
+      instagram: 'https://www.instagram.com/tensorclub',
+      twitter: 'https://www.twitter.com/tensorclub'
+    },
+    officialWebsite: 'https://www.tensorclub.com',
+    bestContactMethod: 'Email'
+  },
+  generalInformation: {
+    whatIsTensor: 'Tensor Club is a student organization that promotes AI and Machine Learning.',
+    whoCanJoin: 'Any student can join Tensor Club.',
+    membershipFees: 'There are no membership fees.',
+    stayUpdated: 'Follow us on social media to stay updated.'
+  },
+  eventsAndRegistration: {
+    howToRegister: 'Registration for events is done through our website.'
+  }
+};
 
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,6 +164,31 @@ const ChatBot = () => {
 
     return () => clearTimeout(timer);
   }, []); 
+
+  const getGeneralInfo = (infoType: keyof NonNullable<ClubData['generalInformation']>) => {
+    return clubData.generalInformation?.[infoType] || 'Information not available';
+  };
+
+  const getEventsInfo = (infoType: keyof NonNullable<ClubData['eventsAndRegistration']>) => {
+    return clubData.eventsAndRegistration?.[infoType] || 'Information not available';
+  };
+
+  const handleGeneralInquiry = (inquiry: string) => {
+    switch (inquiry.toLowerCase()) {
+      case 'what is tensor':
+        return getGeneralInfo('whatIsTensor');
+      case 'who can join':
+        return getGeneralInfo('whoCanJoin');
+      case 'membership fees':
+        return getGeneralInfo('membershipFees');
+      case 'stay updated':
+        return getGeneralInfo('stayUpdated');
+      case 'how to register':
+        return getEventsInfo('howToRegister');
+      default:
+        return 'I could not find information about that topic.';
+    }
+  };
 
   const findAnswer = (question: string): string => {
     const lowercaseQuestion = question.toLowerCase();
@@ -273,19 +394,19 @@ Follow our social media for regular updates about events, workshops, and opportu
     
     // General Questions
     if (lowercaseQuestion.includes('what is tensor')) {
-      return clubData.generalInformation.whatIsTensor;
+      return handleGeneralInquiry('what is tensor');
     }
     if (lowercaseQuestion.includes('who can join')) {
-      return clubData.generalInformation.whoCanJoin;
+      return handleGeneralInquiry('who can join');
     }
     if (lowercaseQuestion.includes('membership fees')) {
-      return clubData.generalInformation.membershipFees;
+      return handleGeneralInquiry('membership fees');
     }
     if (lowercaseQuestion.includes('stay updated')) {
-      return clubData.generalInformation.stayUpdated;
+      return handleGeneralInquiry('stay updated');
     }
     if (lowercaseQuestion.includes('events registration')) {
-      return clubData.eventsAndRegistration.howToRegister;
+      return handleGeneralInquiry('how to register');
     }
     
     // More specific team and member queries
@@ -521,7 +642,7 @@ I'm here to help you learn more about Tensor!`;
               </div>
             </form>
 
-            <style jsx global>{`
+            <style>{`
               .custom-scrollbar::-webkit-scrollbar {
                 width: 10px;
                 height: 10px;

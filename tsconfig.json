@@ -22,8 +22,9 @@
       "node",
       "react",
       "react-dom",
-      "react-three/fiber",
-      "react-three/drei"
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei"
     ],
     "noImplicitAny": true,
     "strictNullChecks": true,

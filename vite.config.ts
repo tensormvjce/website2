@@ -29,6 +29,9 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        'three': path.resolve(__dirname, 'node_modules/three'),
+        '@react-three/fiber': path.resolve(__dirname, 'node_modules/@react-three/fiber'),
+        '@react-three/drei': path.resolve(__dirname, 'node_modules/@react-three/drei')
       },
     },
     build: {
@@ -68,7 +71,6 @@ export default defineConfig(({ mode }) => {
         '@react-three/fiber',
         '@react-three/drei',
         'three',
-        'leaflet',
         'lucide-react',
         'firebase',
         'gsap'

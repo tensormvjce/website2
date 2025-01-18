@@ -1,5 +1,5 @@
 [build]
-  command = "npm ci --no-optional && npm run build"
+  command = "npm run clean && npm ci --no-optional && npm run build:debug"
   publish = "dist"
 
 [build.environment]
@@ -22,11 +22,11 @@
   status = 200
 
 [context.production]
-  command = "npm ci --no-optional && npm run build"
+  command = "npm run clean && npm ci --no-optional && npm run build:debug"
   publish = "dist"
 
 [context.deploy-preview]
-  command = "npm ci --no-optional && npm run build"
+  command = "npm run clean && npm ci --no-optional && npm run build:debug"
 
 [context.branch-deploy]
-  command = "npm ci --no-optional && npm run build"
+  command = "npm run clean && npm ci --no-optional && npm run build:debug"

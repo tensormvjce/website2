@@ -112,12 +112,27 @@ function SplashCursor({
   TRANSPARENT = true,
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const dye = useRef<ReturnType<typeof createFBO> | null>(null);
+  const canvas = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvasRef.current) return;
 
-    const gl = getWebGLContext(canvas);
+    canvas.current = canvasRef.current;
+    const gl = getWebGLContext(canvas.current);
+
+    if (!gl) {
+      console.error('WebGL context not available');
+      return;
+    }
+
+    dye.current = createFBO(gl, DYE_RESOLUTION, DYE_RESOLUTION, gl.HALF_FLOAT_OES, gl.LINEAR);
+
+    if (!dye.current) {
+      console.error('Failed to create dye framebuffer');
+      return;
+    }
+
     const halfFloat = gl.getExtension('OES_texture_half_float');
     const supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
 
@@ -147,14 +162,6 @@ function SplashCursor({
     let pointers = [new PointerPrototype()];
     let lastUpdateTime = Date.now();
     let colorUpdateTimer = 0.0;
-
-    let dye = createFBO(
-      gl,
-      config.DYE_RESOLUTION,
-      config.DYE_RESOLUTION,
-      texType,
-      supportLinearFiltering ? gl.LINEAR : gl.NEAREST
-    );
 
     function updateColors(dt: number) {
       colorUpdateTimer += dt * config.COLOR_UPDATE_SPEED;
@@ -220,8 +227,9 @@ function SplashCursor({
     }
 
     function splat(x: number, y: number, dx: number, dy: number, color: number[]) {
-      gl.viewport(0, 0, dye.width, dye.height);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, dye.fbo);
+      if (!dye.current) return;
+      gl.viewport(0, 0, dye.current.width, dye.current.height);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, dye.current.fbo);
       
       const radius = correctRadius(config.SPLAT_RADIUS / 100.0);
       const force = config.SPLAT_FORCE;
@@ -234,7 +242,7 @@ function SplashCursor({
     }
 
     function correctRadius(radius: number) {
-      const aspectRatio = canvas.width / canvas.height;
+      const aspectRatio = canvas.current ? canvas.current.width / canvas.current.height : 1;
       if (aspectRatio > 1) radius *= aspectRatio;
       return radius;
     }
@@ -244,8 +252,8 @@ function SplashCursor({
       pointer.id = id;
       pointer.down = true;
       pointer.moved = false;
-      pointer.texcoordX = posX / canvas.width;
-      pointer.texcoordY = 1.0 - posY / canvas.height;
+      pointer.texcoordX = posX / (canvas.current ? canvas.current.width : 1);
+      pointer.texcoordY = 1.0 - posY / (canvas.current ? canvas.current.height : 1);
       pointer.prevTexcoordX = pointer.texcoordX;
       pointer.prevTexcoordY = pointer.texcoordY;
       pointer.deltaX = 0;
@@ -256,42 +264,42 @@ function SplashCursor({
     function updatePointerMoveData(pointer: any, posX: number, posY: number) {
       pointer.prevTexcoordX = pointer.texcoordX;
       pointer.prevTexcoordY = pointer.texcoordY;
-      pointer.texcoordX = posX / canvas.width;
-      pointer.texcoordY = 1.0 - posY / canvas.height;
+      pointer.texcoordX = posX / (canvas.current ? canvas.current.width : 1);
+      pointer.texcoordY = 1.0 - posY / (canvas.current ? canvas.current.height : 1);
       pointer.deltaX = correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX);
       pointer.deltaY = correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY);
       pointer.moved = Math.abs(pointer.deltaX) > 0 || Math.abs(pointer.deltaY) > 0;
     }
 
     function correctDeltaX(delta: number) {
-      const aspectRatio = canvas.width / canvas.height;
+      const aspectRatio = canvas.current ? canvas.current.width / canvas.current.height : 1;
       if (aspectRatio < 1) delta *= aspectRatio;
       return delta;
     }
 
     function correctDeltaY(delta: number) {
-      const aspectRatio = canvas.width / canvas.height;
+      const aspectRatio = canvas.current ? canvas.current.width / canvas.current.height : 1;
       if (aspectRatio > 1) delta /= aspectRatio;
       return delta;
     }
 
     // Event listeners
-    canvas.addEventListener('mousemove', (e) => {
+    canvas.current?.addEventListener('mousemove', (e) => {
       const pointer = pointers[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const rect = canvas.current?.getBoundingClientRect();
+      const x = e.clientX - (rect ? rect.left : 0);
+      const y = e.clientY - (rect ? rect.top : 0);
       updatePointerMoveData(pointer, x, y);
       if (pointer.moved) {
         splat(pointer.texcoordX, pointer.texcoordY, pointer.deltaX, pointer.deltaY, pointer.color);
       }
     });
 
-    canvas.addEventListener('mousedown', (e) => {
+    canvas.current?.addEventListener('mousedown', (e) => {
       const pointer = pointers[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const rect = canvas.current?.getBoundingClientRect();
+      const x = e.clientX - (rect ? rect.left : 0);
+      const y = e.clientY - (rect ? rect.top : 0);
       updatePointerDownData(pointer, -1, x, y);
     });
 
@@ -310,8 +318,16 @@ function SplashCursor({
     animate();
 
     return () => {
-      canvas.removeEventListener('mousemove', () => {});
-      canvas.removeEventListener('mousedown', () => {});
+      canvas.current?.removeEventListener('mousemove', () => {});
+      canvas.current?.removeEventListener('mousedown', () => {});
+      if (dye.current) {
+        // Cleanup logic for dye
+        dye.current = null;
+      }
+      if (canvas.current) {
+        // Additional cleanup if needed
+        canvas.current = null;
+      }
     };
   }, [
     SIM_RESOLUTION,

@@ -16,15 +16,18 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "leaflet": ["node_modules/leaflet/dist/leaflet.js"]
+      "@/*": ["./src/*"]
     },
     "types": [
-      "leaflet",
       "node",
       "react",
-      "react-dom"
-    ]
+      "react-dom",
+      "react-three/fiber",
+      "react-three/drei"
+    ],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["src"],
   "references": [

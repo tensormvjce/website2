@@ -11,14 +11,20 @@ const Blog: React.FC = () => {
   // Fetch blogs from Firestore
   const { items: blogs, loading, error } = useFirestoreCollection(db, 'blogs');
 
-  // Extract unique tags from blogs
-  const tags = ["All", ...new Set(blogs.flatMap(blog => blog.tags))];
+  // Extract unique tags from blogs, handling undefined case
+  const tags = ["All", ...new Set(
+    blogs
+      .flatMap(blog => blog.tags || [])
+      .filter(tag => tag !== undefined)
+  )];
 
-  // Filter blogs based on search and tag
+  // Filter blogs based on search and tag, with null/undefined checks
   const filteredBlogs = blogs.filter(blog => {
-    const matchesTag = selectedTag === "All" || blog.tags.includes(selectedTag);
-    const matchesSearch = blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         blog.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const blogTags = blog.tags || [];
+    const matchesTag = selectedTag === "All" || blogTags.includes(selectedTag);
+    const matchesSearch = 
+      (blog.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (blog.description || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesTag && matchesSearch;
   });
 

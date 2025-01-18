@@ -436,15 +436,41 @@ Some things you can ask me:
 I'm here to help you learn more about Tensor!`;
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSendMessage = () => {
+    if (inputValue.trim() === '') return;
+
+    const newUserMessage: Message = { 
+      type: 'user', 
+      content: inputValue.trim() 
+    };
+
+    const newMessages: Message[] = [...messages, newUserMessage];
+    setMessages(newMessages);
+
+    // Bot response logic
+    const botResponse: Message = { 
+      type: 'bot', 
+      content: findAnswer(inputValue.trim()) 
+    };
+
+    setMessages(prevMessages => [...prevMessages, botResponse]);
+    setInputValue('');
+    inputRef.current?.focus();
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
-
-    const userMessage: Message = { type: 'user', content: inputValue };
-    const botMessage: Message = { type: 'bot', content: findAnswer(inputValue) };
-
-    setMessages(prev => [...prev, userMessage, botMessage]);
-    setInputValue('');
+    handleSendMessage();
   };
 
   const toggleChat = () => {
@@ -625,7 +651,8 @@ I'm here to help you learn more about Tensor!`;
                   ref={inputRef}
                   type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
                   placeholder="Type your message..."
                   className="flex-1 bg-white/5 text-white placeholder-white/50 rounded-lg px-4 py-2 
                            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/10

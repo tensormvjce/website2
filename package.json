@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist",
-    "prebuild": "npm run clean && npm install",
+    "prebuild": "npm ci --no-optional || npm install --no-optional",
     "build": "tsc && vite build",
     "build:debug": "npm run prebuild && echo 'Build Environment:' && echo \"Node version: $(node -v)\" && echo \"NPM version: $(npm -v)\" && npm run build --verbose && echo 'Build completed successfully'",
     "dev": "vite",
@@ -44,5 +44,12 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
+  },
+  "config": {
+    "optional-dependencies": false
+  },
+  "engines": {
+    "node": ">=18.17.1",
+    "npm": ">=9.6.7"
   }
 }

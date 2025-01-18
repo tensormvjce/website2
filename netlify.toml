@@ -1,11 +1,12 @@
 [build]
-  command = "npm run build:debug"
+  command = "npm ci --no-optional && npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18.17.1"
   NPM_VERSION = "9.6.7"
   NODE_OPTIONS = "--max_old_space_size=4096"
+  NPM_FLAGS = "--no-optional"
 
 [[headers]]
   for = "/*"
@@ -21,11 +22,11 @@
   status = 200
 
 [context.production]
-  command = "npm run build:debug"
+  command = "npm ci --no-optional && npm run build"
   publish = "dist"
 
 [context.deploy-preview]
-  command = "npm run build:debug"
+  command = "npm ci --no-optional && npm run build"
 
 [context.branch-deploy]
-  command = "npm run build:debug"
+  command = "npm ci --no-optional && npm run build"

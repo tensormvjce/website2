@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import { db } from '../services/firebase';
+import { useNavigate } from 'react-router-dom';
 import ContentLoader from '../components/ContentLoader';
 
 interface Event {
@@ -13,9 +14,11 @@ interface Event {
   tags?: string[];
   location: string;
   registrationLink?: string;
+  slug: string;
 }
 
 const Events: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { items: events = [], loading, error } = useFirestoreCollection<Event>(db, 'events');
@@ -127,7 +130,8 @@ const Events: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="relative group"
+                onClick={() => navigate(`/events/${event.slug}`)}
+                className="relative group cursor-pointer"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">

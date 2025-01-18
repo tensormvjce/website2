@@ -1,6 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Brain, Users, Lightbulb, Code, Cpu, Bot, Sparkles, GraduationCap} from 'lucide-react';
-import Spline from '@splinetool/react-spline';
 import { useRef, useMemo, useState, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, OrbitControls } from '@react-three/drei';
@@ -11,7 +10,6 @@ import { events } from '../data/eventsData';
 import { blogs } from '../data/blogData';
 import { previewMembers } from '../data/previewTeamData';
 import { scrollToTop } from '../utils/scrollUtils';
-import HeroText from '../components/HeroText';
 
 function BlackHoleBackground() {
   const points = useRef<THREE.Points>(null!);

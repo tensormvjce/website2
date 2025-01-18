@@ -1,7 +1,18 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import { db } from '../services/firebase';
-import { useFirestoreCollection, FirestoreItem } from '../hooks/useFirestoreCollection';
+
+interface BlogPost {
+  id?: string;
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  tags?: string[];
+  content: string;
+  author: string;
+}
 
 const Blog: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
@@ -9,7 +20,7 @@ const Blog: React.FC = () => {
   const [visibleBlogs, setVisibleBlogs] = useState<number>(4);
 
   // Fetch blogs from Firestore
-  const { items: blogs, loading, error } = useFirestoreCollection(db, 'blogs');
+  const { items: blogs, loading, error } = useFirestoreCollection<BlogPost>(db, 'blogs');
 
   // Extract unique tags from blogs with type safety
   const tags = useMemo(() => {
@@ -37,6 +48,11 @@ const Blog: React.FC = () => {
 
   const handleLoadMore = () => {
     setVisibleBlogs(prev => Math.min(prev + 4, filteredBlogs.length));
+  };
+
+  const handleTagClick = (tag: string): void => {
+    setSelectedTag(tag);
+    setVisibleBlogs(4);
   };
 
   if (loading) {
@@ -100,10 +116,7 @@ const Blog: React.FC = () => {
           {tags.map((tag) => (
             <button
               key={tag}
-              onClick={() => {
-                setSelectedTag(tag);
-                setVisibleBlogs(4);
-              }}
+              onClick={() => handleTagClick(tag)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
                 ${selectedTag === tag 
                   ? 'bg-purple-500/40 border-purple-500' 

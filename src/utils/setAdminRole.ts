@@ -1,106 +1,82 @@
 import { 
-  collection, 
   doc, 
-  getDocs, 
-  getDoc, 
-  updateDoc, 
-  query, 
-  where, 
-  setDoc 
+  updateDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  getFirestore,
+  DocumentData
 } from 'firebase/firestore';
-import { db } from '../services/firebase';
 import { getAuth } from 'firebase/auth';
 
 interface UserData {
-  email?: string;
-  roles?: string[];
+  id?: string;
+  email: string;
+  role: string;
+  updatedAt: string;
   createdAt?: Date;
   isAdmin?: boolean;
   adminGrantedAt?: Date;
 }
 
-const ADMIN_UIDS = [
-  'QZPUMmMNTCNlzAYgNzpDqcqGQQh1', // Existing admin
-  '1lSm47YoxYMuEacsmWmZVWasOSZ2' // New admin user added
-];
-
-export const listUsers = async () => {
+export const listUsers = async (): Promise<UserData[]> => {
   try {
+    const db = getFirestore();
     const usersRef = collection(db, 'users');
     const querySnapshot = await getDocs(usersRef);
     
-    const users: Array<{id: string, data: UserData}> = [];
-    
-    querySnapshot.forEach((doc) => {
-      users.push({
-        id: doc.id,
-        data: doc.data() as UserData
-      });
-    });
-    
-    console.table(users.map(user => ({
-      ID: user.id,
-      Email: user.data.email,
-      Roles: user.data.roles?.join(', ') || 'No roles',
-      CreatedAt: user.data.createdAt?.toLocaleString(),
-      Admin: user.data.isAdmin ? 'Yes' : 'No',
-      AdminGrantedAt: user.data.adminGrantedAt?.toLocaleString()
-    })));
-    
-    return users;
+    return querySnapshot.docs.map((doc: DocumentData) => ({
+      ...doc.data(),
+      id: doc.id
+    })) as UserData[];
   } catch (error) {
     console.error('Error listing users:', error);
-    return [];
+    throw error;
   }
 };
 
-export const setAdminRole = async (uid: string) => {
+export const setAdminRole = async (uid: string): Promise<void> => {
   try {
-    const userDocRef = doc(db, 'users', uid);
-    
-    await updateDoc(userDocRef, {
-      roles: ['admin'],
-      updatedAt: new Date()
+    const db = getFirestore();
+    const userRef = doc(db, 'users', uid);
+    await updateDoc(userRef, {
+      role: 'admin',
+      updatedAt: new Date().toISOString()
     });
-    
-    console.log(`User ${uid} has been set as an admin`);
-    return true;
   } catch (error) {
     console.error('Error setting admin role:', error);
-    return false;
+    throw error;
   }
 };
 
-export const findUserByEmail = async (email: string) => {
+export const findUserByEmail = async (email: string): Promise<UserData | null> => {
   try {
+    const db = getFirestore();
     const usersRef = collection(db, 'users');
     const q = query(usersRef, where('email', '==', email));
     
     const querySnapshot = await getDocs(q);
     
-    if (!querySnapshot.empty) {
-      const userDoc = querySnapshot.docs[0];
-      console.log('User found:', {
-        id: userDoc.id,
-        data: userDoc.data()
-      });
-      
-      return {
-        id: userDoc.id,
-        data: userDoc.data() as UserData
-      };
+    if (querySnapshot.empty) {
+      return null;
     }
     
-    console.log('No user found with this email');
-    return null;
+    const userDoc = querySnapshot.docs[0];
+    return {
+      ...userDoc.data(),
+      id: userDoc.id
+    } as UserData;
   } catch (error) {
-    console.error('Error finding user by email:', error);
-    return null;
+    console.error('Error finding user:', error);
+    throw error;
   }
 };
 
 export const grantAdminAccess = async (userId: string) => {
   try {
+    const db = getFirestore();
     // Reference to the user document
     const userRef = doc(db, 'users', userId);
 
@@ -137,6 +113,7 @@ export const checkAdminStatus = async (userId?: string) => {
   }
 
   try {
+    const db = getFirestore();
     const userRef = doc(db, 'users', currentUser);
     const userDoc = await getDoc(userRef);
 

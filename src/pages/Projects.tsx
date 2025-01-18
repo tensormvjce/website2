@@ -1,10 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { db } from '../services/firebase';
 import { useFirestoreCollection, FirestoreItem } from '../hooks/useFirestoreCollection';
 
-interface ProjectCardProps extends Partial<FirestoreItem> {
+interface Project extends FirestoreItem {
+  title: string;
+  description: string;
+  image: string;
+  tags?: string[];
+  websiteUrl?: string;
+}
+
+interface ProjectCardProps {
   title: string;
   description: string;
   image: string;
@@ -45,7 +53,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           />
         </div>
         <div className="flex items-center space-x-4 mb-3">
-          {tags.map((tag) => (
+          {tags.map((tag: string) => (
             <span 
               key={tag} 
               className="text-xs text-purple-400 terminal-text px-2 py-1 rounded-full border border-purple-400/30"
@@ -81,11 +89,8 @@ const Projects: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [visibleProjects, setVisibleProjects] = useState<number>(3);
+  const { items: projects, loading, error } = useFirestoreCollection<Project>(db, 'projects');
 
-  // Fetch projects from Firestore
-  const { items: projects, loading, error } = useFirestoreCollection(db, 'projects');
-
-  // Extract unique tags from projects with type safety
   const tags = React.useMemo(() => {
     const allTags = projects.reduce<string[]>((acc, project) => {
       if (project.tags && Array.isArray(project.tags)) {
@@ -93,24 +98,21 @@ const Projects: React.FC = () => {
       }
       return acc;
     }, []);
-    
     return ["All", ...new Set(allTags)];
   }, [projects]);
 
-  // Filter projects based on search query and selected tag with type safety
   const filteredProjects = React.useMemo(() => {
     return projects.filter(project => {
       const projectTags = project.tags || [];
       const matchesSearch = 
-        (project.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (project.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        projectTags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        projectTags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
       const matchesTag = selectedTag === "All" || projectTags.includes(selectedTag);
       return matchesSearch && matchesTag;
     });
   }, [projects, searchQuery, selectedTag]);
 
-  // Reset visible projects when search query or tag changes
   useEffect(() => {
     setVisibleProjects(3);
   }, [searchQuery, selectedTag]);
@@ -118,6 +120,10 @@ const Projects: React.FC = () => {
   const handleLoadMore = useCallback((): void => {
     setVisibleProjects(prev => Math.min(prev + 3, filteredProjects.length));
   }, [filteredProjects.length]);
+
+  const handleTagSelect = useCallback((tag: string) => {
+    setSelectedTag(tag);
+  }, []);
 
   const visibleProjectPosts = filteredProjects.slice(0, visibleProjects);
   const hasMoreProjects = visibleProjects < filteredProjects.length;
@@ -179,7 +185,7 @@ const Projects: React.FC = () => {
           {tags.map((tag) => (
             <motion.button
               key={tag}
-              onClick={() => setSelectedTag(tag)}
+              onClick={() => handleTagSelect(tag)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 selectedTag === tag
                   ? 'bg-purple-500/20 text-purple-300 border-purple-500/50'

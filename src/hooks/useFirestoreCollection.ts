@@ -4,7 +4,8 @@ import {
   query, 
   orderBy, 
   onSnapshot, 
-  Firestore 
+  Firestore,
+  DocumentData,
 } from 'firebase/firestore';
 
 export interface Speaker {
@@ -40,64 +41,50 @@ export interface FirestoreItem {
   [key: string]: any;
 }
 
-export const useFirestoreCollection = (db: Firestore, collectionName: string) => {
-  const [items, setItems] = useState<FirestoreItem[]>([]);
+export interface FirestoreCollectionResult<T> {
+  items: T[];
+  loading: boolean;
+  error: string | null;
+}
+
+export const useFirestoreCollection = <T extends DocumentData>(
+  db: Firestore, 
+  collectionName: string
+): FirestoreCollectionResult<T> => {
+  const [items, setItems] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log(`Fetching collection: ${collectionName}`);
-    console.log('Firestore database:', db);
+    try {
+      const q = query(
+        collection(db, collectionName), 
+        orderBy('date', 'desc')
+      );
 
-    // Create a query to order items by date in descending order
-    const q = query(
-      collection(db, collectionName), 
-      orderBy('date', 'desc')
-    );
-
-    // Set up real-time listener
-    const unsubscribe = onSnapshot(
-      q, 
-      (snapshot) => {
-        console.log(`Snapshot received for ${collectionName}:`, snapshot.docs.length, 'documents');
-        
-        const fetchedItems: FirestoreItem[] = snapshot.docs.map(doc => {
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const fetchedItems = snapshot.docs.map((doc) => {
           const data = doc.data();
-          console.log('Individual document data:', {
-            id: doc.id,
-            ...data
-          });
-          
           return {
-            id: doc.id,
             ...data,
-            // Ensure default values for optional fields
-            link: data.link || '',
-            bannerImg: data.bannerImg || data.image || '',
-            longDescription: data.longDescription || data.description || '',
-            agenda: data.agenda || [],
-            whyAttend: data.whyAttend || [],
-            venue: data.venue || '',
-            duration: data.duration || '',
-            registrationStatus: data.registrationStatus || 'Open',
-            speakers: data.speakers || []
-          } as FirestoreItem;
+            id: doc.id
+          } as T & { id: string };
         });
-
-        console.log(`Processed items for ${collectionName}:`, fetchedItems);
-
+        
         setItems(fetchedItems);
         setLoading(false);
-      },
-      (err) => {
+      }, (err) => {
         console.error(`Error fetching ${collectionName}:`, err);
         setError(err.message);
         setLoading(false);
-      }
-    );
+      });
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (err) {
+      console.error(`Error setting up ${collectionName} listener:`, err);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setLoading(false);
+    }
   }, [db, collectionName]);
 
   return { items, loading, error };

@@ -74,6 +74,7 @@ export default defineConfig(({ mode }) => {
         '@react-three/fiber',
         '@react-three/drei',
         'three',
+        'leaflet',
         'lucide-react'
       ]
     }

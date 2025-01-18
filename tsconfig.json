@@ -16,8 +16,15 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "leaflet": ["node_modules/leaflet/dist/leaflet.js"]
+    },
+    "types": [
+      "leaflet",
+      "node",
+      "react",
+      "react-dom"
+    ]
   },
   "include": ["src"],
   "references": [

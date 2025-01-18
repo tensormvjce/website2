@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --verbose",
-    "build": "tsc && vite build --verbose",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean && npm install",
+    "build": "tsc && vite build",
+    "build:debug": "npm run prebuild && echo 'Build Environment:' && echo \"Node version: $(node -v)\" && echo \"NPM version: $(npm -v)\" && npm run build --verbose && echo 'Build completed successfully'",
+    "dev": "vite",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "debug": "echo \"Node version: $(node -v)\" && echo \"NPM version: $(npm -v)\" && npm run build --verbose && echo \"Build completed successfully\"",
-    "prebuild": "npm install && tsc --noEmit"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -38,6 +39,7 @@
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
+    "rimraf": "^5.0.5",
     "tailwindcss": "^3.3.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2",

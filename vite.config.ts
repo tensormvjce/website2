@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -24,6 +25,37 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: mode === 'production',
+      minify: mode === 'production',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          }
+        }
+      },
+      chunkSizeWarningLimit: 1000,
+    },
+    server: {
+      port: 3000,
+      open: true,
+      hmr: {
+        overlay: true,
+      },
+    },
+    preview: {
+      port: 3000,
+    },
     define: {
       'import.meta.env.VITE_FIREBASE_API_KEY': JSON.stringify(env.VITE_FIREBASE_API_KEY),
       'import.meta.env.VITE_FIREBASE_AUTH_DOMAIN': JSON.stringify(env.VITE_FIREBASE_AUTH_DOMAIN),
@@ -31,15 +63,19 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_FIREBASE_STORAGE_BUCKET': JSON.stringify(env.VITE_FIREBASE_STORAGE_BUCKET),
       'import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID': JSON.stringify(env.VITE_FIREBASE_MESSAGING_SENDER_ID),
       'import.meta.env.VITE_FIREBASE_APP_ID': JSON.stringify(env.VITE_FIREBASE_APP_ID),
+      'process.env': env
     },
-    plugins: [react()],
     optimizeDeps: {
-      exclude: ['lucide-react'],
-    },
-    server: {
-      hmr: {
-        overlay: true,
-      },
-    },
+      include: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        'framer-motion',
+        '@react-three/fiber',
+        '@react-three/drei',
+        'three',
+        'lucide-react'
+      ]
+    }
   };
 });

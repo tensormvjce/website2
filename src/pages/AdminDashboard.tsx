@@ -4,12 +4,15 @@ import { db } from '../services/firebase';
 import { 
   collection, 
   addDoc, 
+  getDocs
 } from 'firebase/firestore';
 
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState<'blogs' | 'projects' | 'events'>('blogs');
   const [error, setError] = useState<string | null>(null);
+  const [availableTags, setAvailableTags] = useState<string[]>([]);
+  const [newTag, setNewTag] = useState('');
 
   // State for form inputs
   const [newItem, setNewItem] = useState({
@@ -43,12 +46,63 @@ const AdminDashboard: React.FC = () => {
     console.log('Is Admin:', isAdmin);
   }, [currentUser, isAdmin]);
 
+  useEffect(() => {
+    // Fetch existing tags from Firebase
+    const fetchTags = async () => {
+      try {
+        const collectionRef = collection(db, activeTab);
+        const snapshot = await getDocs(collectionRef);
+        const tags = new Set<string>();
+        
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.tags && Array.isArray(data.tags)) {
+            data.tags.forEach((tag: string) => tags.add(tag));
+          }
+        });
+        
+        setAvailableTags(Array.from(tags).sort());
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+
+    fetchTags();
+  }, [activeTab]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewItem(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleTagChange = (selectedTag: string) => {
+    setNewItem(prev => {
+      const currentTags = new Set(prev.tags);
+      if (currentTags.has(selectedTag)) {
+        currentTags.delete(selectedTag);
+      } else {
+        currentTags.add(selectedTag);
+      }
+      return { ...prev, tags: Array.from(currentTags) };
+    });
+  };
+
+  const handleAddNewTag = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newTag.trim()) {
+      const trimmedTag = newTag.trim();
+      if (!availableTags.includes(trimmedTag)) {
+        setAvailableTags(prev => [...prev, trimmedTag].sort());
+      }
+      setNewItem(prev => ({
+        ...prev,
+        tags: [...new Set([...prev.tags, trimmedTag])]
+      }));
+      setNewTag('');
+    }
   };
 
   const handleAddItem = async () => {
@@ -240,25 +294,68 @@ const AdminDashboard: React.FC = () => {
           </>
         )}
         <div className="mb-4">
-          <label className="block mb-2">Tags (comma-separated)</label>
-          <input
-            type="text"
-            value={newItem.tags.join(', ')}
-            onChange={(e) => {
-              // Split input by comma, trim whitespace, and filter out empty tags
-              const tags = e.target.value
-                .split(',')
-                .map(tag => tag.trim())
-                .filter(tag => tag !== '');
-              
-              setNewItem(prev => ({
-                ...prev,
-                tags: tags
-              }));
-            }}
-            className="w-full bg-gray-800 p-2 rounded"
-            placeholder="Enter tags separated by commas"
-          />
+          <label className="block mb-2">Tags</label>
+          <div className="space-y-2">
+            {/* Available tags */}
+            <div className="flex flex-wrap gap-2">
+              {availableTags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => handleTagChange(tag)}
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    newItem.tags.includes(tag)
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-gray-700 text-gray-300'
+                  } hover:bg-purple-600 transition-colors`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+            
+            {/* Add new tag */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                placeholder="Add new tag"
+                className="flex-1 bg-gray-800 p-2 rounded"
+              />
+              <button
+                type="button"
+                onClick={handleAddNewTag}
+                className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+              >
+                Add Tag
+              </button>
+            </div>
+
+            {/* Selected tags */}
+            {newItem.tags.length > 0 && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-400 mb-1">Selected tags:</p>
+                <div className="flex flex-wrap gap-2">
+                  {newItem.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-purple-500 text-white rounded-full text-sm flex items-center gap-2"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => handleTagChange(tag)}
+                        className="hover:text-red-300"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Event-specific fields */}

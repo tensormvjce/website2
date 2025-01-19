@@ -14,7 +14,7 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
 
   useEffect(() => {
     // Show logo after a brief delay
-    setTimeout(() => setShowLogo(true), 500);
+    setTimeout(() => setShowLogo(true), 250);
 
     const timer = setInterval(() => {
       setProgress((prev) => {
@@ -26,13 +26,13 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
             setTimeout(() => {
               setLoading(false);
               onLoadingComplete();
-            }, 1500);
-          }, 1000);
+            }, 650);
+          }, 600);
           return 100;
         }
-        return prev + 0.5; // Slower progress for more premium feel
+        return prev + 1.25; // Adjusted for 4 sec duration
       });
-    }, 50);
+    }, 30);
 
     return () => clearInterval(timer);
   }, [onLoadingComplete]);

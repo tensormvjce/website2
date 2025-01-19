@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -360,5 +361,93 @@
     100% {
       transform: skew(0deg);
     }
+  }
+
+  .section-heading {
+    @apply relative inline-block font-['Space_Grotesk'] font-bold text-white;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-items {
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  nav:hover {
+    background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.6) 50%,
+      transparent 100%
+    );
+  }
+
+  .nav-collapsed .nav-item-left,
+  .nav-collapsed .nav-item-right {
+    opacity: 0;
+    transform: translateX(0);
+    pointer-events: none;
+  }
+
+  .nav-expanded .nav-item-left,
+  .nav-expanded .nav-item-right {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: calc(var(--item-index) * 100ms);
+  }
+
+  .nav-collapsed .nav-item-left {
+    transform: translateX(50px);
+  }
+
+  .nav-collapsed .nav-item-right {
+    transform: translateX(-50px);
+  }
+
+  .navbar-link {
+    position: relative;
+    font-family: 'Space Grotesk', sans-serif;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-link.active {
+    @apply text-2xl text-white font-bold;
+    transform: scale(1.1);
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .mobile-menu {
+    @apply fixed inset-0 bg-black/95 backdrop-blur-xl z-50;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-menu.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu-item {
+    @apply relative text-2xl font-['Space_Grotesk'] py-4 px-6 w-full text-center text-gray-300;
+    background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.1), transparent);
+  }
+
+  .mobile-menu-item.active {
+    @apply text-3xl font-bold text-white;
+    background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.2), transparent);
+  }
+
+  .navbar-button {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-300;
+    background: linear-gradient(45deg, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.1));
+    border: 1px solid rgba(147, 51, 234, 0.2);
+    box-shadow: 0 2px 10px rgba(147, 51, 234, 0.1);
+  }
+
+  .navbar-button:hover {
+    background: linear-gradient(45deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
+    border-color: rgba(147, 51, 234, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(147, 51, 234, 0.2);
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingAnimation from './components/LoadingAnimation';
@@ -13,13 +13,30 @@ import ChatBot from './components/ChatBot';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    const hasVisited = localStorage.getItem('hasVisitedBefore');
+    return !hasVisited;
+  });
   const [showTransition, setShowTransition] = useState(false);
-  const [showContent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(() => {
+    const hasVisited = localStorage.getItem('hasVisitedBefore');
+    return !!hasVisited;
+  });
+
+  useEffect(() => {
+    // If this is not the first visit, skip loading and transition
+    const hasVisited = localStorage.getItem('hasVisitedBefore');
+    if (hasVisited) {
+      setLoading(false);
+      setShowTransition(false);
+      setShowContent(true);
+    }
+  }, []);
 
   const handleLoadingComplete = () => {
     setLoading(false);
     setShowTransition(true);
+    localStorage.setItem('hasVisitedBefore', 'true');
   };
 
   const handleEnterPress = () => {

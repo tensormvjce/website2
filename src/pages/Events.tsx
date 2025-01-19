@@ -107,15 +107,16 @@ const Events: React.FC = () => {
           />
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
           {tags.map((tag) => (
             <button
               key={tag}
               onClick={() => handleTagSelect(tag)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
-                ${selectedTag === tag 
-                  ? 'bg-purple-500/40 text-white' 
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50'}`}
+              className={`px-4 py-2 rounded-lg transition-all duration-300 uppercase tracking-wider text-sm ${
+                selectedTag === tag
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/30'
+                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 hover:text-white'
+              }`}
             >
               {tag}
             </button>

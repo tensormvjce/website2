@@ -6,21 +6,18 @@ import { useAuth } from '../contexts/AuthContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const location = useLocation();
   const { currentUser, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Initial animation
   useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
-      setScrolled(offset > 50);
-    };
+    const timer = setTimeout(() => {
+      setIsExpanded(false);
+    }, 5000);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   const handleLogin = () => {
@@ -68,30 +65,33 @@ const Navbar: React.FC = () => {
       scrollToTop();
       return;
     }
-
     navigate(path);
-    
     setTimeout(() => {
       scrollToTop();
     }, 100);
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'navbar-glass' : 'bg-transparent'}`}>
+    <nav 
+      className="fixed w-full z-50 transition-all duration-700 ease-in-out"
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+    >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-24">
           {/* Left Navigation */}
-          <div className="hidden md:flex flex-1 items-center justify-end space-x-16 pr-12">
-            {leftNavItems.map((item) => (
+          <div className={`hidden md:flex flex-1 items-center justify-end space-x-16 pr-12 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
+            {leftNavItems.map((item, index) => (
               <Link
                 key={item.name}
                 to={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`navbar-link text-lg tracking-wide ${
+                className={`navbar-link text-lg tracking-wide whitespace-nowrap ${
                   isActivePath(item.path)
-                    ? 'text-white font-semibold'
+                    ? 'text-white font-semibold active'
                     : 'text-gray-300 hover:text-white'
-                } transition-colors duration-200`}
+                } nav-item-left`}
+                style={{ '--item-index': index } as React.CSSProperties & { '--item-index': number }}
               >
                 {item.name}
               </Link>
@@ -99,10 +99,10 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center justify-center">
+          <div className={`flex-shrink-0 flex items-center justify-center transition-all duration-500 ${!isExpanded ? 'scale-125' : ''}`}>
             <Link 
               to="/" 
-              className="relative group hover:scale-105 transition-transform duration-300"
+              className="relative group transition-transform duration-300"
               onClick={() => handleNavigation('/')}
             >
               <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -115,23 +115,26 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Right Navigation */}
-          <div className="hidden md:flex flex-1 items-center justify-start space-x-16 pl-12">
-            {rightNavItems.map((item) => (
+          <div className={`hidden md:flex flex-1 items-center justify-start space-x-16 pl-12 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
+            {rightNavItems.map((item, index) => (
               <Link
                 key={item.name}
                 to={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`navbar-link text-lg tracking-wide ${
+                className={`navbar-link text-lg tracking-wide whitespace-nowrap ${
                   isActivePath(item.path)
-                    ? 'text-white font-semibold'
+                    ? 'text-white font-semibold active'
                     : 'text-gray-300 hover:text-white'
-                } transition-colors duration-200`}
+                } nav-item-right`}
+                style={{ '--item-index': index } as React.CSSProperties & { '--item-index': number }}
               >
                 {item.name}
               </Link>
             ))}
+            
             {/* Authentication Buttons */}
-            <div className="flex items-center space-x-4">
+            <div className={`flex items-center space-x-4 nav-item-right`} 
+              style={{ '--item-index': rightNavItems.length } as React.CSSProperties & { '--item-index': number }}>
               {currentUser ? (
                 <div className="flex items-center space-x-4">
                   <span className="text-white text-sm">
@@ -139,7 +142,7 @@ const Navbar: React.FC = () => {
                   </span>
                   <button 
                     onClick={handleLogout}
-                    className="bg-red-600/20 hover:bg-red-600/40 text-red-300 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="navbar-button text-red-300 hover:text-red-200"
                   >
                     Logout
                   </button>
@@ -147,7 +150,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <button 
                   onClick={handleLogin}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="navbar-button text-purple-300 hover:text-purple-200"
                 >
                   Login
                 </button>
@@ -155,7 +158,7 @@ const Navbar: React.FC = () => {
               {isAdmin && (
                 <Link 
                   to="/admin"
-                  className="flex items-center px-4 py-2 bg-blue-500/20 border border-blue-500 rounded-lg hover:bg-blue-500/30 transition-all duration-300"
+                  className="navbar-button text-blue-300 hover:text-blue-200"
                 >
                   Admin Dashboard
                 </Link>
@@ -182,12 +185,9 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-lg transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-        style={{ top: '96px' }}
+        className={`mobile-menu ${isOpen ? 'open' : ''}`}
       >
-        <div className="flex flex-col items-center justify-start pt-8 space-y-8">
+        <div className="flex flex-col items-center justify-start pt-16 space-y-6">
           {[...leftNavItems, ...rightNavItems].map((item) => (
             <Link
               key={item.name}
@@ -196,45 +196,52 @@ const Navbar: React.FC = () => {
                 handleNavigation(item.path);
                 toggleMenu();
               }}
-              className={`text-xl tracking-wide ${
-                isActivePath(item.path)
-                  ? 'text-white font-semibold'
-                  : 'text-gray-300 hover:text-white'
-              } transition-colors duration-200`}
+              className={`mobile-menu-item ${
+                isActivePath(item.path) ? 'active' : ''
+              }`}
             >
               {item.name}
             </Link>
           ))}
+          
           {/* Mobile Authentication Buttons */}
-          {currentUser ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-white text-sm">
-                {currentUser.displayName || currentUser.email}
-              </span>
+          <div className="flex flex-col items-center space-y-4 mt-8 w-full px-6">
+            {currentUser ? (
+              <>
+                <span className="text-white text-lg mb-2">
+                  {currentUser.displayName || currentUser.email}
+                </span>
+                <button 
+                  onClick={() => {
+                    handleLogout();
+                    toggleMenu();
+                  }}
+                  className="navbar-button text-red-300 hover:text-red-200 w-full"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
               <button 
-                onClick={handleLogout}
-                className="w-full text-left px-3 py-2 text-white hover:bg-gray-700 rounded-md"
+                onClick={() => {
+                  handleLogin();
+                  toggleMenu();
+                }}
+                className="navbar-button text-purple-300 hover:text-purple-200 w-full"
               >
-                Logout
+                Login
               </button>
-            </div>
-          ) : (
-            <button 
-              onClick={handleLogin}
-              className="w-full text-left px-3 py-2 text-white hover:bg-gray-700 rounded-md"
-            >
-              Login
-            </button>
-          )}
-          {isAdmin && (
-            <Link 
-              to="/admin"
-              className="flex items-center w-full text-left px-3 py-2 text-white hover:bg-gray-700 rounded-md"
-              onClick={toggleMenu}
-            >
-              Admin Dashboard
-            </Link>
-          )}
+            )}
+            {isAdmin && (
+              <Link 
+                to="/admin"
+                onClick={toggleMenu}
+                className="navbar-button text-blue-300 hover:text-blue-200 w-full text-center"
+              >
+                Admin Dashboard
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>

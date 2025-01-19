@@ -6,7 +6,7 @@ interface ContentLoaderProps {
 }
 
 const ContentLoader: React.FC<ContentLoaderProps> = ({ type }) => {
-  const items = type === 'blog' ? Array(6).fill(null) : Array(4).fill(null); // Adjust number of items based on type
+  const items = type === 'blog' ? Array(6).fill(null) : type === 'event' ? Array(4).fill(null) : Array(4).fill(null); // Adjust number of items based on type
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -16,7 +16,7 @@ const ContentLoader: React.FC<ContentLoaderProps> = ({ type }) => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         {/* Title Skeleton */}
         <div className="text-center mb-12">
-          <div className={`${type === 'blog' ? 'w-48' : 'w-64'} h-12 bg-gray-800/50 rounded-lg mx-auto mb-4 overflow-hidden`}>
+          <div className={`${type === 'blog' ? 'w-48' : type === 'event' ? 'w-64' : 'w-64'} h-12 bg-gray-800/50 rounded-lg mx-auto mb-4 overflow-hidden`}>
             <motion.div
               className="w-full h-full bg-gradient-to-r from-gray-800/0 via-gray-700/50 to-gray-800/0"
               animate={{

@@ -6,10 +6,30 @@ import { Points, PointMaterial, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Link } from 'react-router-dom';
 import LockedButton from '../components/LockedButton';
-import { events } from '../data/eventsData';
-import { blogs } from '../data/blogData';
-import { previewMembers } from '../data/previewTeamData';
+import ItemCard from '../components/ItemCard';
+import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
+import { db } from '../services/firebase';
 import { scrollToTop } from '../utils/scrollUtils';
+import { previewMembers } from '../data/previewTeamData';
+
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  status: 'Open' | 'Closed' | 'Ended';
+  slug: string;
+}
+
+interface Blog {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  author: string;
+}
 
 function BlackHoleBackground() {
   const points = useRef<THREE.Points>(null!);
@@ -163,6 +183,9 @@ const Home = () => {
     }
   ];
 
+  const { items: events = [] } = useFirestoreCollection<Event>(db, 'events');
+  const { items: blogs = [] } = useFirestoreCollection<Blog>(db, 'blogs');
+
   return (
     <div className="relative min-h-screen bg-black text-white perspective-[1500px]">
       <motion.div 
@@ -269,7 +292,7 @@ const Home = () => {
           <section className="py-32">
             <div className="container mx-auto px-4">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                <h2 className="section-heading text-4xl md:text-5xl mb-4">
                   Why Join Us?
                 </h2>
                 <p className="text-gray-300 max-w-2xl mx-auto">
@@ -298,7 +321,7 @@ const Home = () => {
           <section className="py-32">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4 glow-text">What We Offer</h2>
+                <h2 className="section-heading text-4xl mb-4">What We Offer</h2>
                 <p className="text-xl text-gray-400 terminal-text">
                   Comprehensive learning opportunities to boost your AI journey
                 </p>
@@ -342,9 +365,7 @@ const Home = () => {
             
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4 glow-text">
-                  Our Teams
-                </h2>
+                <h2 className="section-heading text-4xl">Our Teams</h2>
                 <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
                   Specialized teams working together to push the boundaries of AI
                 </p>
@@ -484,54 +505,19 @@ const Home = () => {
           {/* Events Preview Section */}
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center mb-10">
-              <h2 className="text-4xl font-bold mb-4 glow-text">Our Events</h2>
+              <h2 className="section-heading text-4xl">Our Events</h2>
               <Link to="/events" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
                 Explore more events <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {events.slice(0, 3).map((event, index) => (
-                <div key={`event-${index}`} className="bg-black/50 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden 
-                       hover:border-purple-500/40 transition-all duration-300 group">
-                  <div className="aspect-[16/9] relative overflow-hidden">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-purple-400/80 mb-4 text-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {new Date(event.date).toLocaleDateString('en-US', { 
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric'
-                      })}
-                    </div>
-                    <h3 className="text-xl font-semibold mb-3 terminal-text group-hover:text-purple-400 transition-colors">
-                      {event.title}
-                    </h3>
-                    <p className="text-gray-400 mb-4 line-clamp-2">{event.description}</p>
-                    <div className="mt-4">
-                      <Link 
-                        to={`/events/${event.slug}`}
-                        onClick={scrollToTop}
-                        className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors"
-                      >
-                        Learn more <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+              {events.slice(0, 3).map((event) => (
+                <Link key={event.id} to={`/events/${event.slug}`} onClick={scrollToTop}>
+                  <ItemCard {...event} type="event" status={event.status} />
+                </Link>
               ))}
             </div>
           </div>
@@ -539,43 +525,19 @@ const Home = () => {
           {/* Blogs Preview Section */}
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center mb-10">
-              <h2 className="text-4xl font-bold mb-4 glow-text">Our Blogs</h2>
-              <Link to="/blog" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+              <h2 className="section-heading text-4xl">Our Blogs</h2>
+              <Link to="/blogs" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
                 Explore more blogs <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogs.slice(0, 3).map((blog, index) => (
-                <div key={`blog-${index}`} className="bg-black/50 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden 
-                       hover:border-purple-500/40 transition-all duration-300 group">
-                  <div className="aspect-[16/9] relative overflow-hidden">
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center text-sm text-gray-400">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {new Date(blog.date).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </div>
-                    <h3 className="text-xl font-semibold mb-3 terminal-text group-hover:text-purple-400 transition-colors">
-                      {blog.title}
-                    </h3>
-                    <p className="text-gray-400 mb-4 line-clamp-2">{blog.excerpt}</p>
-                  </div>
-                </div>
+              {blogs.slice(0, 3).map((blog) => (
+                <Link key={blog.id} to={`/blogs/${blog.id}`} onClick={scrollToTop}>
+                  <ItemCard {...blog} type="blog" />
+                </Link>
               ))}
             </div>
           </div>

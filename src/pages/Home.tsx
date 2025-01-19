@@ -353,15 +353,6 @@ const Home = () => {
             {/* Background Effects */}
             <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:50px_50px]" />
             <div className="absolute inset-0 bg-noise opacity-20" />
-            <div className="absolute -top-1/3 left-2/3 -z-10 transform-gpu blur-3xl xl:left-1/2" aria-hidden="true">
-              <div
-                className="aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-purple-500 to-blue-500 opacity-20"
-                style={{
-                  clipPath:
-                    'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                }}
-              />
-            </div>
             
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
               <div className="text-center mb-16">
@@ -373,7 +364,7 @@ const Home = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Technical Team */}
-                <div className="group relative rounded-3xl bg-gradient-to-b from-purple-500/5 to-blue-500/5 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
+                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
                   <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
                   <div className="relative">
                     <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Technical Team</h3>
@@ -398,7 +389,7 @@ const Home = () => {
                 </div>
 
                 {/* Content Team */}
-                <div className="group relative rounded-3xl bg-gradient-to-b from-purple-500/5 to-blue-500/5 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
+                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
                   <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
                   <div className="relative">
                     <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Content Team</h3>
@@ -423,7 +414,7 @@ const Home = () => {
                 </div>
 
                 {/* Media Team */}
-                <div className="group relative rounded-3xl bg-gradient-to-b from-purple-500/5 to-blue-500/5 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
+                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
                   <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
                   <div className="relative">
                     <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Media Team</h3>
@@ -448,7 +439,7 @@ const Home = () => {
                 </div>
 
                 {/* Design Team */}
-                <div className="group relative rounded-3xl bg-gradient-to-b from-purple-500/5 to-blue-500/5 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
+                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
                   <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
                   <div className="relative">
                     <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Design Team</h3>

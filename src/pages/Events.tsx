@@ -71,7 +71,7 @@ const Events: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="events-bg">
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
       

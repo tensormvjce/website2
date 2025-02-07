@@ -72,12 +72,12 @@ const Blog: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden py-24">
+    <div className="blog-bg">
       {/* Background Elements */}
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 pb-16">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

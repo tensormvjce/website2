@@ -28,7 +28,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="about-bg">
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
       

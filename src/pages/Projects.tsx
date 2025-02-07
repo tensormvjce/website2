@@ -150,11 +150,11 @@ const Projects: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="projects-bg">
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
       
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <div className="text-center mb-12">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}

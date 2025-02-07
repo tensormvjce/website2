@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingAnimation from './components/LoadingAnimation';
-import StarryNightTransition from './components/StarryNightTransition';
 import AppRoutes from './AppRoutes';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -17,31 +16,24 @@ function App() {
     const hasVisited = localStorage.getItem('hasVisitedBefore');
     return !hasVisited;
   });
-  const [showTransition, setShowTransition] = useState(false);
   const [showContent, setShowContent] = useState(() => {
     const hasVisited = localStorage.getItem('hasVisitedBefore');
     return !!hasVisited;
   });
 
   useEffect(() => {
-    // If this is not the first visit, skip loading and transition
+    // If this is not the first visit, skip loading
     const hasVisited = localStorage.getItem('hasVisitedBefore');
     if (hasVisited) {
       setLoading(false);
-      setShowTransition(false);
       setShowContent(true);
     }
   }, []);
 
   const handleLoadingComplete = () => {
     setLoading(false);
-    setShowTransition(true);
+    setShowContent(true);
     localStorage.setItem('hasVisitedBefore', 'true');
-  };
-
-  const handleEnterPress = () => {
-    setShowTransition(false);
-    setTimeout(() => setShowContent(true), 500);
   };
 
   return (
@@ -54,21 +46,6 @@ function App() {
             <div className="relative z-50">
               <LoadingAnimation onLoadingComplete={handleLoadingComplete} />
             </div>
-          )}
-        </AnimatePresence>
-
-        {/* Starry Night Transition */}
-        <AnimatePresence mode="wait">
-          {showTransition && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="relative z-40"
-            >
-              <StarryNightTransition onEnter={handleEnterPress} />
-            </motion.div>
           )}
         </AnimatePresence>
 

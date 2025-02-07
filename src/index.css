@@ -24,9 +24,6 @@
   body {
     font-family: 'Orbitron', cursive;
     @apply bg-black text-white min-h-screen font-mono;
-    background: linear-gradient(to bottom, 
-      rgba(0, 0, 0, 1) 0%,
-      rgba(255, 255, 255, 1) 100%);
     cursor: default;
   }
 
@@ -36,6 +33,80 @@
 }
 
 @layer components {
+  /* Common background elements */
+  .noise {
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.08;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .grid-background {
+    background-size: 50px 50px;
+    background-image: 
+      linear-gradient(to right, rgba(128, 90, 213, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(128, 90, 213, 0.08) 1px, transparent 1px);
+    z-index: 0;
+  }
+
+  /* Teams page background */
+  .teams-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%, 
+      rgba(88, 28, 135, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* Events page background */
+  .events-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(147, 51, 234, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* Blog page background */
+  .blog-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(88, 28, 135, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* Projects page background */
+  .projects-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(147, 51, 234, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* Registration page background */
+  .registration-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(147, 51, 234, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* About page background */
+  .about-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(88, 28, 135, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* Login page background */
+  .login-bg {
+    @apply min-h-screen bg-black relative overflow-hidden;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(147, 51, 234, 0.25),
+      rgba(0, 0, 0, 1) 70%);
+  }
+
   .terminal-text {
     font-family: "JetBrains Mono", monospace;
     @apply text-sm leading-relaxed;

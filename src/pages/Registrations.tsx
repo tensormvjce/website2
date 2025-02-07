@@ -59,12 +59,12 @@ const ProcessStep = ({
 
 const Registrations = () => {
   return (
-    <div className="min-h-screen bg-black pt-24 pb-16 relative overflow-hidden">
+    <div className="registration-bg">
       {/* Background Elements */}
       <div className="noise" />
       <div className="grid-background fixed inset-0" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 pb-16">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

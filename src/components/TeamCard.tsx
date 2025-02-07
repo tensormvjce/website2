@@ -5,7 +5,7 @@ interface TeamCardProps {
   member: TeamMember
 }
 
-const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
+const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
   const handleLinkedInClick = (e: React.MouseEvent, url: string) => {
     e.preventDefault();
     if (url) {
@@ -13,8 +13,11 @@ const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
     }
   };
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = '/avatars/default.jpg'; // Fallback image
+  const getImageSource = (member: TeamMember) => {
+    if (member.photo && member.photo !== '') {
+      return member.photo;
+    }
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff`;
   };
 
   return (
@@ -25,17 +28,15 @@ const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
           className="cursor-pointer"
         >
           <img
-            src={member.photo}
+            src={getImageSource(member)}
             alt={member.name}
-            onError={handleImageError}
             className="w-32 h-32 rounded-full mx-auto mb-4 hover:opacity-80 transition-opacity"
           />
         </div>
       ) : (
         <img
-          src={member.photo}
+          src={getImageSource(member)}
           alt={member.name}
-          onError={handleImageError}
           className="w-32 h-32 rounded-full mx-auto mb-4"
         />
       )}

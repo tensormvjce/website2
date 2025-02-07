@@ -34,7 +34,16 @@ interface Blog {
 function BlackHoleBackground() {
   const points = useRef<THREE.Points>(null!);
   const [isReady, setIsReady] = useState(false);
+  const { scrollYProgress } = useScroll();
   const particleCount = 8000; 
+
+  // Create zoom effect based on scroll
+  const zoomScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [1, 2.5]  // Zoom from normal (1) to 2.5x as we scroll
+  );
+
   const sphere = useMemo(() => {
     const positions = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
@@ -57,6 +66,9 @@ function BlackHoleBackground() {
       points.current.rotation.z += delta * 0.08;
       points.current.rotation.x = state.clock.elapsedTime * 0.04;
       points.current.rotation.y = state.clock.elapsedTime * 0.06;
+      // Update scale based on scroll progress
+      const currentScale = zoomScale.get();
+      points.current.scale.set(currentScale, currentScale, currentScale);
     }
   });
 
@@ -82,28 +94,11 @@ function BlackHoleBackground() {
 const Home = () => {
   const { scrollYProgress } = useScroll();
 
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [1, 1.3, 1.3, 1]
-  );
-
+  // Remove previous transform effects that were affecting content
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.4, 0.6, 1],
     [1, 0.9, 0.9, 1]
-  );
-
-  const translateZ = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [0, 200, 200, 0]
-  );
-
-  const rotate = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.6, 1],
-    [0, 0.5, -0.5, 0]
   );
 
   const CustomIcons = {
@@ -187,18 +182,8 @@ const Home = () => {
   const { items: blogs = [] } = useFirestoreCollection<Blog>(db, 'blogs');
 
   return (
-    <div className="relative min-h-screen bg-black text-white perspective-[1500px]">
-      <motion.div 
-        className="fixed inset-0 w-full h-screen will-change-transform"
-        style={{ 
-          scale,
-          opacity,
-          rotate,
-          z: translateZ,
-          transformStyle: "preserve-3d",
-          transformOrigin: "center center",
-        }}
-      >
+    <div className="relative min-h-screen bg-black text-white">
+      <div className="fixed inset-0 w-full h-screen">
         <Canvas 
           camera={{ position: [0, 0, 3.5], fov: 65 }}
           dpr={1}
@@ -214,12 +199,12 @@ const Home = () => {
             />
           </Suspense>
         </Canvas>
-      </motion.div>
+      </div>
 
       <motion.div 
         className="relative z-10"
         style={{
-          y: useTransform(scrollYProgress, [0, 0.5, 1], [0, -10, 0], { clamp: false })
+          opacity
         }}
       >
         {/* Hero Section */}

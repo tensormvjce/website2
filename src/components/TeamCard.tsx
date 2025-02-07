@@ -2,10 +2,10 @@ import React from 'react';
 import { TeamMember } from '../data/teamData';
 
 interface TeamCardProps {
-  member: TeamMember;
+  member: TeamMember
 }
 
-const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
+const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
   const handleLinkedInClick = (e: React.MouseEvent, url: string) => {
     e.preventDefault();
     if (url) {

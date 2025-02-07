@@ -117,8 +117,8 @@ const Teams = () => {
                               >
                                 {yearData.members
                                   .filter(member => member.category === 'Core Team')
-                                  .map((member, index) => (
-                                    <TeamCard key={member.name} member={member} index={index} />
+                                  .map((member) => (
+                                    <TeamCard key={member.name} member={member} />
                                   ))}
                               </motion.div>
                             )}
@@ -154,8 +154,8 @@ const Teams = () => {
                                       {department}
                                     </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                      {members.map((member, index) => (
-                                        <TeamCard key={member.name} member={member} index={index} />
+                                      {members.map((member) => (
+                                        <TeamCard key={member.name} member={member} />
                                       ))}
                                     </div>
                                   </div>

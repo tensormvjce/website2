@@ -605,7 +605,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bharath Sai Karnati',
         role: 'Member',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHBaOpZaMZaMQ/profile-displayphoto-shrink_400_400/B56ZQ2vcElH0Ag-/0/1736085193709?e=1744243200&v=beta&t=GFO4tge4VdXbqijZX_oDm5iUPqhGMIGHMCaJGm-0P2A',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQFkMbqHo-22aA/profile-displayphoto-shrink_400_400/B56ZOsz5keG4Ak-/0/1733771107309?e=1744243200&v=beta&t=kBXjKnQdxtPFlHpnQHH2xJV9LUcd9WKfFCqiT5fGXfU',
         linkedin: 'https://www.linkedin.com/in/bharathsj3026',
         category: 'Sub-Team Members',
         department: 'Design'

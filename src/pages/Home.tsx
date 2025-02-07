@@ -21,6 +21,11 @@ interface Event {
   image: string;
   status: 'Open' | 'Closed' | 'Ended';
   slug: string;
+  tags: string[];
+  location: string;
+  registrationLink?: string;
+  venue?: string;
+  duration?: string;
 }
 
 interface Blog {
@@ -304,8 +309,8 @@ const Home = () => {
           </section>
 
           {/* Features Section */}
-          <section className="py-32">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section className="py-32 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
               <div className="text-center mb-16">
                 <h2 className="section-heading text-4xl mb-4">What We Offer</h2>
                 <p className="text-xl text-gray-400 terminal-text">
@@ -315,7 +320,14 @@ const Home = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {features.map((feature, index) => (
-                  <div key={`feature-${index}`} className="relative group">
+                  <motion.div
+                    key={`feature-${index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.2 }}
+                    className="relative group"
+                  >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="relative p-8 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
                       <div className="flex items-start space-x-4">
@@ -328,7 +340,7 @@ const Home = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -436,9 +448,93 @@ const Home = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {events.slice(0, 3).map((event) => (
-                <Link key={event.id} to={`/events/${event.slug}`} onClick={scrollToTop}>
-                  <ItemCard {...event} type="event" status={event.status} />
+                <motion.div
+                  key={event.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="relative group cursor-pointer"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
+                    <Link to={`/events/${event.slug}`} onClick={scrollToTop}>
+                      <div className="aspect-video">
+                        <img
+                          src={event.image}
+                          alt={event.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://via.placeholder.com/800x400?text=Event+Image';
+                          }}
+                        />
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-xl font-semibold">{event.title}</h3>
+                          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            event.status === 'Open' 
+                              ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                              : event.status === 'Ended' 
+                                ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
+                                : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          }`}>
+                            {event.status === 'Open' ? 'Registration Open' : 
+                             event.status === 'Ended' ? 'Event Ended' : 
+                             'Registration Closed'}
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {event.tags?.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-xs text-purple-400 px-2 py-1 rounded-full border border-purple-400/30 terminal-text"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <p className="text-gray-400 mb-4 line-clamp-2">{event.description}</p>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-4">
+                            <span className="text-purple-400">{event.date}</span>
+                          </div>
+                          {event.registrationLink && event.status === 'Open' && (
+                            <a
+                              href={event.registrationLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
+                                       rounded-lg text-white font-medium transition-all duration-300"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Register
+                            </a>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-end mt-2">
+                          <button className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-2 group transition-all duration-300">
+                            Read More
+                            <svg 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" 
+                              fill="none" 
+                              viewBox="0 0 24 24" 
+                              stroke="currentColor"
+                            >
+                              <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth={2} 
+                                d="M13 7l5 5m0 0l-5 5m5-5H6" 
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                 </Link>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -456,7 +552,7 @@ const Home = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogs.slice(0, 3).map((blog) => (
-                <Link key={blog.id} to={`/blogs/${blog.id}`} onClick={scrollToTop}>
+                <Link key={blog.id} to={`/blog/${blog.id}`} onClick={scrollToTop}>
                   <ItemCard {...blog} type="blog" />
                 </Link>
               ))}

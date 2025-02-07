@@ -23,9 +23,13 @@ const AdminDashboard: React.FC = () => {
     author: '',
     websiteUrl: '',
     tags: [] as string[],
-    // New event-specific fields
-    slug: '',
+    // Blog-specific fields
+    content: '',
     bannerImg: '',
+    contentWriter: '',
+    writerAvatar: '',
+    // Event-specific fields
+    slug: '',
     longDescription: '',
     agenda: [] as { day: string; title: string; details: string[] }[],
     whyAttend: [] as string[],
@@ -70,7 +74,7 @@ const AdminDashboard: React.FC = () => {
     fetchTags();
   }, [activeTab]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewItem(prev => ({
       ...prev,
@@ -126,15 +130,13 @@ const AdminDashboard: React.FC = () => {
       // Add document to Firestore
       const docRef = await addDoc(collection(db, collectionName), {
         ...newItem,
-        // Ensure tags is an array and trim whitespace
         tags: newItem.tags.map(tag => tag.trim()).filter(tag => tag !== ''),
-        // Generate slug if not provided
         slug: newItem.slug || newItem.title.toLowerCase().replace(/\s+/g, '-')
       });
 
       console.log('Document added with ID:', docRef.id);
 
-      // Reset form and show success message
+      // Reset form with all fields
       setNewItem({
         title: '',
         description: '',
@@ -143,8 +145,11 @@ const AdminDashboard: React.FC = () => {
         author: '',
         websiteUrl: '',
         tags: [],
-        slug: '',
+        content: '',
         bannerImg: '',
+        contentWriter: '',
+        writerAvatar: '',
+        slug: '',
         longDescription: '',
         agenda: [],
         whyAttend: [],
@@ -379,6 +384,62 @@ const AdminDashboard: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* Blog-specific fields */}
+          {activeTab === 'blogs' && (
+            <>
+              {/* Banner Image */}
+              <div>
+                <label className="block text-gray-300 mb-2">Banner Image URL</label>
+                <input
+                  type="text"
+                  name="bannerImg"
+                  value={newItem.bannerImg}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="Enter banner image URL"
+                />
+              </div>
+
+              {/* Content Writer */}
+              <div>
+                <label className="block text-gray-300 mb-2">Content Writer</label>
+                <input
+                  type="text"
+                  name="contentWriter"
+                  value={newItem.contentWriter}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="Enter content writer's name"
+                />
+              </div>
+
+              {/* Writer Avatar */}
+              <div>
+                <label className="block text-gray-300 mb-2">Writer Avatar URL</label>
+                <input
+                  type="text"
+                  name="writerAvatar"
+                  value={newItem.writerAvatar}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="Enter writer's avatar image URL"
+                />
+              </div>
+
+              {/* Content */}
+              <div>
+                <label className="block text-gray-300 mb-2">Content</label>
+                <textarea
+                  name="content"
+                  value={newItem.content}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
+                  placeholder="Enter blog content (supports markdown)"
+                />
+              </div>
+            </>
+          )}
 
           {/* Event-specific fields */}
           {activeTab === 'events' && (

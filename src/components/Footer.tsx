@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import logo from "../logo_white.png";
 import likith from "../assets/team/likith1.png";
 import yusha from "../assets/team/yusha.jpg";
@@ -19,10 +20,17 @@ const Footer = () => {
       color: "hover:text-gray-400"
     },
     {
-      icon: <FaTwitter className="w-6 h-6" />,
-      href: "https://twitter.com/TensorAIMVJ",
-      color: "hover:text-blue-500"
+      icon: <FaInstagram className="w-6 h-6" />,
+      href: "https://instagram.com/tensor.club",
+      color: "hover:text-pink-500"
     }
+  ];
+
+  const quickLinks = [
+    { name: 'About Us', path: '/about' },
+    { name: 'Teams', path: '/teams' },
+    { name: 'Events', path: '/events' },
+    { name: 'Blogs', path: '/blogs' },
   ];
 
   const teamMembers = [
@@ -38,24 +46,41 @@ const Footer = () => {
     }
   ];
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <motion.footer 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="relative w-full bg-black/50 backdrop-blur-sm border-t border-purple-500/20"
     >
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-          {/* Left Section */}
+      {/* Top corner decorative elements */}
+      <div className="absolute inset-x-0 top-0 h-16 overflow-hidden">
+        <div className="absolute left-0 top-0 w-16 h-16 bg-black/50 rounded-br-3xl" />
+        <div className="absolute right-0 top-0 w-16 h-16 bg-black/50 rounded-bl-3xl" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 py-12">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8">
+          {/* Logo & Contact Section */}
           <div className="space-y-6">
             <motion.div 
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-4 bg-black/30 p-3 rounded-lg backdrop-blur-sm border border-purple-500/10"
               whileHover={{ scale: 1.02 }}
             >
-              <img src={logo} className="w-20 h-20" alt="Tensor Logo" />
+              <img src={logo} className="w-16 h-16" alt="Tensor Logo" />
+              <div className="space-y-1">
+                <h2 className="text-xl font-bold text-white tracking-wide">TENSOR CLUB</h2>
+                <p className="text-sm text-gray-300">MVJ College of Engineering</p>
+              </div>
             </motion.div>
             <div className="space-y-2 text-gray-300">
-              <p className="font-medium">MVJ College of Engineering</p>
               <p className="text-sm">Near ITPB, Channasandra, Bangalore - 560067</p>
               <motion.a
                 href="mailto:tensormvjce@gmail.com"
@@ -68,20 +93,44 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Center Section */}
-          <div className="flex flex-col justify-center items-center self-center">
-            {/* Social Media */}
-            <div className="text-center space-y-4">
-              <p className="text-gray-300 font-medium">Follow us on Social Media</p>
-              <div className="flex space-x-6 justify-center">
+          {/* Quick Links Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <ul className="space-y-2">
+              {quickLinks.map((link, index) => (
+                <motion.li 
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Link 
+                    to={link.path}
+                    onClick={scrollToTop}
+                    className="text-gray-300 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Social Media Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Connect With Us</h3>
+            <div className="flex flex-col space-y-4">
+              <p className="text-sm text-gray-300">
+                Follow us on social media to stay updated with our latest events and announcements.
+              </p>
+              <div className="flex space-x-4">
                 {socialLinks.map((link, index) => (
                   <motion.a
                     key={index}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-gray-400 transition-colors ${link.color}`}
-                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    className={`text-gray-400 transition-colors ${link.color} bg-white/5 p-2 rounded-lg backdrop-blur-sm`}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
                   >
                     {link.icon}
@@ -91,11 +140,14 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="flex flex-col items-center justify-center self-center">
-            <div className="flex flex-col items-center space-y-4">
-              <span className="text-gray-300 font-medium text-lg">Developed by</span>
-              <div className="flex -space-x-6">
+          {/* Developers Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Developers</h3>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-300">
+                Meet the talented developers behind this website
+              </p>
+              <div className="flex -space-x-4">
                 {teamMembers.map((member, index) => (
                   <motion.a
                     key={index}
@@ -108,7 +160,7 @@ const Footer = () => {
                     <img
                       src={member.image}
                       alt={member.alt}
-                      className="w-16 h-16 rounded-full border-2 border-purple-500/50 hover:border-purple-500 transition-colors"
+                      className="w-14 h-14 rounded-full border-2 border-purple-500/50 hover:border-purple-500 transition-colors"
                     />
                   </motion.a>
                 ))}
@@ -116,10 +168,37 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
+        {/* Copyright Section */}
+        <div className="pt-8 mt-8 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-sm text-gray-400">
+              © {new Date().getFullYear()} Tensor Club. All rights reserved.
+            </p>
+            <div className="flex space-x-4 text-sm text-gray-400">
+              <motion.a 
+                href="#" 
+                className="hover:text-purple-400 transition-colors"
+                whileHover={{ scale: 1.05 }}
+              >
+                Privacy Policy
+              </motion.a>
+              <span>•</span>
+              <motion.a 
+                href="#" 
+                className="hover:text-purple-400 transition-colors"
+                whileHover={{ scale: 1.05 }}
+              >
+                Terms of Service
+              </motion.a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Background Gradient */}
+      {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-t from-purple-900/10 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:20px_20px] pointer-events-none" />
     </motion.footer>
   );
 };

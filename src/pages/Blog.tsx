@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import { db } from '../services/firebase';
+import ItemCard from '../components/ItemCard';
 
 interface BlogPost {
   id?: string;
@@ -139,33 +140,16 @@ const Blog: React.FC = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                  {blog.image && (
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={blog.image} 
-                        alt={blog.title} 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">{blog.title}</h3>
-                    <p className="text-gray-400 mb-4">{blog.description}</p>
-                    {blog.tags && (
-                      <div className="flex flex-wrap gap-2">
-                        {blog.tags.map((tag, tagIndex) => (
-                          <span 
-                            key={`${blog.id}-${tag}-${tagIndex}`}
-                            className="text-sm bg-purple-500/20 text-purple-300 px-2 py-1 rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <ItemCard
+                  title={blog.title}
+                  description={blog.description}
+                  image={blog.image}
+                  date={blog.date}
+                  tags={blog.tags}
+                  author={blog.author}
+                  link={`/blog/${blog.id}`}
+                  type="blog"
+                />
               </motion.div>
             ))}
           </AnimatePresence>

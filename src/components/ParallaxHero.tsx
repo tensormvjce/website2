@@ -3,9 +3,14 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import BlackHoleBackground from '../pages/Home';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const ParallaxHero: React.FC = () => {
   const { scrollY } = useScroll();
+  const titleRef = useScrollReveal<HTMLHeadingElement>();
+  const subtitleRef = useScrollReveal<HTMLHeadingElement>({ threshold: 0.2 });
+  const ctaRef = useScrollReveal<HTMLDivElement>({ threshold: 0.3 });
+  const scrollIndicatorRef = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
 
   // Memoized transform values for performance
   const transforms = useMemo(() => {
@@ -59,20 +64,19 @@ const ParallaxHero: React.FC = () => {
           zIndex: 1
         }}
       >
+        {/* Welcome Text - Reveal from Left */}
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="text-6xl md:text-8xl font-bold text-white text-center mb-6 tracking-wider glitch"
+          ref={titleRef}
+          className="text-6xl md:text-8xl font-bold text-white text-center mb-6 tracking-wider glitch reveal-from-left"
           data-text="WELCOME TO"
         >
           WELCOME TO
         </motion.h1>
+
+        {/* Main Title - Scale In */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, duration: 1 }}
-          className="relative"
+          ref={subtitleRef}
+          className="relative scale-in"
         >
           <h1 
             className="text-7xl md:text-9xl font-extrabold text-transparent bg-clip-text tracking-tight glitch"
@@ -83,12 +87,23 @@ const ParallaxHero: React.FC = () => {
           <div className="absolute -inset-1 blur-xl bg-gradient-to-r from-blue-400/30 to-purple-600/30 -z-10" />
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* Buttons - Fade In with Delay */}
+        <div 
+          ref={ctaRef}
+          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 fade-in reveal-delay-2"
+        >
+          <button className="px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg text-lg font-semibold transition-all duration-300 hover:scale-105">
+            Join Us
+          </button>
+          <button className="px-8 py-3 border border-purple-500 hover:bg-purple-500/10 rounded-lg text-lg font-semibold transition-all duration-300 hover:scale-105">
+            Learn More
+          </button>
+        </div>
+
+        {/* Scroll Indicator - Fade In with Delay */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10"
+          ref={scrollIndicatorRef}
+          className="absolute bottom-10 fade-in reveal-delay-3"
         >
           <div className="flex flex-col items-center">
             <span className="text-white text-sm mb-2">Scroll Down</span>
@@ -107,7 +122,7 @@ const ParallaxHero: React.FC = () => {
         </motion.div>
       </motion.div>
 
-      {/* Very gradual darkening overlay */}
+      {/* Gradient Overlay */}
       <motion.div 
         className="fixed inset-0 w-full h-screen pointer-events-none bg-gradient-to-b from-transparent to-black/80"
         style={{

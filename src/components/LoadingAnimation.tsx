@@ -61,15 +61,23 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
           </div>
 
           <div className="relative mt-8">
-            {/* Base text layer */}
-            <div 
-              className="text-[120px] font-bold tracking-[1rem] text-purple-500 select-none font-orbitron"
-              style={{
-                clipPath: `inset(${100 - progress}% 0 0 0)`,
-                WebkitClipPath: `inset(${100 - progress}% 0 0 0)`,
-              }}
-            >
-              T E N S O R
+            {/* Text container with glitch effects */}
+            <div className="relative">
+              <div 
+                className="text-[120px] font-bold tracking-[1rem] select-none font-orbitron relative"
+                style={{
+                  clipPath: `inset(${100 - progress}% 0 0 0)`,
+                  WebkitClipPath: `inset(${100 - progress}% 0 0 0)`,
+                }}
+              >
+                {/* Main text with glitch effect */}
+                <span 
+                  className="glitch relative inline-block text-purple-500"
+                  data-text="T E N S O R"
+                >
+                  T E N S O R
+                </span>
+              </div>
             </div>
 
             <div className="relative h-1 mt-8 bg-gray-800/50 rounded-full overflow-hidden backdrop-blur-sm">

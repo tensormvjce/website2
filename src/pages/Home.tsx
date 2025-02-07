@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { Link } from 'react-router-dom';
 import LockedButton from '../components/LockedButton';
 import ItemCard from '../components/ItemCard';
+import TeamSection from '../components/TeamSection';
 import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import { db } from '../services/firebase';
 import { scrollToTop } from '../utils/scrollUtils';
@@ -341,112 +342,56 @@ const Home = () => {
             
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
               <div className="text-center mb-16">
-                <h2 className="section-heading text-4xl">Our Teams</h2>
+                <h2 className="section-heading text-4xl">Our Team Structure</h2>
                 <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
                   Specialized teams working together to push the boundaries of AI
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex flex-col space-y-4">
                 {/* Technical Team */}
-                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
-                  <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
-                  <div className="relative">
-                    <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Technical Team</h3>
-                    <p className="text-base leading-7 text-gray-400 mb-6">
-                      Developing cutting-edge AI/ML solutions and conducting research in emerging technologies.
-                    </p>
-                    <ul className="space-y-3 text-gray-300">
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Neural Networks</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Computer Vision</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Natural Language Processing</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <TeamSection
+                  title="Technical Team"
+                  description="Developing cutting-edge AI/ML solutions and conducting research in emerging technologies."
+                  items={[
+                    "Neural Networks",
+                    "Computer Vision",
+                    "Natural Language Processing"
+                  ]}
+                />
 
                 {/* Content Team */}
-                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
-                  <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
-                  <div className="relative">
-                    <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Content Team</h3>
-                    <p className="text-base leading-7 text-gray-400 mb-6">
-                      Creating informative and engaging content about AI/ML concepts and latest developments.
-                    </p>
-                    <ul className="space-y-3 text-gray-300">
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Technical Blogs</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Social Media</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Documentation</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <TeamSection
+                  title="Content Team"
+                  description="Creating informative and engaging content about AI/ML concepts and latest developments."
+                  items={[
+                    "Technical Blogs",
+                    "Social Media",
+                    "Documentation"
+                  ]}
+                />
 
                 {/* Media Team */}
-                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
-                  <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
-                  <div className="relative">
-                    <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Media Team</h3>
-                    <p className="text-base leading-7 text-gray-400 mb-6">
-                      Capturing and showcasing our journey through various media formats.
-                    </p>
-                    <ul className="space-y-3 text-gray-300">
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Event Coverage</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Video Production</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Photography</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <TeamSection
+                  title="Media Team"
+                  description="Capturing and showcasing our journey through various media formats."
+                  items={[
+                    "Event Coverage",
+                    "Video Production",
+                    "Photography"
+                  ]}
+                />
 
                 {/* Design Team */}
-                <div className="group relative rounded-3xl bg-black/50 px-8 py-10 backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300">
-                  <div className="absolute inset-0 rounded-3xl transition duration-300 group-hover:bg-purple-500/10" />
-                  <div className="relative">
-                    <h3 className="text-xl font-semibold leading-7 text-gradient-purple mb-3 text-4xl font-bold mb-4 glow-text">Design Team</h3>
-                    <p className="text-base leading-7 text-gray-400 mb-6">
-                      Creating visually appealing designs and maintaining brand consistency.
-                    </p>
-                    <ul className="space-y-3 text-gray-300">
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">UI/UX Design</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Graphics</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="h-px flex-auto bg-gradient-to-r from-purple-500/0 via-purple-500/70 to-purple-500/0" />
-                        <span className="text-sm font-medium">Branding</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <TeamSection
+                  title="Design Team"
+                  description="Creating visually appealing designs and maintaining brand consistency."
+                  items={[
+                    "UI/UX Design",
+                    "Graphics",
+                    "Branding"
+                  ]}
+                />
               </div>
             </div>
           </section>

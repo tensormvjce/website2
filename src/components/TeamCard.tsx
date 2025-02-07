@@ -13,6 +13,10 @@ const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
     }
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/avatars/default.jpg'; // Fallback image
+  };
+
   return (
     <div className="bg-black p-4 rounded-lg shadow-lg text-center">
       {member.linkedin ? (
@@ -23,6 +27,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
           <img
             src={member.photo}
             alt={member.name}
+            onError={handleImageError}
             className="w-32 h-32 rounded-full mx-auto mb-4 hover:opacity-80 transition-opacity"
           />
         </div>
@@ -30,6 +35,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member}) => {
         <img
           src={member.photo}
           alt={member.name}
+          onError={handleImageError}
           className="w-32 h-32 rounded-full mx-auto mb-4"
         />
       )}

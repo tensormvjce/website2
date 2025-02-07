@@ -29,7 +29,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQH9lQa2xKP0Gg/profile-displayphoto-shrink_200_200/B56ZR6Jw1WHsAY-/0/1737216168844?e=2147483647&v=beta&t=W4BC1523Z8QwsoNmfw1XOqmVoKsY5XdXH_KGJ60IoGw',
+        photo: 'https://ui-avatars.com/api/?name=Bahulika&background=random',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },
@@ -370,7 +370,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQH9lQa2xKP0Gg/profile-displayphoto-shrink_200_200/B56ZR6Jw1WHsAY-/0/1737216168844?e=2147483647&v=beta&t=W4BC1523Z8QwsoNmfw1XOqmVoKsY5XdXH_KGJ60IoGw',
+        photo: 'https://ui-avatars.com/api/?name=Bahulika&background=random',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },

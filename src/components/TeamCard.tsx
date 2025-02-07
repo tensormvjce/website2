@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TeamMember } from '../data/teamData';
 
 interface TeamCardProps {
@@ -6,6 +6,8 @@ interface TeamCardProps {
 }
 
 const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
+  const [imageError, setImageError] = useState(false);
+
   const handleLinkedInClick = (e: React.MouseEvent, url: string) => {
     e.preventDefault();
     if (url) {
@@ -14,10 +16,14 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
   };
 
   const getImageSource = (member: TeamMember) => {
-    if (member.photo && member.photo !== '') {
+    if (!imageError && member.photo && member.photo !== '') {
       return member.photo;
     }
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff`;
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff&size=128`;
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
   };
 
   return (
@@ -30,6 +36,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
           <img
             src={getImageSource(member)}
             alt={member.name}
+            onError={handleImageError}
             className="w-32 h-32 rounded-full mx-auto mb-4 hover:opacity-80 transition-opacity"
           />
         </div>
@@ -37,6 +44,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
         <img
           src={getImageSource(member)}
           alt={member.name}
+          onError={handleImageError}
           className="w-32 h-32 rounded-full mx-auto mb-4"
         />
       )}

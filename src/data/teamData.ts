@@ -118,7 +118,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Joshua Royar',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/155966e5-50df-4b05-835e-0f880a35a7b8',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -198,7 +198,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sankeerth S banagar',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/afa402c0-ed58-4af8-8d81-f0f132e5114d',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -288,7 +288,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Z syed zuhaib ahmed',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/9ff1dbff-db71-4608-a7d6-b6a96a75511f',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -296,7 +296,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Om Babu Singh',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/54d9c8f9-6079-424d-b4ad-d2f6c049e20c',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -475,7 +475,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Joshua Royar',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/155966e5-50df-4b05-835e-0f880a35a7b8',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -555,7 +555,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sankeerth S banagar',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/afa402c0-ed58-4af8-8d81-f0f132e5114d',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -645,7 +645,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Z syed zuhaib ahmed',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/9ff1dbff-db71-4608-a7d6-b6a96a75511f',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -653,7 +653,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Om Babu Singh',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/54d9c8f9-6079-424d-b4ad-d2f6c049e20c',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'

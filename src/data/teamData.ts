@@ -64,7 +64,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Angel Susan',
         role: 'Design Sub-Lead',
-        photo: '(https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
+        photo: 'https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
         linkedin: '',
         category: 'Core Team',
         department: 'Design'

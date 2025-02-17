@@ -256,7 +256,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Suhana',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/c73d071f-7e5e-4a5d-99c4-bff1493b05f3',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -613,7 +613,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Suhana',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/c73d071f-7e5e-4a5d-99c4-bff1493b05f3',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'

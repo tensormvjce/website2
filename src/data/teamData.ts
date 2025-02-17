@@ -29,7 +29,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://drive.google.com/file/d/13Kbxp0oXAEUfOf1ZH7jeXw7zrEZxNz-s/view?usp=drive_link',
+        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d)',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },
@@ -38,7 +38,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Chandana',
         role: 'Technical Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D4D35AQEc2P0FFbDdsQ/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1718796542667?e=1739556000&v=beta&t=IyhNb8Sn785sthBWVFOFZxwudM7R5UX82vUbi4PhWc0',
+        photo: 'https://github.com/user-attachments/assets/7ace1c31-119b-4a81-91bd-cba4c55bbf17)',
         linkedin: 'https://linkedin.com/in/alapati-mani-chandana/',
         category: 'Core Team',
         department: 'Technical'
@@ -56,7 +56,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Swetha',
         role: 'Design Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5635AQGKCWJ-3GaapA/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1728181485272?e=1739556000&v=beta&t=upMADyA6hKszoPG-uorNnAIEDCygxwnH1CQpwAoB6e4',
+        photo: 'https://github.com/user-attachments/assets/d84c212e-5871-4014-9de1-51a0e65c0aaf',
         linkedin: 'https://www.linkedin.com/in/swetha-sasidharan-3b7147212',
         category: 'Core Team',
         department: 'Design'
@@ -64,7 +64,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Angel Susan',
         role: 'Design Sub-Lead',
-        photo: '',
+        photo: '(https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
         linkedin: '',
         category: 'Core Team',
         department: 'Design'
@@ -110,7 +110,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Jashwanth Naidu',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/07fa9d84-2d6b-4dce-942b-d74bcd3d47bc',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -158,7 +158,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sathwik',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/f8146e88-30a4-455a-af60-b174d8d541f6',
         linkedin: 'https://www.linkedin.com/in/sathwik-shetty-572b39314',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -199,6 +199,14 @@ export const teamData: TeamYear[] = [
         name: 'Sankeerth S banagar',
         role: 'Member',
         photo: '/avatars/default.jpg',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Amrutha Sindhu',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/321deeb6-4c61-4488-a10b-e19c96e28615',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -322,7 +330,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sanjit Kumaar S',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3)',
         linkedin: 'https://www.linkedin.com/in/sanjit-ss-b76985228',
         category: 'Sub-Team Members',
         department: 'Content'
@@ -332,7 +340,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bhavesh',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/f73aabb7-d2b4-421a-8fcd-2ba2139f54c1)',
         linkedin: 'https://www.linkedin.com/in/bhavesh-chhabria-21630433b',
         category: 'Sub-Team Members',
         department: 'Media'
@@ -350,6 +358,14 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D4E03AQHfv94uILvFhw/profile-displayphoto-shrink_400_400/B4EZR.jLZEHMAg-/0/1737289939785?e=1744243200&v=beta&t=ht2LcSssLRvHpZDbO9POD2qVSRK8PdBEmhi51T4AHDE',
         linkedin: 'https://www.linkedin.com/in/kaviya-sendhil-009681347',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Surabhi M R',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQGGcdbNDhgXmA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731924641621?e=1745452800&v=beta&t=OcbHjRhaya5btsowBqFkC8l_x_gBOFX2WUMW0NgqW_c',
+        linkedin: 'https://www.linkedin.com/in/surabhi-m-r-baab98312/',
         category: 'Sub-Team Members',
         department: 'Media'
       }
@@ -370,7 +386,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://drive.google.com/file/d/13Kbxp0oXAEUfOf1ZH7jeXw7zrEZxNz-s/view?usp=drive_link',
+        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d)',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },
@@ -379,7 +395,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Chandana',
         role: 'Technical Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D4D35AQEc2P0FFbDdsQ/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1718796542667?e=1739556000&v=beta&t=IyhNb8Sn785sthBWVFOFZxwudM7R5UX82vUbi4PhWc0',
+        photo: 'https://github.com/user-attachments/assets/7ace1c31-119b-4a81-91bd-cba4c55bbf17)',
         linkedin: 'https://linkedin.com/in/alapati-mani-chandana/',
         category: 'Core Team',
         department: 'Technical'
@@ -397,7 +413,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Swetha',
         role: 'Design Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5635AQGKCWJ-3GaapA/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1728181485272?e=1739556000&v=beta&t=upMADyA6hKszoPG-uorNnAIEDCygxwnH1CQpwAoB6e4',
+        photo: 'https://github.com/user-attachments/assets/d84c212e-5871-4014-9de1-51a0e65c0aaf',
         linkedin: 'https://www.linkedin.com/in/swetha-sasidharan-3b7147212',
         category: 'Core Team',
         department: 'Design'
@@ -405,7 +421,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Angel Susan',
         role: 'Design Sub-Lead',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
         linkedin: '',
         category: 'Core Team',
         department: 'Design'
@@ -451,7 +467,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Jashwanth Naidu',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/07fa9d84-2d6b-4dce-942b-d74bcd3d47bc',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -499,7 +515,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sathwik',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/f8146e88-30a4-455a-af60-b174d8d541f6',
         linkedin: 'https://www.linkedin.com/in/sathwik-shetty-572b39314',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -540,6 +556,14 @@ export const teamData: TeamYear[] = [
         name: 'Sankeerth S banagar',
         role: 'Member',
         photo: '/avatars/default.jpg',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Amrutha Sindhu',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/321deeb6-4c61-4488-a10b-e19c96e28615',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -663,7 +687,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sanjit Kumaar S',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3)',
         linkedin: 'https://www.linkedin.com/in/sanjit-ss-b76985228',
         category: 'Sub-Team Members',
         department: 'Content'
@@ -673,7 +697,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bhavesh',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/f73aabb7-d2b4-421a-8fcd-2ba2139f54c1',
         linkedin: 'https://www.linkedin.com/in/bhavesh-chhabria-21630433b',
         category: 'Sub-Team Members',
         department: 'Media'
@@ -691,6 +715,14 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D4E03AQHfv94uILvFhw/profile-displayphoto-shrink_400_400/B4EZR.jLZEHMAg-/0/1737289939785?e=1744243200&v=beta&t=ht2LcSssLRvHpZDbO9POD2qVSRK8PdBEmhi51T4AHDE',
         linkedin: 'https://www.linkedin.com/in/kaviya-sendhil-009681347',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Surabhi M R',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQGGcdbNDhgXmA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731924641621?e=1745452800&v=beta&t=OcbHjRhaya5btsowBqFkC8l_x_gBOFX2WUMW0NgqW_c',
+        linkedin: 'https://www.linkedin.com/in/surabhi-m-r-baab98312/',
         category: 'Sub-Team Members',
         department: 'Media'
       }

@@ -134,7 +134,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Shravik',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/a559c9b5-84a2-4a9a-9240-9f7917dda376',
         linkedin: 'https://www.linkedin.com/in/shravik',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -491,7 +491,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Shravik',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/a559c9b5-84a2-4a9a-9240-9f7917dda376',
         linkedin: 'https://www.linkedin.com/in/shravik',
         category: 'Sub-Team Members',
         department: 'Technical'

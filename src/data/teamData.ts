@@ -29,7 +29,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://ui-avatars.com/api/?name=Bahulika&background=random',
+        photo: 'https://drive.google.com/file/d/13Kbxp0oXAEUfOf1ZH7jeXw7zrEZxNz-s/view?usp=drive_link',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },
@@ -370,7 +370,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://ui-avatars.com/api/?name=Bahulika&background=random',
+        photo: 'https://drive.google.com/file/d/13Kbxp0oXAEUfOf1ZH7jeXw7zrEZxNz-s/view?usp=drive_link',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },

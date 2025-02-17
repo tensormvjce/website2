@@ -46,7 +46,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Rakshitha',
         role: 'Technical Sub-Lead',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/e9a92d4c-ebda-4a5c-aac4-f63790df271c',
         linkedin: 'https://www.linkedin.com/in/rakshitha-p-j-0262612ab',
         category: 'Core Team',
         department: 'Technical'
@@ -102,7 +102,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Divyey',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -232,7 +232,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Krishnapriya',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/fbe0b01a-bb44-4bae-be75-387ebeb79f0d',
         linkedin: 'https://www.linkedin.com/in/krishna-priya-36334b2b8',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -330,7 +330,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sanjit Kumaar S',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3)',
+        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3',
         linkedin: 'https://www.linkedin.com/in/sanjit-ss-b76985228',
         category: 'Sub-Team Members',
         department: 'Content'
@@ -403,7 +403,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Rakshitha',
         role: 'Technical Sub-Lead',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/e9a92d4c-ebda-4a5c-aac4-f63790df271c',
         linkedin: 'https://www.linkedin.com/in/rakshitha-p-j-0262612ab',
         category: 'Core Team',
         department: 'Technical'
@@ -459,7 +459,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Divyey',
         role: 'Member',
-        photo: '/avatars/default.jpg',
+        photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -589,7 +589,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Krishnapriya',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/fbe0b01a-bb44-4bae-be75-387ebeb79f0d',
         linkedin: 'https://www.linkedin.com/in/krishna-priya-36334b2b8',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -687,7 +687,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sanjit Kumaar S',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3)',
+        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3',
         linkedin: 'https://www.linkedin.com/in/sanjit-ss-b76985228',
         category: 'Sub-Team Members',
         department: 'Content'

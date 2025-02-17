@@ -340,7 +340,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bhavesh',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/f73aabb7-d2b4-421a-8fcd-2ba2139f54c1)',
+        photo: 'https://github.com/user-attachments/assets/f73aabb7-d2b4-421a-8fcd-2ba2139f54c1',
         linkedin: 'https://www.linkedin.com/in/bhavesh-chhabria-21630433b',
         category: 'Sub-Team Members',
         department: 'Media'

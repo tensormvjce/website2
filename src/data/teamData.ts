@@ -272,7 +272,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Gouthami B',
         role: 'Member',
-        photo: '',
+        photo: 'https://drive.google.com/file/d/1nzEAotu4tJjc6YFZ7thTFc_gigdqIAam/view?usp=drivesdk',
         linkedin: 'https://www.linkedin.com/in/gouthami-b-476193318',
         category: 'Sub-Team Members',
         department: 'Design'

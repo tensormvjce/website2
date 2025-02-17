@@ -29,7 +29,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d)',
+        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },
@@ -38,7 +38,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Chandana',
         role: 'Technical Lead',
-        photo: 'https://github.com/user-attachments/assets/7ace1c31-119b-4a81-91bd-cba4c55bbf17)',
+        photo: 'https://github.com/user-attachments/assets/7ace1c31-119b-4a81-91bd-cba4c55bbf17',
         linkedin: 'https://linkedin.com/in/alapati-mani-chandana/',
         category: 'Core Team',
         department: 'Technical'
@@ -386,7 +386,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Bahulika',
         role: 'Vice Lead',
-        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d)',
+        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d',
         linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
         category: 'Core Team'
       },
@@ -395,7 +395,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Chandana',
         role: 'Technical Lead',
-        photo: 'https://github.com/user-attachments/assets/7ace1c31-119b-4a81-91bd-cba4c55bbf17)',
+        photo: 'https://github.com/user-attachments/assets/7ace1c31-119b-4a81-91bd-cba4c55bbf17',
         linkedin: 'https://linkedin.com/in/alapati-mani-chandana/',
         category: 'Core Team',
         department: 'Technical'

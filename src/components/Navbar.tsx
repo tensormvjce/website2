@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
               <img 
                 src={logo} 
                 alt="Tensor Logo" 
-                className="h-16 w-16 object-contain relative z-10 transition-all duration-300 group-hover:scale-125"
+                className="h-17 w-16 object-contain relative z-10 transition-all duration-300 group-hover:scale-125"
               />
             </Link>
           </div>
@@ -103,10 +103,10 @@ const Navbar: React.FC = () => {
                 key={item.name}
                 to={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`navbar-link text-lg tracking-wide whitespace-nowrap transition-all duration-300 ${
+                className={`navbar-link text-lg tracking-wide whitespace-nowrap transition-all duration-500 transform cyberpunk-text uppercase ${
                   isActivePath(item.path)
-                    ? 'text-white font-semibold active scale-105'
-                    : 'text-gray-300 hover:text-white hover:font-semibold hover:scale-105'
+                    ? 'text-white font-semibold active scale-110'
+                    : 'text-gray-300 hover:text-white hover:font-semibold hover:scale-125'
                 } nav-item-left`}
                 style={{ '--item-index': index } as React.CSSProperties & { '--item-index': number }}
               >
@@ -122,10 +122,10 @@ const Navbar: React.FC = () => {
                 key={item.name}
                 to={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`navbar-link text-lg tracking-wide whitespace-nowrap transition-all duration-300 ${
+                className={`navbar-link text-lg tracking-wide whitespace-nowrap transition-all duration-500 transform cyberpunk-text uppercase ${
                   isActivePath(item.path)
-                    ? 'text-white font-semibold active scale-105'
-                    : 'text-gray-300 hover:text-white hover:font-semibold hover:scale-105'
+                    ? 'text-white font-semibold active scale-110'
+                    : 'text-gray-300 hover:text-white hover:font-semibold hover:scale-125'
                 } nav-item-right`}
                 style={{ '--item-index': index } as React.CSSProperties & { '--item-index': number }}
               >

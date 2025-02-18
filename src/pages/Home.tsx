@@ -12,6 +12,7 @@ import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import { db } from '../services/firebase';
 import { scrollToTop } from '../utils/scrollUtils';
 import { previewMembers } from '../data/previewTeamData';
+import PostCard from '../components/PostCard';
 
 interface Event {
   id: string;
@@ -35,6 +36,21 @@ interface Blog {
   date: string;
   image: string;
   author: string;
+}
+
+interface Post {
+  id?: string;
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  designer: string;
+  contentWriter: string;
+  tags: string[];
+  socialMedia: {
+    instagram?: { link: string };
+    linkedin?: { link: string };
+  };
 }
 
 function BlackHoleBackground() {
@@ -150,7 +166,7 @@ const Home = () => {
     {
       icon: <CustomIcons.Innovation />,
       title: 'Innovation',
-      description: 'Be part of groundbreaking AI innovations and research projects.',
+      description: 'Be part of groundbreaking AI innovations, research projects and create new ideas.',
       color: 'from-cyan-500/10 to-purple-500/10'
     },
     {
@@ -186,6 +202,12 @@ const Home = () => {
 
   const { items: events = [] } = useFirestoreCollection<Event>(db, 'events');
   const { items: blogs = [] } = useFirestoreCollection<Blog>(db, 'blogs');
+  const { items: posts } = useFirestoreCollection<Post>(db, 'posts');
+
+  // Add this sorting logic before the return statement
+  const sortedEvents = events.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedBlogs = blogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedPosts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className="relative min-h-screen bg-black text-white">
@@ -220,7 +242,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-6xl md:text-8xl font-bold mb-6 tracking-wider glitch"
+              className="text-6xl md:text-8xl font-bold mb-6 tracking-wider glitch text-white"
               data-text="WELCOME TO"
             >
               WELCOME TO
@@ -232,22 +254,17 @@ const Home = () => {
               className="relative"
             >
               <h1 
-                className="text-7xl md:text-9xl font-extrabold text-transparent bg-clip-text bg-white tracking-tight glitch"
+                className="text-7xl md:text-9xl font-extrabold text-white tracking-tight glitch"
                 data-text="TENSOR CLUB"
               >
                 TENSOR CLUB
               </h1>
-              <div className="absolute -inset-1 blur-xl bg-gradient-to-r from-blue-400/30 to-purple-600/30 -z-10" />
             </motion.div>
           </div>
         </div>
 
         {/* Hero Section with Description */}
         <section className="relative min-h-screen flex items-center justify-center">
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-purple-500/5 to-black/0" />
-          </div>
-
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
             <div className="text-5xl md:text-7xl font-bold mb-6 glitch"
                 data-text="Tensor Club">
@@ -348,7 +365,6 @@ const Home = () => {
 
           {/* Teams Section */}
           <section className="relative py-32 overflow-hidden">
-            {/* Background Effects */}
             <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:50px_50px]" />
             <div className="absolute inset-0 bg-noise opacity-20" />
             
@@ -447,7 +463,7 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {events.slice(0, 3).map((event) => (
+              {sortedEvents.slice(0, 3).map((event) => (
                 <motion.div
                   key={event.id}
                   layout
@@ -455,7 +471,6 @@ const Home = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="relative group cursor-pointer"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
                     <Link to={`/events/${event.slug}`} onClick={scrollToTop}>
                       <div className="aspect-video">
@@ -532,7 +547,7 @@ const Home = () => {
                           </button>
                         </div>
                       </div>
-                </Link>
+                    </Link>
                   </div>
                 </motion.div>
               ))}
@@ -551,10 +566,47 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogs.slice(0, 3).map((blog) => (
+              {sortedBlogs.slice(0, 3).map((blog) => (
                 <Link key={blog.id} to={`/blog/${blog.id}`} onClick={scrollToTop}>
                   <ItemCard {...blog} type="blog" />
                 </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Posts Preview Section */}
+          <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center mb-10">
+              <h2 className="section-heading text-4xl">Our Posts</h2>
+              <Link to="/posts" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+                Explore more posts <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {sortedPosts.slice(0, 3).map((post) => (
+                <motion.div
+                  key={post.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="relative group cursor-pointer"
+                >
+                  <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
+                    <PostCard
+                      title={post.title}
+                      description={post.description}
+                      date={post.date}
+                      image={post.image}
+                      tags={post.tags || []}
+                      designer={post.designer}
+                      contentWriter={post.contentWriter}
+                      socialMedia={post.socialMedia}
+                    />
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>

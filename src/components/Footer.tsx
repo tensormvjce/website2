@@ -21,16 +21,19 @@ const Footer = () => {
     },
     {
       icon: <FaInstagram className="w-6 h-6" />,
-      href: "https://instagram.com/tensor.club",
+      href: "https://instagram.com/tensor.mvjce",
       color: "hover:text-pink-500"
     }
   ];
 
   const quickLinks = [
-    { name: 'About Us', path: '/about' },
+    { name: 'Home', path: '/' },
     { name: 'Teams', path: '/teams' },
     { name: 'Events', path: '/events' },
+    { name: 'Posts', path: '/posts' },
     { name: 'Blogs', path: '/blogs' },
+    { name: 'Projects', path: '/projects' },
+    { name: 'About Us', path: '/about' },
   ];
 
   const teamMembers = [
@@ -96,17 +99,17 @@ const Footer = () => {
           {/* Quick Links Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-2 gap-2">
               {quickLinks.map((link, index) => (
                 <motion.li 
                   key={index}
-                  whileHover={{ x: 5 }}
+                  whileHover={{ x: 5, scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <Link 
                     to={link.path}
                     onClick={scrollToTop}
-                    className="text-gray-300 hover:text-purple-400 transition-colors text-sm"
+                    className="text-gray-300 hover:text-purple-400 transition-colors text-sm inline-block"
                   >
                     {link.name}
                   </Link>

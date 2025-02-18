@@ -6,6 +6,7 @@ import {
   addDoc, 
 } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
@@ -271,526 +272,554 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
+    <div className="min-h-screen bg-black text-white">
+      {/* Add background effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-transparent to-blue-500/5" />
+      <div className="noise" />
+      <div className="grid-background fixed inset-0" />
 
-      {error && (
-        <div className="bg-red-500/20 border border-red-500/50 text-red-300 p-4 rounded-lg mb-6">
-          {error}
+      {/* Main content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <motion.h1 
+            className="text-4xl md:text-6xl font-bold mb-6 glitch"
+            data-text="Admin Dashboard"
+          >
+            Admin Dashboard
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 terminal-text max-w-2xl mx-auto"
+          >
+            Manage your website content
+          </motion.p>
+        </motion.div>
+
+        {error && (
+          <div className="bg-red-500/20 border border-red-500/50 text-red-300 p-4 rounded-lg mb-6">
+            {error}
+          </div>
+        )}
+
+        {/* Tab Navigation */}
+        <div className="flex space-x-4 mb-8">
+          <button
+            onClick={() => setActiveTab('blogs')}
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === 'blogs'
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-800 text-gray-300'
+            }`}
+          >
+            Blogs
+          </button>
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === 'projects'
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-800 text-gray-300'
+            }`}
+          >
+            Projects
+          </button>
+          <button
+            onClick={() => setActiveTab('events')}
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === 'events'
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-800 text-gray-300'
+            }`}
+          >
+            Events
+          </button>
+          <button
+            onClick={() => setActiveTab('posts')}
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === 'posts'
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-800 text-gray-300'
+            }`}
+          >
+            Posts
+          </button>
         </div>
-      )}
 
-      {/* Tab Navigation */}
-      <div className="flex space-x-4 mb-8">
-        <button
-          onClick={() => setActiveTab('blogs')}
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === 'blogs'
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-800 text-gray-300'
-          }`}
-        >
-          Blogs
-        </button>
-        <button
-          onClick={() => setActiveTab('projects')}
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === 'projects'
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-800 text-gray-300'
-          }`}
-        >
-          Projects
-        </button>
-        <button
-          onClick={() => setActiveTab('events')}
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === 'events'
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-800 text-gray-300'
-          }`}
-        >
-          Events
-        </button>
-        <button
-          onClick={() => setActiveTab('posts')}
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === 'posts'
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-800 text-gray-300'
-          }`}
-        >
-          Posts
-        </button>
-      </div>
-
-      <div className="bg-gray-900/50 p-6 rounded-xl border border-gray-800">
-        <h2 className="text-2xl font-semibold mb-6">Add New {activeTab.slice(0, -1)}</h2>
-        
-        <div className="space-y-6">
-          {/* General form fields for non-post items */}
-          {activeTab !== 'posts' && (
-            <>
-              {/* Title */}
-              <div>
-                <label className="block text-gray-300 mb-2">Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={newItem.title}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Enter title"
-                />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-gray-300 mb-2">Description</label>
-                <textarea
-                  name="description"
-                  value={newItem.description}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                  placeholder="Enter description"
-                />
-              </div>
-
-              {/* Date */}
-              <div>
-                <label className="block text-gray-300 mb-2">Date</label>
-                <input
-                  type="date"
-                  name="date"
-                  value={newItem.date}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                />
-              </div>
-
-              {/* Image URL */}
-              <div>
-                <label className="block text-gray-300 mb-2">Image URL</label>
-                <input
-                  type="text"
-                  name="image"
-                  value={newItem.image}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Enter image URL"
-                />
-              </div>
-            </>
-          )}
-
-          {/* Author (for blogs) */}
-          {activeTab === 'blogs' && (
-            <div>
-              <label className="block text-gray-300 mb-2">Author</label>
-              <input
-                type="text"
-                name="author"
-                value={newItem.author}
-                onChange={handleInputChange}
-                className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                placeholder="Enter author name"
-              />
-            </div>
-          )}
-
-          {/* Blog-specific fields */}
-          {activeTab === 'blogs' && (
-            <>
-              {/* Banner Image */}
-              <div>
-                <label className="block text-gray-300 mb-2">Banner Image URL</label>
-                <input
-                  type="text"
-                  name="bannerImg"
-                  value={newItem.bannerImg}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Enter banner image URL"
-                />
-              </div>
-
-              {/* Content Writer */}
-              <div>
-                <label className="block text-gray-300 mb-2">Content Writer</label>
-                <input
-                  type="text"
-                  name="contentWriter"
-                  value={newItem.contentWriter}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Enter content writer's name"
-                />
-              </div>
-
-              {/* Writer Avatar */}
-              <div>
-                <label className="block text-gray-300 mb-2">Writer Avatar URL</label>
-                <input
-                  type="text"
-                  name="writerAvatar"
-                  value={newItem.writerAvatar}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Enter writer's avatar image URL"
-                />
-              </div>
-
-              {/* Content */}
-              <div>
-                <label className="block text-gray-300 mb-2">Content</label>
-                <textarea
-                  name="content"
-                  value={newItem.content}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
-                  placeholder="Enter blog content (supports markdown)"
-                />
-              </div>
-            </>
-          )}
-
-          {/* Event-specific fields */}
-          {activeTab === 'events' && (
-            <>
-              {/* Slug */}
-              <div>
-                <label className="block text-gray-300 mb-2">Slug (URL-friendly name)</label>
-                <input
-                  type="text"
-                  name="slug"
-                  value={newItem.slug}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Optional: will be generated from title if left blank"
-                />
-              </div>
-
-              {/* Banner Image URL */}
-              <div>
-                <label className="block text-gray-300 mb-2">Banner Image URL</label>
-                <input
-                  type="text"
-                  name="bannerImg"
-                  value={newItem.bannerImg}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                />
-              </div>
-
-              {/* Long Description */}
-              <div>
-                <label className="block text-gray-300 mb-2">Long Description</label>
-                <textarea
-                  name="longDescription"
-                  value={newItem.longDescription}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                  placeholder="Detailed event description"
-                />
-              </div>
-
-              {/* Venue */}
-              <div>
-                <label className="block text-gray-300 mb-2">Venue</label>
-                <input
-                  type="text"
-                  name="venue"
-                  value={newItem.venue}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                />
-              </div>
-
-              {/* Duration */}
-              <div>
-                <label className="block text-gray-300 mb-2">Duration</label>
-                <input
-                  type="text"
-                  name="duration"
-                  value={newItem.duration}
-                  onChange={handleInputChange}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="e.g., '2 days', '3 hours'"
-                />
-              </div>
-
-              {/* Registration Status */}
-              <div>
-                <label className="block text-gray-300 mb-2">Registration Status</label>
-                <select
-                  name="registrationStatus"
-                  value={newItem.registrationStatus}
-                  onChange={(e) => setNewItem(prev => ({
-                    ...prev,
-                    registrationStatus: e.target.value as 'Open' | 'Closed' | 'Ended'
-                  }))}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                >
-                  <option value="Open">Open</option>
-                  <option value="Closed">Closed</option>
-                  <option value="Ended">Ended</option>
-                </select>
-              </div>
-
-              {/* Agenda */}
-              <div>
-                <label className="block text-gray-300 mb-2">Event Agenda</label>
-                {newItem.agenda.map((agendaItem, index) => (
-                  <div key={index} className="mb-4 p-4 bg-gray-800 rounded">
-                    <input
-                      type="text"
-                      placeholder="Day"
-                      value={agendaItem.day}
-                      onChange={(e) => handleAgendaChange(index, 'day', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Title"
-                      value={agendaItem.title}
-                      onChange={(e) => handleAgendaChange(index, 'title', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                    />
-                    <textarea
-                      placeholder="Details (one per line)"
-                      value={agendaItem.details.join('\n')}
-                      onChange={(e) => {
-                        const details = e.target.value.split('\n').filter(d => d.trim() !== '');
-                        const updatedAgenda = [...newItem.agenda];
-                        updatedAgenda[index] = {
-                          ...updatedAgenda[index],
-                          details
-                        };
-                        setNewItem(prev => ({ ...prev, agenda: updatedAgenda }));
-                      }}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                    />
-                  </div>
-                ))}
-                <button
-                  onClick={addAgendaItem}
-                  className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded mt-2"
-                >
-                  Add Agenda Item
-                </button>
-              </div>
-
-              {/* Why Attend */}
-              <div>
-                <label className="block text-gray-300 mb-2">Why Attend (one per line)</label>
-                <textarea
-                  value={newItem.whyAttend.join('\n')}
-                  onChange={(e) => {
-                    const whyAttend = e.target.value.split('\n').filter(r => r.trim() !== '');
-                    setNewItem(prev => ({ ...prev, whyAttend }));
-                  }}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                  placeholder="Enter reasons to attend, one per line"
-                />
-              </div>
-
-              {/* Speakers */}
-              <div>
-                <label className="block text-gray-300 mb-2">Speakers</label>
-                {newItem.speakers.map((speaker, index) => (
-                  <div key={index} className="mb-4 p-4 bg-gray-800 rounded">
-                    <input
-                      type="text"
-                      placeholder="Name"
-                      value={speaker.name}
-                      onChange={(e) => handleSpeakerChange(index, 'name', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Role"
-                      value={speaker.role}
-                      onChange={(e) => handleSpeakerChange(index, 'role', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                    />
-                    <textarea
-                      placeholder="Bio"
-                      value={speaker.bio}
-                      onChange={(e) => handleSpeakerChange(index, 'bio', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Avatar URL"
-                      value={speaker.avatar}
-                      onChange={(e) => handleSpeakerChange(index, 'avatar', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                    />
-                    <input
-                      type="text"
-                      placeholder="LinkedIn Profile URL"
-                      value={speaker.linkedin}
-                      onChange={(e) => handleSpeakerChange(index, 'linkedin', e.target.value)}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                    />
-                  </div>
-                ))}
-                <button
-                  onClick={addSpeaker}
-                  className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded mt-2"
-                >
-                  Add Speaker
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* Post-specific fields */}
-          {activeTab === 'posts' && (
-            <div className="space-y-8">
-              {/* Main Post Details */}
-              <div className="space-y-4 bg-gray-900/30 p-6 rounded-xl border border-gray-800">
-                <h3 className="text-xl font-semibold text-purple-400 mb-4">Post Details</h3>
-                <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gray-900/50 p-6 rounded-xl border border-gray-800">
+          <h2 className="text-2xl font-semibold mb-6">Add New {activeTab.slice(0, -1)}</h2>
+          
+          <div className="space-y-6">
+            {/* General form fields for non-post items */}
+            {activeTab !== 'posts' && (
+              <>
+                {/* Title */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Title</label>
                   <input
                     type="text"
-                    placeholder="Post Title"
-                    value={newPost.title}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+                    name="title"
+                    value={newItem.title}
+                    onChange={handleInputChange}
                     className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Enter title"
                   />
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Description</label>
+                  <textarea
+                    name="description"
+                    value={newItem.description}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                    placeholder="Enter description"
+                  />
+                </div>
+
+                {/* Date */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Date</label>
                   <input
                     type="date"
-                    value={newPost.date}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, date: e.target.value }))}
-                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    name="date"
+                    value={newItem.date}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 [color-scheme:dark]"
+                    placeholder="Select date"
                   />
                 </div>
-                <textarea
-                  placeholder="Post Description"
-                  value={newPost.description}
-                  onChange={(e) => setNewPost(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                />
+
+                {/* Image URL */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Image URL</label>
+                  <input
+                    type="text"
+                    name="image"
+                    value={newItem.image}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Enter image URL"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Author (for blogs) */}
+            {activeTab === 'blogs' && (
+              <div>
+                <label className="block text-gray-300 mb-2">Author</label>
                 <input
                   type="text"
-                  placeholder="Thumbnail Image URL"
-                  value={newPost.image}
-                  onChange={(e) => setNewPost(prev => ({ ...prev, image: e.target.value }))}
+                  name="author"
+                  value={newItem.author}
+                  onChange={handleInputChange}
                   className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="Enter author name"
                 />
-                
-                {/* Designer and Content Writer */}
-                <div className="grid grid-cols-2 gap-4">
+              </div>
+            )}
+
+            {/* Blog-specific fields */}
+            {activeTab === 'blogs' && (
+              <>
+                {/* Banner Image */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Banner Image URL</label>
                   <input
                     type="text"
-                    placeholder="Designer"
-                    value={newPost.designer}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, designer: e.target.value }))}
+                    name="bannerImg"
+                    value={newItem.bannerImg}
+                    onChange={handleInputChange}
                     className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Enter banner image URL"
                   />
+                </div>
+
+                {/* Content Writer */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Content Writer</label>
                   <input
                     type="text"
-                    placeholder="Content Writer"
-                    value={newPost.contentWriter}
-                    onChange={(e) => setNewPost(prev => ({ ...prev, contentWriter: e.target.value }))}
+                    name="contentWriter"
+                    value={newItem.contentWriter}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Enter content writer's name"
+                  />
+                </div>
+
+                {/* Writer Avatar */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Writer Avatar URL</label>
+                  <input
+                    type="text"
+                    name="writerAvatar"
+                    value={newItem.writerAvatar}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Enter writer's avatar image URL"
+                  />
+                </div>
+
+                {/* Content */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Content</label>
+                  <textarea
+                    name="content"
+                    value={newItem.content}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
+                    placeholder="Enter blog content (supports markdown)"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Event-specific fields */}
+            {activeTab === 'events' && (
+              <>
+                {/* Slug */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Slug (URL-friendly name)</label>
+                  <input
+                    type="text"
+                    name="slug"
+                    value={newItem.slug}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Optional: will be generated from title if left blank"
+                  />
+                </div>
+
+                {/* Banner Image URL */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Banner Image URL</label>
+                  <input
+                    type="text"
+                    name="bannerImg"
+                    value={newItem.bannerImg}
+                    onChange={handleInputChange}
                     className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
                   />
                 </div>
 
-                {/* Tags Section */}
-                <div className="space-y-2">
-                  <div className="flex gap-2">
+                {/* Long Description */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Long Description</label>
+                  <textarea
+                    name="longDescription"
+                    value={newItem.longDescription}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                    placeholder="Detailed event description"
+                  />
+                </div>
+
+                {/* Venue */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Venue</label>
+                  <input
+                    type="text"
+                    name="venue"
+                    value={newItem.venue}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                {/* Duration */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Duration</label>
+                  <input
+                    type="text"
+                    name="duration"
+                    value={newItem.duration}
+                    onChange={handleInputChange}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    placeholder="e.g., '2 days', '3 hours'"
+                  />
+                </div>
+
+                {/* Registration Status */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Registration Status</label>
+                  <select
+                    name="registrationStatus"
+                    value={newItem.registrationStatus}
+                    onChange={(e) => setNewItem(prev => ({
+                      ...prev,
+                      registrationStatus: e.target.value as 'Open' | 'Closed' | 'Ended'
+                    }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  >
+                    <option value="Open">Open</option>
+                    <option value="Closed">Closed</option>
+                    <option value="Ended">Ended</option>
+                  </select>
+                </div>
+
+                {/* Agenda */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Event Agenda</label>
+                  {newItem.agenda.map((agendaItem, index) => (
+                    <div key={index} className="mb-4 p-4 bg-gray-800 rounded">
+                      <input
+                        type="text"
+                        placeholder="Day"
+                        value={agendaItem.day}
+                        onChange={(e) => handleAgendaChange(index, 'day', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Title"
+                        value={agendaItem.title}
+                        onChange={(e) => handleAgendaChange(index, 'title', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                      <textarea
+                        placeholder="Details (one per line)"
+                        value={agendaItem.details.join('\n')}
+                        onChange={(e) => {
+                          const details = e.target.value.split('\n').filter(d => d.trim() !== '');
+                          const updatedAgenda = [...newItem.agenda];
+                          updatedAgenda[index] = {
+                            ...updatedAgenda[index],
+                            details
+                          };
+                          setNewItem(prev => ({ ...prev, agenda: updatedAgenda }));
+                        }}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    onClick={addAgendaItem}
+                    className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded mt-2"
+                  >
+                    Add Agenda Item
+                  </button>
+                </div>
+
+                {/* Why Attend */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Why Attend (one per line)</label>
+                  <textarea
+                    value={newItem.whyAttend.join('\n')}
+                    onChange={(e) => {
+                      const whyAttend = e.target.value.split('\n').filter(r => r.trim() !== '');
+                      setNewItem(prev => ({ ...prev, whyAttend }));
+                    }}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                    placeholder="Enter reasons to attend, one per line"
+                  />
+                </div>
+
+                {/* Speakers */}
+                <div>
+                  <label className="block text-gray-300 mb-2">Speakers</label>
+                  {newItem.speakers.map((speaker, index) => (
+                    <div key={index} className="mb-4 p-4 bg-gray-800 rounded">
+                      <input
+                        type="text"
+                        placeholder="Name"
+                        value={speaker.name}
+                        onChange={(e) => handleSpeakerChange(index, 'name', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Role"
+                        value={speaker.role}
+                        onChange={(e) => handleSpeakerChange(index, 'role', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                      <textarea
+                        placeholder="Bio"
+                        value={speaker.bio}
+                        onChange={(e) => handleSpeakerChange(index, 'bio', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Avatar URL"
+                        value={speaker.avatar}
+                        onChange={(e) => handleSpeakerChange(index, 'avatar', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                      <input
+                        type="text"
+                        placeholder="LinkedIn Profile URL"
+                        value={speaker.linkedin}
+                        onChange={(e) => handleSpeakerChange(index, 'linkedin', e.target.value)}
+                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    onClick={addSpeaker}
+                    className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded mt-2"
+                  >
+                    Add Speaker
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Post-specific fields */}
+            {activeTab === 'posts' && (
+              <div className="space-y-8">
+                {/* Main Post Details */}
+                <div className="space-y-4 bg-gray-900/30 p-6 rounded-xl border border-gray-800">
+                  <h3 className="text-xl font-semibold text-purple-400 mb-4">Post Details</h3>
+                  <div className="grid grid-cols-2 gap-4">
                     <input
                       type="text"
-                      placeholder="Add a new tag"
-                      value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddNewTag(e);
-                        }
-                      }}
-                      className="flex-1 bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      placeholder="Post Title"
+                      value={newPost.title}
+                      onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
                     />
-                    <button
-                      onClick={handleAddNewTag}
-                      className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
-                    >
-                      Add Tag
-                    </button>
+                    <input
+                      type="date"
+                      value={newPost.date}
+                      onChange={(e) => setNewPost(prev => ({ ...prev, date: e.target.value }))}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 [color-scheme:dark]"
+                    />
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {newPost.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        onClick={() => handleTagChange(tag)}
-                        className="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-sm cursor-pointer hover:bg-purple-500/30"
+                  <textarea
+                    placeholder="Post Description"
+                    value={newPost.description}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, description: e.target.value }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Thumbnail Image URL"
+                    value={newPost.image}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, image: e.target.value }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  />
+                  
+                  {/* Designer and Content Writer */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Designer"
+                      value={newPost.designer}
+                      onChange={(e) => setNewPost(prev => ({ ...prev, designer: e.target.value }))}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Content Writer"
+                      value={newPost.contentWriter}
+                      onChange={(e) => setNewPost(prev => ({ ...prev, contentWriter: e.target.value }))}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    />
+                  </div>
+
+                  {/* Tags Section */}
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Add a new tag"
+                        value={newTag}
+                        onChange={(e) => setNewTag(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddNewTag(e);
+                          }
+                        }}
+                        className="flex-1 bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      />
+                      <button
+                        onClick={handleAddNewTag}
+                        className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
                       >
-                        {tag} ×
-                      </span>
-                    ))}
+                        Add Tag
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {newPost.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          onClick={() => handleTagChange(tag)}
+                          className="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-sm cursor-pointer hover:bg-purple-500/30"
+                        >
+                          {tag} ×
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Social Media Links */}
-              <div className="grid grid-cols-2 gap-6">
-                {/* Instagram Section */}
-                <div className="space-y-4 bg-pink-500/5 p-6 rounded-xl border border-pink-500/20">
-                  <h3 className="text-xl font-semibold text-pink-400">Instagram Post</h3>
-                  <input
-                    type="text"
-                    placeholder="Post Link"
-                    value={newPost.socialMedia.instagram.link}
-                    onChange={(e) => setNewPost(prev => ({
-                      ...prev,
-                      socialMedia: {
-                        ...prev.socialMedia,
-                        instagram: { link: e.target.value }
-                      }
-                    }))}
-                    className="w-full bg-black/50 border border-pink-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-pink-500"
-                  />
+                {/* Social Media Links */}
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Instagram Section */}
+                  <div className="space-y-4 bg-pink-500/5 p-6 rounded-xl border border-pink-500/20">
+                    <h3 className="text-xl font-semibold text-pink-400">Instagram Post</h3>
+                    <input
+                      type="text"
+                      placeholder="Post Link"
+                      value={newPost.socialMedia.instagram.link}
+                      onChange={(e) => setNewPost(prev => ({
+                        ...prev,
+                        socialMedia: {
+                          ...prev.socialMedia,
+                          instagram: { link: e.target.value }
+                        }
+                      }))}
+                      className="w-full bg-black/50 border border-pink-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-pink-500"
+                    />
+                  </div>
+
+                  {/* LinkedIn Section */}
+                  <div className="space-y-4 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
+                    <h3 className="text-xl font-semibold text-blue-400">LinkedIn Post</h3>
+                    <input
+                      type="text"
+                      placeholder="Post Link"
+                      value={newPost.socialMedia.linkedin.link}
+                      onChange={(e) => setNewPost(prev => ({
+                        ...prev,
+                        socialMedia: {
+                          ...prev.socialMedia,
+                          linkedin: { link: e.target.value }
+                        }
+                      }))}
+                      className="w-full bg-black/50 border border-blue-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
                 </div>
 
-                {/* LinkedIn Section */}
-                <div className="space-y-4 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
-                  <h3 className="text-xl font-semibold text-blue-400">LinkedIn Post</h3>
-                  <input
-                    type="text"
-                    placeholder="Post Link"
-                    value={newPost.socialMedia.linkedin.link}
-                    onChange={(e) => setNewPost(prev => ({
-                      ...prev,
-                      socialMedia: {
-                        ...prev.socialMedia,
-                        linkedin: { link: e.target.value }
-                      }
-                    }))}
-                    className="w-full bg-black/50 border border-blue-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
-                  />
-                </div>
+                <button
+                  onClick={handlePostSubmit}
+                  className="w-full bg-gradient-to-r from-pink-500 to-blue-500 text-white py-3 rounded-lg hover:from-pink-600 hover:to-blue-600 transition-all duration-300"
+                >
+                  Add Post
+                </button>
               </div>
+            )}
 
+            {activeTab !== 'posts' && (
               <button
-                onClick={handlePostSubmit}
-                className="w-full bg-gradient-to-r from-pink-500 to-blue-500 text-white py-3 rounded-lg hover:from-pink-600 hover:to-blue-600 transition-all duration-300"
+                onClick={handleAddItem}
+                className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors"
               >
-                Add Post
+                Add {activeTab.slice(0, -1)}
               </button>
-            </div>
-          )}
-
-          {activeTab !== 'posts' && (
-            <button
-              onClick={handleAddItem}
-              className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors"
-            >
-              Add {activeTab.slice(0, -1)}
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

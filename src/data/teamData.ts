@@ -100,6 +100,22 @@ export const teamData: TeamYear[] = [
 
       // Technical Team Members
       {
+        name: 'Likith Yadav',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/0cc512c1-bad9-4a74-b3f5-00907b863dc4',
+        linkedin: 'https://www.linkedin.com/in/likithyadavgn/',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Yusha',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHTzBVD38cS_w/profile-displayphoto-shrink_400_400/B56ZOSO4GeGsAk-/0/1733325194494?e=1744243200&v=beta&t=zoG90sRPFjjxa85beK5Ooglep4XcQngYkEORoannzqc',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
         name: ' DIYA R V',
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
@@ -242,22 +258,6 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/fbe0b01a-bb44-4bae-be75-387ebeb79f0d',
         linkedin: 'https://www.linkedin.com/in/krishna-priya-36334b2b8',
-        category: 'Sub-Team Members',
-        department: 'Design'
-      },
-      {
-        name: 'Likith Yadav',
-        role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/0cc512c1-bad9-4a74-b3f5-00907b863dc4',
-        linkedin: 'https://www.linkedin.com/in/likithyadavgn/',
-        category: 'Sub-Team Members',
-        department: 'Design'
-      },
-      {
-        name: 'Yusha',
-        role: 'Member',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHTzBVD38cS_w/profile-displayphoto-shrink_400_400/B56ZOSO4GeGsAk-/0/1733325194494?e=1744243200&v=beta&t=zoG90sRPFjjxa85beK5Ooglep4XcQngYkEORoannzqc',
-        linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'
       },

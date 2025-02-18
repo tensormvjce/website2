@@ -473,6 +473,14 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Technical'
       },
+      {
+        name: 'Joshua Royar',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/155966e5-50df-4b05-835e-0f880a35a7b8',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
 
       // Design Team Members
       {

@@ -368,6 +368,14 @@ export const teamData: TeamYear[] = [
         linkedin: 'https://www.linkedin.com/in/surabhi-m-r-baab98312/',
         category: 'Sub-Team Members',
         department: 'Media'
+      },
+      {
+        name: 'Raaghav',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/09394e01-c1c3-46f6-ac07-f594f41b288f',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Media'
       }
     ]
   },
@@ -723,6 +731,14 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D5603AQGGcdbNDhgXmA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731924641621?e=1745452800&v=beta&t=OcbHjRhaya5btsowBqFkC8l_x_gBOFX2WUMW0NgqW_c',
         linkedin: 'https://www.linkedin.com/in/surabhi-m-r-baab98312/',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Raaghav',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/09394e01-c1c3-46f6-ac07-f594f41b288f',
+        linkedin: '',
         category: 'Sub-Team Members',
         department: 'Media'
       }

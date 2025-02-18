@@ -164,6 +164,14 @@ export const teamData: TeamYear[] = [
         department: 'Technical'
       },
       {
+        name: 'Divyey',
+        role: 'Member',
+        photo: '',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
         name: 'Aaghaaz Khan',
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D5603AQGdE7oGmU8KRw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718446071474?e=1744243200&v=beta&t=cabvt8a6veY3sJ1fk0jHG2IDV8CxAQvGgs-7BPB2PQw',
@@ -466,9 +474,9 @@ export const teamData: TeamYear[] = [
         department: 'Technical'
       },
       {
-        name: ' DIYA R V',
+        name: 'Divyey',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
+        photo: '',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'

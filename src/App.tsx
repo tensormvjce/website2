@@ -10,6 +10,7 @@ import Registrations from './pages/Registrations';
 import CustomCursor from './components/CustomCursor';
 import ChatBot from './components/ChatBot';
 import ErrorBoundary from './components/ErrorBoundary';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [loading, setLoading] = useState(() => {
@@ -37,47 +38,50 @@ function App() {
   };
 
   return (
-    <Router>
-      <CustomCursor />
-      <div className="relative min-h-screen bg-black">
-        {/* Loading Screen */}
-        <AnimatePresence mode="wait">
-          {loading && (
-            <div className="relative z-50">
-              <LoadingAnimation onLoadingComplete={handleLoadingComplete} />
-            </div>
-          )}
-        </AnimatePresence>
+    <>
+      <Toaster position="top-right" />
+      <Router>
+        <CustomCursor />
+        <div className="relative min-h-screen bg-black">
+          {/* Loading Screen */}
+          <AnimatePresence mode="wait">
+            {loading && (
+              <div className="relative z-50">
+                <LoadingAnimation onLoadingComplete={handleLoadingComplete} />
+              </div>
+            )}
+          </AnimatePresence>
 
-        {/* Main Content */}
-        <AnimatePresence mode="wait">
-          {showContent && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                duration: 1,
-                ease: "easeOut"
-              }}
-              className="relative z-30"
-            >
-              <ErrorBoundary>
-                <Navbar />
-                <div className="min-h-screen text-white">
-                  <Routes>
-                    <Route path="/blogs" element={<Blog />} />
-                    <Route path="/registrations" element={<Registrations />} />
-                    <Route path="*" element={<AppRoutes />} />
-                  </Routes>
-                </div>
-                <Footer />
-                <ChatBot />
-              </ErrorBoundary>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </Router>
+          {/* Main Content */}
+          <AnimatePresence mode="wait">
+            {showContent && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  duration: 1,
+                  ease: "easeOut"
+                }}
+                className="relative z-30"
+              >
+                <ErrorBoundary>
+                  <Navbar />
+                  <div className="min-h-screen text-white">
+                    <Routes>
+                      <Route path="/blogs" element={<Blog />} />
+                      <Route path="/registrations" element={<Registrations />} />
+                      <Route path="*" element={<AppRoutes />} />
+                    </Routes>
+                  </div>
+                  <Footer />
+                  <ChatBot />
+                </ErrorBoundary>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </Router>
+    </>
   );
 }
 

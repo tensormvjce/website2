@@ -37,7 +37,6 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-console.log('Firebase Configuration:', JSON.stringify(firebaseConfig, null, 2));
 
 // Verify Firebase configuration
 async function verifyFirebaseConfig() {

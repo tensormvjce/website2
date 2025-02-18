@@ -17,6 +17,7 @@ const Login = lazy(() => import('./pages/Login'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const EventDetails = lazy(() => import('./pages/EventDetails'));
 const BlogDetails = lazy(() => import('./pages/BlogDetails'));
+const Posts = lazy(() => import('./pages/Posts'));
 
 const AppRoutes: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/events" element={<Events />} />
           <Route path="/events/:slug" element={<EventDetails />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/posts" element={<Posts />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/about" element={<About />} />
           <Route path="/join" element={<JoinClub />} />

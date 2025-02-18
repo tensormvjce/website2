@@ -41,10 +41,12 @@ const Navbar: React.FC = () => {
     { name: 'Home', path: '/' },
     { name: 'Teams', path: '/teams' },
     { name: 'Events', path: '/events' },
+    { name: 'Posts', path: '/posts' },
+    { name: 'Blogs', path: '/blogs' },
   ];
 
   const rightNavItems = [
-    { name: 'Blogs', path: '/blogs' },
+    { name: 'Projects', path: '/projects' },
     { name: 'Registrations', path: '/registrations' },
     { name: 'About Us', path: '/about' }
   ];
@@ -79,17 +81,32 @@ const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-24">
+          {/* Logo */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 z-50">
+            <Link 
+              to="/" 
+              className="relative group transition-transform duration-300 flex items-center justify-center"
+              onClick={() => handleNavigation('/')}
+            >
+              <img 
+                src={logo} 
+                alt="Tensor Logo" 
+                className="h-16 w-16 object-contain relative z-10 transition-all duration-300 group-hover:scale-125"
+              />
+            </Link>
+          </div>
+
           {/* Left Navigation */}
-          <div className={`hidden md:flex flex-1 items-center justify-end space-x-16 pr-12 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
+          <div className={`hidden md:flex flex-1 items-center justify-end space-x-16 pr-20 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
             {leftNavItems.map((item, index) => (
               <Link
                 key={item.name}
                 to={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`navbar-link text-lg tracking-wide whitespace-nowrap ${
+                className={`navbar-link text-lg tracking-wide whitespace-nowrap transition-all duration-300 ${
                   isActivePath(item.path)
-                    ? 'text-white font-semibold active'
-                    : 'text-gray-300 hover:text-white'
+                    ? 'text-white font-semibold active scale-105'
+                    : 'text-gray-300 hover:text-white hover:font-semibold hover:scale-105'
                 } nav-item-left`}
                 style={{ '--item-index': index } as React.CSSProperties & { '--item-index': number }}
               >
@@ -98,33 +115,17 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Logo */}
-          <div className={`flex-shrink-0 flex items-center justify-center transition-all duration-500 ${!isExpanded ? 'scale-125' : ''}`}>
-            <Link 
-              to="/" 
-              className="relative group transition-transform duration-300"
-              onClick={() => handleNavigation('/')}
-            >
-              <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <img 
-                src={logo} 
-                alt="Tensor Logo" 
-                className="h-18 w-16 object-contain relative z-10"
-              />
-            </Link>
-          </div>
-
           {/* Right Navigation */}
-          <div className={`hidden md:flex flex-1 items-center justify-start space-x-16 pl-12 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
+          <div className={`hidden md:flex flex-1 items-center justify-start space-x-16 pl-20 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
             {rightNavItems.map((item, index) => (
               <Link
                 key={item.name}
                 to={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`navbar-link text-lg tracking-wide whitespace-nowrap ${
+                className={`navbar-link text-lg tracking-wide whitespace-nowrap transition-all duration-300 ${
                   isActivePath(item.path)
-                    ? 'text-white font-semibold active'
-                    : 'text-gray-300 hover:text-white'
+                    ? 'text-white font-semibold active scale-105'
+                    : 'text-gray-300 hover:text-white hover:font-semibold hover:scale-105'
                 } nav-item-right`}
                 style={{ '--item-index': index } as React.CSSProperties & { '--item-index': number }}
               >

@@ -4,14 +4,13 @@ import { db } from '../services/firebase';
 import { 
   collection, 
   addDoc, 
-  getDocs
 } from 'firebase/firestore';
+import { toast } from 'react-hot-toast';
 
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
-  const [activeTab, setActiveTab] = useState<'blogs' | 'projects' | 'events'>('blogs');
+  const [activeTab, setActiveTab] = useState<'blogs' | 'projects' | 'events' | 'posts'>('blogs');
   const [error, setError] = useState<string | null>(null);
-  const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
 
   // State for form inputs
@@ -45,34 +44,34 @@ const AdminDashboard: React.FC = () => {
     }[],
   });
 
+  // Update the newPost state structure
+  const [newPost, setNewPost] = useState({
+    title: '',
+    description: '',
+    date: '',
+    image: '',
+    designer: '',  // Single designer for both platforms
+    contentWriter: '', // Single content writer for both platforms
+    tags: [] as string[],
+    socialMedia: {
+      instagram: {
+        link: '',
+      },
+      linkedin: {
+        link: '',
+      }
+    }
+  });
+
   useEffect(() => {
     console.log('Current User:', currentUser);
     console.log('Is Admin:', isAdmin);
   }, [currentUser, isAdmin]);
 
   useEffect(() => {
-    // Fetch existing tags from Firebase
-    const fetchTags = async () => {
-      try {
-        const collectionRef = collection(db, activeTab);
-        const snapshot = await getDocs(collectionRef);
-        const tags = new Set<string>();
-        
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.tags && Array.isArray(data.tags)) {
-            data.tags.forEach((tag: string) => tags.add(tag));
-          }
-        });
-        
-        setAvailableTags(Array.from(tags).sort());
-      } catch (error) {
-        console.error('Error fetching tags:', error);
-      }
-    };
-
-    fetchTags();
-  }, [activeTab]);
+    console.log('Current User UID:', currentUser?.uid);
+    console.log('Is Admin:', isAdmin);
+  }, [currentUser, isAdmin]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -82,29 +81,38 @@ const AdminDashboard: React.FC = () => {
     }));
   };
 
-  const handleTagChange = (selectedTag: string) => {
-    setNewItem(prev => {
-      const currentTags = new Set(prev.tags);
-      if (currentTags.has(selectedTag)) {
-        currentTags.delete(selectedTag);
-      } else {
-        currentTags.add(selectedTag);
-      }
-      return { ...prev, tags: Array.from(currentTags) };
-    });
-  };
-
-  const handleAddNewTag = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newTag.trim()) {
-      const trimmedTag = newTag.trim();
-      if (!availableTags.includes(trimmedTag)) {
-        setAvailableTags(prev => [...prev, trimmedTag].sort());
-      }
+  const handleTagChange = (tag: string) => {
+    if (activeTab === 'posts') {
+      // For posts, remove the tag from newPost
+      setNewPost(prev => ({
+        ...prev,
+        tags: prev.tags.filter(t => t !== tag)
+      }));
+    } else {
+      // For other items, remove the tag from newItem
       setNewItem(prev => ({
         ...prev,
-        tags: [...new Set([...prev.tags, trimmedTag])]
+        tags: prev.tags.filter(t => t !== tag)
       }));
+    }
+  };
+
+  const handleAddNewTag = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    if (newTag.trim()) {
+      if (activeTab === 'posts') {
+        // For posts, update the newPost state
+        setNewPost(prev => ({
+          ...prev,
+          tags: [...prev.tags, newTag.trim()]
+        }));
+      } else {
+        // For other items, update the newItem state
+        setNewItem(prev => ({
+          ...prev,
+          tags: [...prev.tags, newTag.trim()]
+        }));
+      }
       setNewTag('');
     }
   };
@@ -200,6 +208,60 @@ const AdminDashboard: React.FC = () => {
     }));
   };
 
+  // Update the handlePostSubmit function
+  const handlePostSubmit = async () => {
+    try {
+      if (!isAdmin) {
+        setError('You do not have permission to add items.');
+        return;
+      }
+
+      const postData = {
+        title: newPost.title,
+        description: newPost.description,
+        date: newPost.date ? new Date(newPost.date).toISOString() : new Date().toISOString(),
+        image: newPost.image,
+        designer: newPost.designer,
+        contentWriter: newPost.contentWriter,
+        tags: newPost.tags,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        createdBy: currentUser?.uid,
+        status: 'active',
+        socialMedia: {
+          instagram: newPost.socialMedia.instagram.link ? {
+            link: newPost.socialMedia.instagram.link,
+          } : null,
+          linkedin: newPost.socialMedia.linkedin.link ? {
+            link: newPost.socialMedia.linkedin.link,
+          } : null
+        }
+      };
+
+      await addDoc(collection(db, 'posts'), postData);
+      
+      setNewPost({
+        title: '',
+        description: '',
+        date: '',
+        image: '',
+        designer: '',
+        contentWriter: '',
+        tags: [],
+        socialMedia: {
+          instagram: { link: '' },
+          linkedin: { link: '' }
+        }
+      });
+
+      toast.success('Post added successfully!');
+    } catch (error) {
+      console.error('Error adding post:', error);
+      setError('Failed to add post. Please try again.');
+      toast.error('Failed to add post');
+    }
+  };
+
   if (!currentUser) {
     return <div className="text-white p-8">Please log in to access this page.</div>;
   }
@@ -250,61 +312,76 @@ const AdminDashboard: React.FC = () => {
         >
           Events
         </button>
+        <button
+          onClick={() => setActiveTab('posts')}
+          className={`px-4 py-2 rounded-lg ${
+            activeTab === 'posts'
+              ? 'bg-purple-500 text-white'
+              : 'bg-gray-800 text-gray-300'
+          }`}
+        >
+          Posts
+        </button>
       </div>
 
       <div className="bg-gray-900/50 p-6 rounded-xl border border-gray-800">
         <h2 className="text-2xl font-semibold mb-6">Add New {activeTab.slice(0, -1)}</h2>
         
         <div className="space-y-6">
-          {/* Title */}
-          <div>
-            <label className="block text-gray-300 mb-2">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={newItem.title}
-              onChange={handleInputChange}
-              className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-              placeholder="Enter title"
-            />
-          </div>
+          {/* General form fields for non-post items */}
+          {activeTab !== 'posts' && (
+            <>
+              {/* Title */}
+              <div>
+                <label className="block text-gray-300 mb-2">Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={newItem.title}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="Enter title"
+                />
+              </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-gray-300 mb-2">Description</label>
-            <textarea
-              name="description"
-              value={newItem.description}
-              onChange={handleInputChange}
-              className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-              placeholder="Enter description"
-            />
-          </div>
+              {/* Description */}
+              <div>
+                <label className="block text-gray-300 mb-2">Description</label>
+                <textarea
+                  name="description"
+                  value={newItem.description}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                  placeholder="Enter description"
+                />
+              </div>
 
-          {/* Date */}
-          <div>
-            <label className="block text-gray-300 mb-2">Date</label>
-            <input
-              type="date"
-              name="date"
-              value={newItem.date}
-              onChange={handleInputChange}
-              className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-            />
-          </div>
+              {/* Date */}
+              <div>
+                <label className="block text-gray-300 mb-2">Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  value={newItem.date}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                />
+              </div>
 
-          {/* Image URL */}
-          <div>
-            <label className="block text-gray-300 mb-2">Image URL</label>
-            <input
-              type="text"
-              name="image"
-              value={newItem.image}
-              onChange={handleInputChange}
-              className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-              placeholder="Enter image URL"
-            />
-          </div>
+              {/* Image URL */}
+              <div>
+                <label className="block text-gray-300 mb-2">Image URL</label>
+                <input
+                  type="text"
+                  name="image"
+                  value={newItem.image}
+                  onChange={handleInputChange}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="Enter image URL"
+                />
+              </div>
+            </>
+          )}
 
           {/* Author (for blogs) */}
           {activeTab === 'blogs' && (
@@ -320,70 +397,6 @@ const AdminDashboard: React.FC = () => {
               />
             </div>
           )}
-
-          {/* Tags */}
-          <div>
-            <label className="block text-gray-300 mb-2">Tags</label>
-            <div className="space-y-4">
-              {/* Selected Tags */}
-              <div className="flex flex-wrap gap-2">
-                {newItem.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    onClick={() => handleTagChange(tag)}
-                    className="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-sm cursor-pointer hover:bg-purple-500/30"
-                  >
-                    {tag} ×
-                  </span>
-                ))}
-              </div>
-
-              {/* Add New Tag */}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleAddNewTag(e);
-                    }
-                  }}
-                  className="flex-1 bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                  placeholder="Add a new tag"
-                />
-                <button
-                  onClick={handleAddNewTag}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
-                >
-                  Add Tag
-                </button>
-              </div>
-
-              {/* Available Tags */}
-              {availableTags.length > 0 && (
-                <div>
-                  <label className="block text-gray-400 text-sm mb-2">Available Tags:</label>
-                  <div className="flex flex-wrap gap-2">
-                    {availableTags.map((tag) => (
-                      <span
-                        key={tag}
-                        onClick={() => handleTagChange(tag)}
-                        className={`px-3 py-1 rounded-full text-sm cursor-pointer ${
-                          newItem.tags.includes(tag)
-                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                            : 'bg-gray-800/50 text-gray-400 border border-gray-700 hover:border-purple-500/30'
-                        }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* Blog-specific fields */}
           {activeTab === 'blogs' && (
@@ -631,12 +644,153 @@ const AdminDashboard: React.FC = () => {
               </div>
             </>
           )}
-          <button
-            onClick={handleAddItem}
-            className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors"
-          >
-            Add {activeTab.slice(0, -1)}
-          </button>
+
+          {/* Post-specific fields */}
+          {activeTab === 'posts' && (
+            <div className="space-y-8">
+              {/* Main Post Details */}
+              <div className="space-y-4 bg-gray-900/30 p-6 rounded-xl border border-gray-800">
+                <h3 className="text-xl font-semibold text-purple-400 mb-4">Post Details</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="Post Title"
+                    value={newPost.title}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  />
+                  <input
+                    type="date"
+                    value={newPost.date}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, date: e.target.value }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+                <textarea
+                  placeholder="Post Description"
+                  value={newPost.description}
+                  onChange={(e) => setNewPost(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                />
+                <input
+                  type="text"
+                  placeholder="Thumbnail Image URL"
+                  value={newPost.image}
+                  onChange={(e) => setNewPost(prev => ({ ...prev, image: e.target.value }))}
+                  className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                />
+                
+                {/* Designer and Content Writer */}
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="Designer"
+                    value={newPost.designer}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, designer: e.target.value }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Content Writer"
+                    value={newPost.contentWriter}
+                    onChange={(e) => setNewPost(prev => ({ ...prev, contentWriter: e.target.value }))}
+                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                {/* Tags Section */}
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Add a new tag"
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddNewTag(e);
+                        }
+                      }}
+                      className="flex-1 bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    />
+                    <button
+                      onClick={handleAddNewTag}
+                      className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+                    >
+                      Add Tag
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {newPost.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        onClick={() => handleTagChange(tag)}
+                        className="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-sm cursor-pointer hover:bg-purple-500/30"
+                      >
+                        {tag} ×
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Media Links */}
+              <div className="grid grid-cols-2 gap-6">
+                {/* Instagram Section */}
+                <div className="space-y-4 bg-pink-500/5 p-6 rounded-xl border border-pink-500/20">
+                  <h3 className="text-xl font-semibold text-pink-400">Instagram Post</h3>
+                  <input
+                    type="text"
+                    placeholder="Post Link"
+                    value={newPost.socialMedia.instagram.link}
+                    onChange={(e) => setNewPost(prev => ({
+                      ...prev,
+                      socialMedia: {
+                        ...prev.socialMedia,
+                        instagram: { link: e.target.value }
+                      }
+                    }))}
+                    className="w-full bg-black/50 border border-pink-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-pink-500"
+                  />
+                </div>
+
+                {/* LinkedIn Section */}
+                <div className="space-y-4 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
+                  <h3 className="text-xl font-semibold text-blue-400">LinkedIn Post</h3>
+                  <input
+                    type="text"
+                    placeholder="Post Link"
+                    value={newPost.socialMedia.linkedin.link}
+                    onChange={(e) => setNewPost(prev => ({
+                      ...prev,
+                      socialMedia: {
+                        ...prev.socialMedia,
+                        linkedin: { link: e.target.value }
+                      }
+                    }))}
+                    className="w-full bg-black/50 border border-blue-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handlePostSubmit}
+                className="w-full bg-gradient-to-r from-pink-500 to-blue-500 text-white py-3 rounded-lg hover:from-pink-600 hover:to-blue-600 transition-all duration-300"
+              >
+                Add Post
+              </button>
+            </div>
+          )}
+
+          {activeTab !== 'posts' && (
+            <button
+              onClick={handleAddItem}
+              className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors"
+            >
+              Add {activeTab.slice(0, -1)}
+            </button>
+          )}
         </div>
       </div>
     </div>

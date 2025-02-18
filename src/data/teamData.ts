@@ -100,7 +100,7 @@ export const teamData: TeamYear[] = [
 
       // Technical Team Members
       {
-        name: 'Divyey',
+        name: ' DIYA R V',
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
         linkedin: '',
@@ -466,7 +466,7 @@ export const teamData: TeamYear[] = [
         department: 'Technical'
       },
       {
-        name: 'Divyey',
+        name: ' DIYA R V',
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
         linkedin: '',

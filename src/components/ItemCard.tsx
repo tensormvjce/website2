@@ -25,15 +25,11 @@ const ItemCard: React.FC<ItemCardProps> = ({
   // Format date with type safety
   const formattedDate = React.useMemo(() => {
     if (!date) {
-      console.log('No date provided for:', title);
       return '';
     }
     try {
-      console.log('Formatting date for:', title, date);
-      // Handle both timestamp and string date formats
       const dateObj = new Date(date);
       if (isNaN(dateObj.getTime())) {
-        console.error('Invalid date for:', title, date);
         return '';
       }
       return dateObj.toLocaleDateString('en-US', {
@@ -42,12 +38,9 @@ const ItemCard: React.FC<ItemCardProps> = ({
         day: 'numeric'
       });
     } catch (error) {
-      console.error('Error formatting date for:', title, error, date);
       return '';
     }
   }, [date, title]);
-
-  console.log('ItemCard props for:', title, { date, formattedDate, author, type });
 
   if (loading) {
     return (

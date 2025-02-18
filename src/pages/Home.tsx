@@ -13,6 +13,7 @@ import { db } from '../services/firebase';
 import { scrollToTop } from '../utils/scrollUtils';
 import { previewMembers } from '../data/previewTeamData';
 import PostCard from '../components/PostCard';
+import Spline from '@splinetool/react-spline';
 
 interface Event {
   id: string;
@@ -236,13 +237,14 @@ const Home = () => {
         }}
       >
         {/* Hero Section */}
-        <div className="relative h-screen flex items-center justify-center">
-          <div className="text-center">
+        <div className="relative h-screen flex items-center">
+          {/* Content - Left Side */}
+          <div className="relative z-10 w-full md:w-1/2 px-6 md:pl-32 flex flex-col justify-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-6xl md:text-8xl font-bold mb-6 tracking-wider glitch text-white"
+              className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center"
               data-text="WELCOME TO"
             >
               WELCOME TO
@@ -254,12 +256,28 @@ const Home = () => {
               className="relative"
             >
               <h1 
-                className="text-7xl md:text-9xl font-extrabold text-white tracking-tight glitch"
+                className="text-5xl sm:text-7xl md:text-8xl font-extrabold text-white tracking-tight glitch cyberpunk-glow text-center"
                 data-text="TENSOR CLUB"
               >
                 TENSOR CLUB
               </h1>
             </motion.div>
+          </div>
+
+          {/* Spline Background - Right Side */}
+          <div className="absolute right-0 w-full md:w-1/2 h-full z-0 hidden md:block">
+            <div className="relative w-full h-full">
+              <Spline 
+                scene="https://prod.spline.design/eZjgnIC3bkdcH5AC/scene.splinecode"
+                className="w-full h-full transform-gpu scale-90"
+              />
+              {/* Cover watermark */}
+              <div className="absolute bottom-12 right-12 z-20 p-8 bg-black rounded-tl-lg">
+                <div className="text-xs text-black font-mono">
+                  Tensor Club
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

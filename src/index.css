@@ -729,3 +729,16 @@
   }
 }
 
+/* Add this to your global CSS */
+[data-spline-watermark] {
+  display: none !important;
+}
+
+.spline-watermark {
+  display: none !important;
+}
+
+iframe[title="Built with Spline"] {
+  display: none !important;
+}
+

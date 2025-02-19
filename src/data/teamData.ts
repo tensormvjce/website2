@@ -182,7 +182,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Divyey',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/155966e5-50df-4b05-835e-0f880a35a7b8',
+        photo: 'https://github.com/user-attachments/assets/976231f9-2f68-49d2-a54a-9df14c02935a',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -476,7 +476,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Divyey',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/155966e5-50df-4b05-835e-0f880a35a7b8',
+        photo: 'https://github.com/user-attachments/assets/976231f9-2f68-49d2-a54a-9df14c02935a',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'

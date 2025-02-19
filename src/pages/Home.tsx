@@ -265,7 +265,7 @@ const Home = () => {
           <div className="hidden md:block absolute right-0 w-1/2 h-full">
             <div className="absolute inset-0 flex items-center justify-end">
               <Spline 
-                scene="https://prod.spline.design/eZjgnIC3bkdcH5AC/scene.splinecode"
+                scene="https://prod.spline.design/Hmu6ozdYkBhVaL0o/scene.splinecode"
                 className="w-full h-full transform-gpu scale-90"
               />
               <div className="absolute bottom-12 right-12 z-20 p-8 bg-black rounded-tl-lg">

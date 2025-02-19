@@ -239,12 +239,12 @@ const Home = () => {
         {/* Hero Section */}
         <div className="relative h-[100vh] md:h-screen flex items-center justify-center md:justify-start">
           {/* Content - Centered on mobile, Left on desktop */}
-          <div className="relative z-10 w-full md:w-1/2 px-6 md:pl-32 flex flex-col items-center md:items-start justify-center -mb-4 md:mb-0">
+          <div className="relative z-8 w-full md:w-1/2 px-4 md:pl-26 flex flex-col justify-center py-10 md:py-0">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-6xl sm:text-8xl md:text-8xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center md:text-center"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center"
               data-text="WELCOME TO"
             >
               WELCOME TO
@@ -255,7 +255,7 @@ const Home = () => {
               transition={{ delay: 0.8, duration: 1 }}
               className="relative"
             >
-              <h1 className="text-6xl sm:text-8xl md:text-9xl font-extrabold text-white tracking-wider glitch cyberpunk-glow text-center md:text-center" data-text="TENSOR CLUB">
+              <h1 className="text-6xl sm:text-8xl md:text-8xl font-extrabold mb-4 tracking-wider glitch cyberpunk-glow text-center md:text-center" data-text="TENSOR CLUB">
                 TENSOR CLUB
               </h1>
             </motion.div>

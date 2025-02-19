@@ -13,7 +13,6 @@ import { db } from '../services/firebase';
 import { scrollToTop } from '../utils/scrollUtils';
 import { previewMembers } from '../data/previewTeamData';
 import PostCard from '../components/PostCard';
-import Spline from '@splinetool/react-spline';
 
 interface Event {
   id: string;
@@ -113,6 +112,44 @@ function BlackHoleBackground() {
     </group>
   );
 }
+
+const TypewriterText = ({ text }: { text: string }) => (
+  <span className="inline-block">
+    {text.split('').map((char, index) => (
+      <motion.span
+        key={index}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: 0.1,
+          delay: index * 0.05,
+          ease: "easeInOut"
+        }}
+      >
+        {char}
+      </motion.span>
+    ))}
+  </span>
+);
+
+// Add this interface before the FadeInSection component
+interface FadeInSectionProps {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}
+
+const FadeInSection = ({ children, className = "", delay = 0 }: FadeInSectionProps) => (
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px" }}
+    transition={{ duration: 0.8, delay }}
+    className={className}
+  >
+    {children}
+  </motion.div>
+);
 
 const Home = () => {
   const { scrollYProgress } = useScroll();
@@ -237,103 +274,145 @@ const Home = () => {
         }}
       >
         {/* Hero Section */}
-        <div className="relative h-[100vh] md:h-screen flex items-center justify-center md:justify-start">
-          {/* Content - Centered on mobile, Left on desktop */}
-          <div className="relative z-8 w-full md:w-1/2 px-4 md:pl-26 flex flex-col justify-center py-10 md:py-0">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+        <div className="relative h-[100vh] md:h-screen flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent opacity-30" />
+
+
+          {/* Content - Centered with enhanced animations */}
+          <div className="relative z-8 w-full max-w-7xl px-4 flex flex-col justify-center items-center">
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 1 }}
-              className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center"
-              data-text="WELCOME TO"
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="mb-8"
             >
-              WELCOME TO
-            </motion.h1>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 1 }}
+                className="text-4xl sm:text-6xl md:text-8xl font-bold tracking-wider glitch cyberpunk-glow text-center"
+                data-text="WELCOME TO"
+              >
+                WELCOME TO
+              </motion.h1>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.8, duration: 1 }}
-              className="relative"
+              className="relative mb-12"
             >
-              <h1 className="text-6xl sm:text-8xl md:text-8xl font-extrabold mb-4 tracking-wider glitch cyberpunk-glow text-center md:text-center" data-text="TENSOR CLUB">
+              <h1 
+                className="text-7xl sm:text-8xl md:text-9xl font-extrabold tracking-wider glitch cyberpunk-glow text-center"
+                data-text="TENSOR CLUB"
+              >
                 TENSOR CLUB
               </h1>
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-cyan-500/20 blur-xl opacity-50 -z-10" />
             </motion.div>
-          </div>
 
-          {/* Spline Background - Desktop Only */}
-          <div className="hidden md:block absolute right-0 w-1/2 h-full">
-            <div className="absolute inset-0 flex items-center justify-end">
-              <Spline 
-                scene="https://prod.spline.design/Hmu6ozdYkBhVaL0o/scene.splinecode"
-                className="w-full h-full transform-gpu scale-90"
-              />
-              <div className="absolute bottom-12 right-12 z-20 p-8 bg-black rounded-tl-lg">
-                <div className="text-xs text-black font-mono">
-                  Tensor Club
-                </div>
-              </div>
-            </div>
+            {/* Animated subtitle */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              className="text-xl md:text-2xl text-gray-400 text-center max-w-2xl mx-auto mb-12 terminal-text"
+            >
+              <span className="typing-animation">
+                {'Exploring the frontiers of Artificial Intelligence'.split('').map((char, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.1,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
+            </motion.div>
+
+            {/* Action buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.8 }}
+              className="flex flex-wrap gap-6 justify-center"
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <LockedButton 
+                  text="Join Our Club"
+                  className="px-8 py-4 text-lg"
+                />
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link 
+                  to="/projects" 
+                  onClick={scrollToTop}
+                  className="px-8 py-4 bg-black/50 border border-gray-700 hover:border-purple-500/50 
+                           rounded-lg font-semibold text-lg hover-glow terminal-text inline-flex items-center gap-2"
+                >
+                  Explore Projects
+                  <motion.svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-5 w-5" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </motion.svg>
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
 
-        {/* Hero Section with Description */}
-        <section className="relative min-h-screen flex items-center justify-center">
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
-            <div className="text-5xl md:text-7xl font-bold mb-6 glitch"
-                data-text="Tensor Club">
-              Tensor Club
-            </div>
-            <p className="text-2xl text-gray-400 mb-8 terminal-text">
-              MVJ College of Engineering's Premier AI Community
-            </p>
-            <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto terminal-text">
-              Empowering students to explore, innovate, and excel in the world of Artificial Intelligence
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <LockedButton 
-                text="Join Our Club"
-              />
-              <Link to="/projects" onClick={scrollToTop}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-black/50 border border-gray-700 hover:border-purple-500/50 
-                         rounded-lg font-semibold text-lg hover-glow terminal-text"
-                >
-                  Explore Projects
-                </motion.button>
-              </Link>
-            </div>
-          </div>
-        </section>
 
         {/* Rest of the content */}
         <div className="relative z-10">
           {/* Benefits Section */}
           <section className="py-32">
             <div className="container mx-auto px-4">
-              <div className="text-center mb-16">
-                <h2 className="section-heading text-4xl md:text-5xl mb-4">
-                  Why Join Us?
-                </h2>
-                <p className="text-gray-300 max-w-2xl mx-auto">
-                  Be part of a community that's shaping the future of AI technology
-                </p>
-              </div>
+              <FadeInSection>
+                <div className="text-center mb-16">
+                  <h2 className="section-heading text-4xl md:text-5xl mb-4">
+                    <TypewriterText text="Why Join Us?" />
+                  </h2>
+                  <p className="text-gray-300 max-w-2xl mx-auto">
+                    <TypewriterText text="Be part of a community that's shaping the future of AI technology" />
+                  </p>
+                </div>
+              </FadeInSection>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {benefits.map((benefit, index) => (
-                  <div key={`benefit-${index}`} className="relative group">
-                    <div className={`absolute inset-0 bg-gradient-to-r ${benefit.color} rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                    <div className="relative p-6 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
-                      <div className="mb-4 p-3 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg w-fit">
-                        {benefit.icon}
+                  <FadeInSection key={`benefit-${index}`} delay={index * 0.2}>
+                    <div className="relative group">
+                      <div className={`absolute inset-0 bg-gradient-to-r ${benefit.color} rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                      <div className="relative p-6 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
+                        <div className="mb-4 p-3 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg w-fit">
+                          {benefit.icon}
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2 glow-text">{benefit.title}</h3>
+                        <p className="text-gray-400 terminal-text">{benefit.description}</p>
                       </div>
-                      <h3 className="text-xl font-semibold mb-2 glow-text">{benefit.title}</h3>
-                      <p className="text-gray-400 terminal-text">{benefit.description}</p>
                     </div>
-                  </div>
+                  </FadeInSection>
                 ))}
               </div>
             </div>
@@ -342,36 +421,39 @@ const Home = () => {
           {/* Features Section */}
           <section className="py-32 relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-              <div className="text-center mb-16">
-                <h2 className="section-heading text-4xl mb-4">What We Offer</h2>
-                <p className="text-xl text-gray-400 terminal-text">
-                  Comprehensive learning opportunities to boost your AI journey
-                </p>
-              </div>
+              <FadeInSection>
+                <div className="text-center mb-16">
+                  <h2 className="section-heading text-4xl mb-4">
+                    <TypewriterText text="What We Offer" />
+                  </h2>
+                  <p className="text-xl text-gray-400 terminal-text">
+                    <TypewriterText text="Comprehensive learning opportunities to boost your AI journey" />
+                  </p>
+                </div>
+              </FadeInSection>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {features.map((feature, index) => (
-                  <motion.div
-                    key={`feature-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.2 }}
-                    className="relative group"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="relative p-8 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
-                      <div className="flex items-start space-x-4">
-                        <div className="p-3 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg">
-                          {feature.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-semibold mb-2 glow-text">{feature.title}</h3>
-                          <p className="text-gray-400 terminal-text">{feature.description}</p>
+                  <FadeInSection key={`feature-${index}`} delay={index * 0.2}>
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="relative p-8 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow">
+                        <div className="flex items-start space-x-4">
+                          <div className="p-3 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg">
+                            {feature.icon}
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-semibold mb-2 glow-text">
+                              <TypewriterText text={feature.title} />
+                            </h3>
+                            <p className="text-gray-400 terminal-text">
+                              <TypewriterText text={feature.description} />
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </FadeInSection>
                 ))}
               </div>
             </div>
@@ -383,57 +465,69 @@ const Home = () => {
             <div className="absolute inset-0 bg-noise opacity-20" />
             
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="text-center mb-16">
-                <h2 className="section-heading text-4xl">Our Team Structure</h2>
-                <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
-                  Specialized teams working together to push the boundaries of AI
-                </p>
-              </div>
+              <FadeInSection>
+                <div className="text-center mb-16">
+                  <h2 className="section-heading text-4xl">
+                    <TypewriterText text="Our Team Structure" />
+                  </h2>
+                  <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
+                    <TypewriterText text="Specialized teams working together to push the boundaries of AI" />
+                  </p>
+                </div>
+              </FadeInSection>
 
               <div className="flex flex-col space-y-4">
                 {/* Technical Team */}
-                <TeamSection
-                  title="Technical Team"
-                  description="Developing cutting-edge AI/ML solutions and conducting research in emerging technologies."
-                  items={[
-                    "Neural Networks",
-                    "Computer Vision",
-                    "Natural Language Processing"
-                  ]}
-                />
+                <FadeInSection delay={0.2}>
+                  <TeamSection
+                    title="Technical Team"
+                    description="Developing cutting-edge AI/ML solutions and conducting research in emerging technologies."
+                    items={[
+                      "Neural Networks",
+                      "Computer Vision", 
+                      "Natural Language Processing"
+                    ]}
+                  />
+                </FadeInSection>
 
                 {/* Content Team */}
-                <TeamSection
-                  title="Content Team"
-                  description="Creating informative and engaging content about AI/ML concepts and latest developments."
-                  items={[
-                    "Technical Blogs",
-                    "Social Media",
-                    "Documentation"
-                  ]}
-                />
+                <FadeInSection delay={0.4}>
+                  <TeamSection
+                    title="Content Team"
+                    description="Creating informative and engaging content about AI/ML concepts and latest developments."
+                    items={[
+                      "Technical Blogs",
+                      "Social Media",
+                      "Documentation"
+                    ]}
+                  />
+                </FadeInSection>
 
                 {/* Media Team */}
-                <TeamSection
-                  title="Media Team"
-                  description="Capturing and showcasing our journey through various media formats."
-                  items={[
-                    "Event Coverage",
-                    "Video Production",
-                    "Photography"
-                  ]}
-                />
+                <FadeInSection delay={0.6}>
+                  <TeamSection
+                    title="Media Team"
+                    description="Capturing and showcasing our journey through various media formats."
+                    items={[
+                      "Event Coverage",
+                      "Video Production",
+                      "Photography"
+                    ]}
+                  />
+                </FadeInSection>
 
                 {/* Design Team */}
-                <TeamSection
-                  title="Design Team"
-                  description="Creating visually appealing designs and maintaining brand consistency."
-                  items={[
-                    "UI/UX Design",
-                    "Graphics",
-                    "Branding"
-                  ]}
-                />
+                <FadeInSection delay={0.8}>
+                  <TeamSection
+                    title="Design Team"
+                    description="Creating visually appealing designs and maintaining brand consistency."
+                    items={[
+                      "UI/UX Design",
+                      "Graphics",
+                      "Branding"
+                    ]}
+                  />
+                </FadeInSection>
               </div>
             </div>
           </section>
@@ -467,160 +561,175 @@ const Home = () => {
 
           {/* Events Preview Section */}
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center mb-10">
-              <h2 className="section-heading text-4xl">Our Events</h2>
-              <Link to="/events" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
-                Explore more events <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
+            <FadeInSection>
+              <div className="flex justify-between items-center mb-10">
+                <h2 className="section-heading text-4xl">
+                  <TypewriterText text="Our Events" />
+                </h2>
+                <Link to="/events" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+                  <TypewriterText text="Explore more events" /> 
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </FadeInSection>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {sortedEvents.slice(0, 3).map((event) => (
-                <motion.div
-                  key={event.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="relative group cursor-pointer"
-                >
-                  <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
-                    <Link to={`/events/${event.slug}`} onClick={scrollToTop}>
-                      <div className="aspect-video">
-                        <img
-                          src={event.image}
-                          alt={event.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://via.placeholder.com/800x400?text=Event+Image';
-                          }}
-                        />
-                      </div>
-                      <div className="p-6">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-xl font-semibold">{event.title}</h3>
-                          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            event.status === 'Open' 
-                              ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                              : event.status === 'Ended' 
-                                ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
-                                : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                          }`}>
-                            {event.status === 'Open' ? 'Registration Open' : 
-                             event.status === 'Ended' ? 'Event Ended' : 
-                             'Registration Closed'}
+              {sortedEvents.slice(0, 3).map((event, index) => (
+                <FadeInSection key={event.id} delay={index * 0.2}>
+                  <motion.div
+                    layout
+                    className="relative group cursor-pointer"
+                  >
+                    <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
+                      <Link to={`/events/${event.slug}`} onClick={scrollToTop}>
+                        <div className="aspect-video">
+                          <img
+                            src={event.image}
+                            alt={event.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = 'https://via.placeholder.com/800x400?text=Event+Image';
+                            }}
+                          />
+                        </div>
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-xl font-semibold">{event.title}</h3>
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              event.status === 'Open' 
+                                ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                                : event.status === 'Ended' 
+                                  ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
+                                  : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                            }`}>
+                              {event.status === 'Open' ? 'Registration Open' : 
+                               event.status === 'Ended' ? 'Event Ended' : 
+                               'Registration Closed'}
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {event.tags?.map((tag) => (
+                              <span
+                                key={tag}
+                                className="text-xs text-purple-400 px-2 py-1 rounded-full border border-purple-400/30 terminal-text"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-gray-400 mb-4 line-clamp-2">{event.description}</p>
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center space-x-4">
+                              <span className="text-purple-400">{event.date}</span>
+                            </div>
+                            {event.registrationLink && event.status === 'Open' && (
+                              <a
+                                href={event.registrationLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
+                                         rounded-lg text-white font-medium transition-all duration-300"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Register
+                              </a>
+                            )}
+                          </div>
+                          <div className="flex items-center justify-end mt-2">
+                            <button className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-2 group transition-all duration-300">
+                              Read More
+                              <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor"
+                              >
+                                <path 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round" 
+                                  strokeWidth={2} 
+                                  d="M13 7l5 5m0 0l-5 5m5-5H6" 
+                                />
+                              </svg>
+                            </button>
                           </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {event.tags?.map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-xs text-purple-400 px-2 py-1 rounded-full border border-purple-400/30 terminal-text"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-gray-400 mb-4 line-clamp-2">{event.description}</p>
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center space-x-4">
-                            <span className="text-purple-400">{event.date}</span>
-                          </div>
-                          {event.registrationLink && event.status === 'Open' && (
-                            <a
-                              href={event.registrationLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
-                                       rounded-lg text-white font-medium transition-all duration-300"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              Register
-                            </a>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-end mt-2">
-                          <button className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-2 group transition-all duration-300">
-                            Read More
-                            <svg 
-                              xmlns="http://www.w3.org/2000/svg" 
-                              className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" 
-                              fill="none" 
-                              viewBox="0 0 24 24" 
-                              stroke="currentColor"
-                            >
-                              <path 
-                                strokeLinecap="round" 
-                                strokeLinejoin="round" 
-                                strokeWidth={2} 
-                                d="M13 7l5 5m0 0l-5 5m5-5H6" 
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                </motion.div>
+                      </Link>
+                    </div>
+                  </motion.div>
+                </FadeInSection>
               ))}
             </div>
           </div>
 
           {/* Blogs Preview Section */}
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center mb-10">
-              <h2 className="section-heading text-4xl">Our Blogs</h2>
-              <Link to="/blogs" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
-                Explore more blogs <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
+            <FadeInSection>
+              <div className="flex justify-between items-center mb-10">
+                <h2 className="section-heading text-4xl">
+                  <TypewriterText text="Our Blogs" />
+                </h2>
+                <Link to="/blogs" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+                  <TypewriterText text="Explore more blogs" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </FadeInSection>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {sortedBlogs.slice(0, 3).map((blog) => (
-                <Link key={blog.id} to={`/blog/${blog.id}`} onClick={scrollToTop}>
-                  <ItemCard {...blog} type="blog" />
-                </Link>
+                <FadeInSection key={blog.id}>
+                  <Link to={`/blog/${blog.id}`} onClick={scrollToTop}>
+                    <ItemCard {...blog} type="blog" />
+                  </Link>
+                </FadeInSection>
               ))}
             </div>
           </div>
 
           {/* Posts Preview Section */}
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center mb-10">
-              <h2 className="section-heading text-4xl">Our Posts</h2>
-              <Link to="/posts" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
-                Explore more posts <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
+            <FadeInSection>
+              <div className="flex justify-between items-center mb-10">
+                <h2 className="section-heading text-4xl">
+                  <TypewriterText text="Our Posts" />
+                </h2>
+                <Link to="/posts" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+                  <TypewriterText text="Explore more posts" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </FadeInSection>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {sortedPosts.slice(0, 3).map((post) => (
-                <motion.div
-                  key={post.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="relative group cursor-pointer"
-                >
-                  <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
-                    <PostCard
-                      title={post.title}
-                      description={post.description}
-                      date={post.date}
-                      image={post.image}
-                      tags={post.tags || []}
-                      designer={post.designer}
-                      contentWriter={post.contentWriter}
-                      socialMedia={post.socialMedia}
-                    />
-                  </div>
-                </motion.div>
+                <FadeInSection key={post.id}>
+                  <motion.div
+                    layout
+                    className="relative group cursor-pointer"
+                  >
+                    <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
+                      <PostCard
+                        title={post.title}
+                        description={post.description}
+                        date={post.date}
+                        image={post.image}
+                        tags={post.tags || []}
+                        designer={post.designer}
+                        contentWriter={post.contentWriter}
+                        socialMedia={post.socialMedia}
+                      />
+                    </div>
+                  </motion.div>
+                </FadeInSection>
               ))}
             </div>
           </div>

@@ -237,14 +237,14 @@ const Home = () => {
         }}
       >
         {/* Hero Section */}
-        <div className="relative h-screen flex flex-col md:flex-row items-center justify-center">
-          {/* Content - Left Side */}
-          <div className="relative z-10 w-full md:w-1/2 px-6 md:pl-32 flex flex-col justify-center py-12 md:py-0">
+        <div className="relative h-[100vh] md:h-screen flex items-center justify-center md:justify-start">
+          {/* Content - Centered on mobile, Left on desktop */}
+          <div className="relative z-10 w-full md:w-1/2 px-6 md:pl-32 flex flex-col items-center md:items-start justify-center -mb-4 md:mb-0">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center"
+              className="text-6xl sm:text-8xl md:text-8xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center md:text-center"
               data-text="WELCOME TO"
             >
               WELCOME TO
@@ -255,23 +255,19 @@ const Home = () => {
               transition={{ delay: 0.8, duration: 1 }}
               className="relative"
             >
-              <h1 
-                className="text-5xl sm:text-6xl md:text-8xl font-extrabold text-white tracking-tight glitch cyberpunk-glow text-center"
-                data-text="TENSOR CLUB"
-              >
+              <h1 className="text-6xl sm:text-8xl md:text-9xl font-extrabold text-white tracking-wider glitch cyberpunk-glow text-center md:text-center" data-text="TENSOR CLUB">
                 TENSOR CLUB
               </h1>
             </motion.div>
           </div>
 
-          {/* Spline Background - Right Side (Desktop Only) */}
-          <div className="hidden md:block relative w-1/2 h-full">
-            <div className="absolute inset-0">
+          {/* Spline Background - Desktop Only */}
+          <div className="hidden md:block absolute right-0 w-1/2 h-full">
+            <div className="absolute inset-0 flex items-center justify-end">
               <Spline 
                 scene="https://prod.spline.design/eZjgnIC3bkdcH5AC/scene.splinecode"
                 className="w-full h-full transform-gpu scale-90"
               />
-              {/* Cover watermark */}
               <div className="absolute bottom-12 right-12 z-20 p-8 bg-black rounded-tl-lg">
                 <div className="text-xs text-black font-mono">
                   Tensor Club

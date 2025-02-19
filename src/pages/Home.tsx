@@ -237,14 +237,14 @@ const Home = () => {
         }}
       >
         {/* Hero Section */}
-        <div className="relative h-screen flex flex-col md:flex-row items-center">
+        <div className="relative h-screen flex flex-col md:flex-row items-center justify-center">
           {/* Content - Left Side */}
           <div className="relative z-10 w-full md:w-1/2 px-6 md:pl-32 flex flex-col justify-center py-12 md:py-0">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center md:text-center"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-wider glitch cyberpunk-glow text-center"
               data-text="WELCOME TO"
             >
               WELCOME TO
@@ -256,7 +256,7 @@ const Home = () => {
               className="relative"
             >
               <h1 
-                className="text-5xl sm:text-6xl md:text-8xl font-extrabold text-white tracking-tight glitch cyberpunk-glow text-center md:text-center"
+                className="text-5xl sm:text-6xl md:text-8xl font-extrabold text-white tracking-tight glitch cyberpunk-glow text-center"
                 data-text="TENSOR CLUB"
               >
                 TENSOR CLUB
@@ -264,15 +264,15 @@ const Home = () => {
             </motion.div>
           </div>
 
-          {/* Spline Background - Right Side */}
-          <div className="relative w-full md:w-1/2 h-[50vh] md:h-full">
+          {/* Spline Background - Right Side (Desktop Only) */}
+          <div className="hidden md:block relative w-1/2 h-full">
             <div className="absolute inset-0">
               <Spline 
                 scene="https://prod.spline.design/eZjgnIC3bkdcH5AC/scene.splinecode"
-                className="w-full h-full transform-gpu scale-75 md:scale-90"
+                className="w-full h-full transform-gpu scale-90"
               />
               {/* Cover watermark */}
-              <div className="absolute bottom-4 right-8 md:bottom-12 md:right-15 z-20 p-4 md:p-10 bg-black rounded-tl-lg">
+              <div className="absolute bottom-12 right-12 z-20 p-8 bg-black rounded-tl-lg">
                 <div className="text-xs text-black font-mono">
                   Tensor Club
                 </div>

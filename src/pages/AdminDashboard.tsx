@@ -7,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
@@ -371,16 +372,26 @@ const AdminDashboard: React.FC = () => {
                   />
                 </div>
 
-                {/* Description */}
+                {/* Description with markdown support */}
                 <div>
-                  <label className="block text-gray-300 mb-2">Description</label>
-                  <textarea
-                    name="description"
-                    value={newItem.description}
-                    onChange={handleInputChange}
-                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
-                    placeholder="Enter description"
-                  />
+                  <label className="block text-gray-300 mb-2">Description (supports markdown: **bold**, *italic*)</label>
+                  <div className="space-y-2">
+                    <textarea
+                      name="description"
+                      value={newItem.description}
+                      onChange={handleInputChange}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-32"
+                      placeholder="Enter description (use **text** for bold)"
+                    />
+                    {newItem.description && (
+                      <div className="p-3 bg-gray-800/50 rounded-lg">
+                        <p className="text-sm text-gray-400 mb-2">Preview:</p>
+                        <ReactMarkdown className="prose prose-invert max-w-none">
+                          {newItem.description}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Date */}
@@ -407,6 +418,43 @@ const AdminDashboard: React.FC = () => {
                     className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
                     placeholder="Enter image URL"
                   />
+                </div>
+
+                {/* Tags Section */}
+                <div className="space-y-2 mb-6">
+                  <label className="block text-gray-300 mb-2">Tags</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Add a new tag"
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddNewTag(e);
+                        }
+                      }}
+                      className="flex-1 bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                    />
+                    <button
+                      onClick={handleAddNewTag}
+                      className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+                    >
+                      Add Tag
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {newItem.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        onClick={() => handleTagChange(tag)}
+                        className="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-sm cursor-pointer hover:bg-purple-500/30"
+                      >
+                        {tag} ×
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </>
             )}
@@ -468,16 +516,26 @@ const AdminDashboard: React.FC = () => {
                   />
                 </div>
 
-                {/* Content */}
+                {/* Blog content with markdown support */}
                 <div>
-                  <label className="block text-gray-300 mb-2">Content</label>
-                  <textarea
-                    name="content"
-                    value={newItem.content}
-                    onChange={handleInputChange}
-                    className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
-                    placeholder="Enter blog content (supports markdown)"
-                  />
+                  <label className="block text-gray-300 mb-2">Content (supports markdown formatting)</label>
+                  <div className="space-y-2">
+                    <textarea
+                      name="content"
+                      value={newItem.content}
+                      onChange={handleInputChange}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
+                      placeholder="Enter blog content (use **text** for bold, *text* for italic)"
+                    />
+                    {newItem.content && (
+                      <div className="p-3 bg-gray-800/50 rounded-lg">
+                        <p className="text-sm text-gray-400 mb-2">Preview:</p>
+                        <ReactMarkdown className="prose prose-invert max-w-none">
+                          {newItem.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </>
             )}

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { db } from '../services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { FirestoreItem } from '../hooks/useFirestoreCollection';
+import ReactMarkdown from 'react-markdown';
 
 interface BlogPost extends FirestoreItem {
   title: string;
@@ -168,11 +169,11 @@ const BlogDetails: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="max-w-none"
+          className="prose prose-invert max-w-none"
         >
-          <pre className="text-gray-300 leading-relaxed whitespace-pre-wrap font-sans text-base">
+          <ReactMarkdown>
             {blog.content}
-          </pre>
+          </ReactMarkdown>
         </motion.div>
 
         {/* Navigation */}

@@ -5,6 +5,7 @@ import { db } from '../services/firebase';
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
 
+
 interface Post {
   id?: string;
   title: string;

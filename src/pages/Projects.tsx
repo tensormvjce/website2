@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink } from 'lucide-react';
 import { db } from '../services/firebase';
 import { useFirestoreCollection, FirestoreItem } from '../hooks/useFirestoreCollection';
 import ContentLoader from '../components/ContentLoader'; // Import the ContentLoader component
+import ReactMarkdown from 'react-markdown';
 
 interface Project extends FirestoreItem {
   title: string;
@@ -71,9 +72,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {title}
         </h2>
         <p className="text-sm text-purple-400 mb-2 flex-shrink-0">by {author}</p>
-        <p className="text-gray-400 terminal-text text-sm mb-4 line-clamp-3 flex-grow">
-          {description}
-        </p>
+        <div className="text-gray-400 terminal-text text-sm mb-4 line-clamp-3 flex-grow">
+          <ReactMarkdown className="prose prose-invert max-w-none">
+            {description}
+          </ReactMarkdown>
+        </div>
         <div className="flex items-center justify-between text-sm text-gray-500 mt-auto flex-shrink-0">
           {websiteUrl && (
             <button 

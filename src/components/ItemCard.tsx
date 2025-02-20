@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FirestoreItem } from '../hooks/useFirestoreCollection';
+import ReactMarkdown from 'react-markdown';
 
 
 interface ItemCardProps extends FirestoreItem {
@@ -158,7 +159,11 @@ const ItemCard: React.FC<ItemCardProps> = ({
                 )}
               </div>
             )}
-            <p className="text-gray-400 mb-4 line-clamp-2">{description}</p>
+            <div className="text-gray-400 mb-4">
+              <ReactMarkdown className="prose prose-invert max-w-none">
+                {description}
+              </ReactMarkdown>
+            </div>
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {tags.map((tag) => (

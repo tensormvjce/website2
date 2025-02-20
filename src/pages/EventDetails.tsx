@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { db } from '../services/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { FirestoreItem } from '../hooks/useFirestoreCollection';
+import ReactMarkdown from 'react-markdown';
 
 const EventDetails: React.FC = () => {
   const { slug } = useParams();
@@ -145,7 +146,18 @@ const EventDetails: React.FC = () => {
           className="bg-gray-900/50 rounded-xl p-8 mb-12"
         >
           <h2 className="text-2xl font-semibold text-white mb-6">Event Description</h2>
-          <p className="text-gray-300 leading-relaxed">{event.longDescription || event.description}</p>
+          <div className="prose prose-invert max-w-none mb-8">
+            <ReactMarkdown>
+              {event.description}
+            </ReactMarkdown>
+          </div>
+          {event.longDescription && (
+            <div className="prose prose-invert max-w-none">
+              <ReactMarkdown>
+                {event.longDescription}
+              </ReactMarkdown>
+            </div>
+          )}
         </motion.div>
 
         {/* Event Details Grid */}

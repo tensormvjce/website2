@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 
 interface PostCardProps {
   title: string;
@@ -69,7 +70,11 @@ const PostCard: React.FC<PostCardProps> = ({
         {/* Title & Description */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-          <p className="text-gray-400 line-clamp-2">{description}</p>
+          <div className="text-gray-400 mb-4">
+            <ReactMarkdown className="prose prose-invert max-w-none">
+              {description}
+            </ReactMarkdown>
+          </div>
         </div>
 
         {/* Date */}

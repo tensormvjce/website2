@@ -161,7 +161,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
             )}
             <div className="text-gray-400 mb-4">
               <ReactMarkdown className="prose prose-invert max-w-none">
-                {description}
+                {description.length > 100 ? `${description.substring(0, 100)}...` : description}
               </ReactMarkdown>
             </div>
             {tags && tags.length > 0 && (

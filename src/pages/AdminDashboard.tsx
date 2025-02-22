@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../services/firebase';
 import { 
@@ -12,6 +12,8 @@ import {
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import { teamData } from '../data/teamData';
+
 
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
@@ -33,12 +35,10 @@ const AdminDashboard: React.FC = () => {
     author: '',
     websiteUrl: '',
     tags: [] as string[],
-    // Blog-specific fields
     content: '',
     bannerImg: '',
     contentWriter: '',
     writerAvatar: '',
-    // Event-specific fields
     slug: '',
     longDescription: '',
     agenda: [] as { day: string; title: string; details: string[] }[],
@@ -51,8 +51,14 @@ const AdminDashboard: React.FC = () => {
       role: string; 
       bio: string; 
       avatar: string; 
-      linkedin: string 
+      linkedin: string; 
     }[],
+    socialMedia: {
+      instagram: { link: '' },
+      linkedin: { link: '' }
+    },
+    link: '',
+    status: 'Open' as 'Open' | 'Closed' | 'Ended',
   });
 
   // Update the newPost state structure
@@ -61,18 +67,20 @@ const AdminDashboard: React.FC = () => {
     description: '',
     date: '',
     image: '',
-    designer: '',  // Single designer for both platforms
-    contentWriter: '', // Single content writer for both platforms
+    designer: '',
+    contentWriter: '',
     tags: [] as string[],
     socialMedia: {
-      instagram: {
-        link: '',
-      },
-      linkedin: {
-        link: '',
-      }
+      instagram: { link: '' },
+      linkedin: { link: '' }
     }
   });
+
+  // Get 2024-25 team members
+  const currentTeamMembers = useMemo(() => {
+    const currentYear = teamData.find(year => year.year === '2024-25');
+    return currentYear ? currentYear.members : [];
+  }, []);
 
   useEffect(() => {
     console.log('Current User:', currentUser);
@@ -150,7 +158,11 @@ const AdminDashboard: React.FC = () => {
       const docRef = await addDoc(collection(db, collectionName), {
         ...newItem,
         tags: newItem.tags.map(tag => tag.trim()).filter(tag => tag !== ''),
-        slug: newItem.slug || newItem.title.toLowerCase().replace(/\s+/g, '-')
+        slug: newItem.slug || newItem.title.toLowerCase().replace(/\s+/g, '-'),
+        socialMedia: {
+          ...newItem.socialMedia,
+          linkedin: { link: newItem.socialMedia.linkedin.link }
+        }
       });
 
       console.log('Document added with ID:', docRef.id);
@@ -176,6 +188,12 @@ const AdminDashboard: React.FC = () => {
         duration: '',
         registrationStatus: 'Open',
         speakers: [],
+        socialMedia: {
+          instagram: { link: '' },
+          linkedin: { link: '' }
+        },
+        link: '',
+        status: 'Open',
       });
       setError(null);
     } catch (error) {
@@ -344,7 +362,9 @@ const AdminDashboard: React.FC = () => {
         venue: item.venue || '',
         duration: item.duration || '',
         registrationStatus: item.registrationStatus || 'Open',
-        speakers: item.speakers || []
+        speakers: item.speakers || [],
+        link: item.link || '',
+        status: item.status || 'Open',
       });
     }
     setEditingItem(item);
@@ -726,49 +746,83 @@ const AdminDashboard: React.FC = () => {
                   {/* Content Writer */}
                   <div>
                     <label className="block text-gray-300 mb-2">Content Writer</label>
-                    <input
-                      type="text"
-                      name="contentWriter"
+                    <select
                       value={newItem.contentWriter}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        const selectedMember = currentTeamMembers.find(member => member.name === e.target.value);
+                        if (selectedMember) {
+                          setNewItem(prev => ({
+                            ...prev,
+                            contentWriter: selectedMember.name,
+                            writerAvatar: selectedMember.photo,
+                            socialMedia: {
+                              ...prev.socialMedia,
+                              linkedin: { link: selectedMember.linkedin }
+                            }
+                          }));
+                        }
+                      }}
                       className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                      placeholder="Enter content writer's name"
-                    />
+                    >
+                      <option value="">Select a content writer</option>
+                      {currentTeamMembers.map((member) => (
+                        <option 
+                          key={member.name} 
+                          value={member.name}
+                          className="text-black"
+                        >
+                          {member.name} - {member.role}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
-                  {/* Writer Avatar */}
-                  <div>
-                    <label className="block text-gray-300 mb-2">Writer Avatar URL</label>
-                    <input
-                      type="text"
-                      name="writerAvatar"
-                      value={newItem.writerAvatar}
-                      onChange={handleInputChange}
-                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                      placeholder="Enter writer's avatar image URL"
-                    />
-                  </div>
+                  {/* Show selected writer's details */}
+                  {newItem.contentWriter && (
+                    <div className="mt-2 p-4 bg-gray-800/50 rounded-lg">
+                      <div className="flex items-center gap-4">
+                        {newItem.writerAvatar && (
+                          <img 
+                            src={newItem.writerAvatar} 
+                            alt={newItem.contentWriter}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        )}
+                        <div>
+                          <p className="text-white">{newItem.contentWriter}</p>
+                          {newItem.socialMedia?.linkedin?.link && (
+                            <a 
+                              href={newItem.socialMedia.linkedin.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 text-sm"
+                            >
+                              LinkedIn Profile
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Blog content with markdown support */}
                   <div>
                     <label className="block text-gray-300 mb-2">Content (supports markdown formatting)</label>
-                    <div className="space-y-2">
-                      <textarea
-                        name="content"
-                        value={newItem.content}
-                        onChange={handleInputChange}
-                        className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
-                        placeholder="Enter blog content (use **text** for bold, *text* for italic)"
-                      />
-                      {newItem.content && (
-                        <div className="p-3 bg-gray-800/50 rounded-lg">
-                          <p className="text-sm text-gray-400 mb-2">Preview:</p>
-                          <ReactMarkdown className="prose prose-invert max-w-none">
-                            {newItem.content}
-                          </ReactMarkdown>
-                        </div>
-                      )}
-                    </div>
+                    <textarea
+                      name="content"
+                      value={newItem.content}
+                      onChange={(e) => setNewItem(prev => ({ ...prev, content: e.target.value }))}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 h-96"
+                      placeholder="Enter blog content (use **text** for bold, *text* for italic)"
+                    />
+                    {newItem.content && (
+                      <div className="p-3 bg-gray-800/50 rounded-lg">
+                        <p className="text-sm text-gray-400 mb-2">Preview:</p>
+                        <ReactMarkdown className="prose prose-invert max-w-none">
+                          {newItem.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
@@ -1102,14 +1156,42 @@ const AdminDashboard: React.FC = () => {
                 </div>
               )}
 
-              {activeTab !== 'posts' && (
-                <button
-                  onClick={isEditing ? handleUpdate : handleAddItem}
-                  className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors"
-                >
-                  {isEditing ? `Update ${activeTab.slice(0, -1)}` : `Add ${activeTab.slice(0, -1)}`}
-                </button>
+              {/* Project-specific fields */}
+              {activeTab === 'projects' && (
+                <>
+                  <div>
+                    <label className="block text-gray-300 mb-2">Project URL</label>
+                    <input
+                      type="text"
+                      name="websiteUrl"
+                      value={newItem.websiteUrl}
+                      onChange={handleInputChange}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      placeholder="Enter project website URL"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-300 mb-2">Project Author/Team</label>
+                    <input
+                      type="text"
+                      name="author"
+                      value={newItem.author}
+                      onChange={handleInputChange}
+                      className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+                      placeholder="Enter project author or team name"
+                    />
+                  </div>
+                </>
               )}
+
+              {/* Submit Button */}
+              <button
+                onClick={isEditing ? handleUpdate : handleAddItem}
+                className="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors"
+              >
+                {isEditing ? `Update ${activeTab.slice(0, -1)}` : `Add ${activeTab.slice(0, -1)}`}
+              </button>
             </div>
           </div>
         )}

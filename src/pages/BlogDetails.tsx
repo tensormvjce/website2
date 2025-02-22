@@ -15,6 +15,10 @@ interface BlogPost extends FirestoreItem {
   bannerImg: string;
   contentWriter: string;
   writerAvatar: string;
+  socialMedia?: {
+    instagram?: { link: string };
+    linkedin?: { link: string };
+  };
   tags?: string[];
 }
 
@@ -46,6 +50,7 @@ const BlogDetails: React.FC = () => {
             bannerImg: blogData.bannerImg,
             contentWriter: blogData.contentWriter,
             writerAvatar: blogData.writerAvatar,
+            socialMedia: blogData.socialMedia,
             tags: blogData.tags
           };
           setBlog(blog);
@@ -87,6 +92,13 @@ const BlogDetails: React.FC = () => {
     );
   }
 
+  // Format the date
+  const formattedDate = new Date(blog.date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   return (
     <div className="min-h-screen bg-black relative overflow-hidden pt-24 pb-16">
       {/* Background Elements */}
@@ -120,10 +132,17 @@ const BlogDetails: React.FC = () => {
                 target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${blog.contentWriter}`;
               }}
             />
-            <span className="text-purple-400">{blog.contentWriter}</span>
+            <a 
+              href={blog.socialMedia?.linkedin?.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400"
+            >
+              {blog.contentWriter}
+            </a>
           </div>
           <span className="text-gray-400">•</span>
-          <span className="text-purple-400">{blog.date}</span>
+          <span className="text-purple-400">{formattedDate}</span>
         </motion.div>
 
         {/* Banner Image */}

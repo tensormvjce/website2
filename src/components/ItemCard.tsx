@@ -136,7 +136,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
           <div className="p-6">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-xl font-semibold text-white">{title}</h3>
-              {type === 'event' && status && (
+              {type === 'project' && status && (
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                   status === 'Open' ? 'bg-green-500/20 text-green-300' :
                   status === 'Closed' ? 'bg-red-500/20 text-red-300' :
@@ -146,12 +146,10 @@ const ItemCard: React.FC<ItemCardProps> = ({
                 </span>
               )}
             </div>
-            {type === 'blog' && (
+            {type === 'project' && author && (
               <div className="flex items-center mb-2">
-                {author && (
-                  <span className="text-gray-400 text-sm">{author}</span>
-                )}
-                {author && formattedDate && (
+                <span className="text-gray-400 text-sm">{author}</span>
+                {formattedDate && (
                   <span className="mx-2 text-gray-600">•</span>
                 )}
                 {formattedDate && (
@@ -180,7 +178,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
               {type !== 'blog' && (
                 <div className="flex items-center text-sm text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 mr-2">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   {formattedDate}
                 </div>

@@ -464,73 +464,77 @@ const Home = () => {
             <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:50px_50px]" />
             <div className="absolute inset-0 bg-noise opacity-20" />
             
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-              <FadeInSection>
-                <div className="text-center mb-16">
-                  <h2 className="section-heading text-4xl">
-                    <TypewriterText text="Our Team Structure" />
-                  </h2>
-                  <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
-                    <TypewriterText text="Specialized teams working together to push the boundaries of AI" />
-                  </p>
-                </div>
+          <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+            <FadeInSection>
+              <div className="text-center mb-16">
+                <h2 className="section-heading text-4xl">
+                  <TypewriterText text="Our Team Structure" />
+                </h2>
+                <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">
+                  <TypewriterText text="Specialized teams working together to push the boundaries of AI" />
+                </p>
+              </div>
+            </FadeInSection>
+
+            <div className="flex flex-col space-y-4">
+              {/* Technical Team - Expanded by default */}
+              <FadeInSection delay={0.2}>
+                <TeamSection
+                  title="Technical Team"
+                  description="Developing cutting-edge AI/ML solutions and conducting research in emerging technologies."
+                  items={[
+                    "Neural Networks",
+                    "Computer Vision", 
+                    "Natural Language Processing"
+                  ]}
+                  isExpanded={true} // Ensure this team is expanded by default
+                />
               </FadeInSection>
 
-              <div className="flex flex-col space-y-4">
-                {/* Technical Team */}
-                <FadeInSection delay={0.2}>
-                  <TeamSection
-                    title="Technical Team"
-                    description="Developing cutting-edge AI/ML solutions and conducting research in emerging technologies."
-                    items={[
-                      "Neural Networks",
-                      "Computer Vision", 
-                      "Natural Language Processing"
-                    ]}
-                  />
-                </FadeInSection>
+              {/* Content Team - Collapsed by default */}
+              <FadeInSection delay={0.4}>
+                <TeamSection
+                  title="Content Team"
+                  description="Creating informative and engaging content about AI/ML concepts and latest developments."
+                  items={[
+                    "Technical Blogs",
+                    "Social Media",
+                    "Documentation"
+                  ]}
+                  isExpanded={false} // Collapsed by default
+                />
+              </FadeInSection>
 
-                {/* Content Team */}
-                <FadeInSection delay={0.4}>
-                  <TeamSection
-                    title="Content Team"
-                    description="Creating informative and engaging content about AI/ML concepts and latest developments."
-                    items={[
-                      "Technical Blogs",
-                      "Social Media",
-                      "Documentation"
-                    ]}
-                  />
-                </FadeInSection>
+              {/* Media Team - Collapsed by default */}
+              <FadeInSection delay={0.6}>
+                <TeamSection
+                  title="Media Team"
+                  description="Capturing and showcasing our journey through various media formats."
+                  items={[
+                    "Event Coverage",
+                    "Video Production",
+                    "Photography"
+                  ]}
+                  isExpanded={false} // Collapsed by default
+                />
+              </FadeInSection>
 
-                {/* Media Team */}
-                <FadeInSection delay={0.6}>
-                  <TeamSection
-                    title="Media Team"
-                    description="Capturing and showcasing our journey through various media formats."
-                    items={[
-                      "Event Coverage",
-                      "Video Production",
-                      "Photography"
-                    ]}
-                  />
-                </FadeInSection>
-
-                {/* Design Team */}
-                <FadeInSection delay={0.8}>
-                  <TeamSection
-                    title="Design Team"
-                    description="Creating visually appealing designs and maintaining brand consistency."
-                    items={[
-                      "UI/UX Design",
-                      "Graphics",
-                      "Branding"
-                    ]}
-                  />
-                </FadeInSection>
-              </div>
+              {/* Design Team - Collapsed by default */}
+              <FadeInSection delay={0.8}>
+                <TeamSection
+                  title="Design Team"
+                  description="Creating visually appealing designs and maintaining brand consistency."
+                  items={[
+                    "UI/UX Design",
+                    "Graphics",
+                    "Branding"
+                  ]}
+                  isExpanded={false} // Collapsed by default
+                />
+              </FadeInSection>
             </div>
-          </section>
+          </div>
+        </section>
 
           {/* Preview Members Section */}
           <div className="py-16 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

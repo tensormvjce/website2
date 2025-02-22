@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Define the props interface for TeamSection
 interface TeamSectionProps {
   title: string;
   description: string;
   items: string[];
+  isExpanded?: boolean; // Optional prop for initial expansion state
 }
 
-const TeamSection = ({ title, description, items }: TeamSectionProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const TeamSection = ({ title, description, items, isExpanded = false }: TeamSectionProps) => {
+  const [isExpandedState, setIsExpanded] = useState(isExpanded); // Use the prop as initial state
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    if (isExpanded && description) {
+    if (isExpandedState && description) {
       setIsTyping(true);
       let currentText = '';
       let currentIndex = 0;
@@ -33,7 +35,7 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
     } else {
       setDisplayText('');
     }
-  }, [isExpanded, description]);
+  }, [isExpandedState, description]);
 
   const renderThemedContent = () => {
     switch (title) {
@@ -74,7 +76,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
       case "Content Team":
         return (
           <div className="bg-white rounded-lg overflow-hidden">
-            {/* Word Top Bar */}
             <div className="bg-[#185ABD] px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <img src="/word-icon.png" alt="Word" className="w-4 h-4 sm:w-5 sm:h-5" onError={(e) => e.currentTarget.style.display = 'none'} />
@@ -87,7 +88,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
               </div>
             </div>
 
-            {/* Word Ribbon */}
             <div className="bg-[#F3F2F1] border-b border-gray-300">
               <div className="flex gap-3 sm:gap-6 px-2 sm:px-4 py-1 text-[10px] sm:text-xs text-gray-700 overflow-x-auto no-scrollbar">
                 <span className="hover:bg-gray-200 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded cursor-pointer whitespace-nowrap">File</span>
@@ -126,7 +126,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
               </div>
             </div>
 
-            {/* Document Content */}
             <div className="bg-white p-4 sm:p-8">
               <div className="max-w-2xl mx-auto">
                 <p className="text-gray-800 mb-4 sm:mb-6 leading-relaxed font-['Calibri'] text-sm sm:text-base">
@@ -156,11 +155,8 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
       case "Media Team":
         return (
           <div className="flex justify-center p-4 sm:p-8 rounded-lg">
-            {/* Phone Frame */}
             <div className="w-[280px] sm:w-[300px] h-[550px] sm:h-[600px] bg-black rounded-[2rem] sm:rounded-[3rem] border-[10px] sm:border-[14px] border-black relative overflow-hidden shadow-2xl">
-              {/* Phone Screen */}
               <div className="relative h-full w-full bg-gradient-to-b from-gray-900 to-black rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden">
-                {/* Rest of the phone content */}
                 <div className="absolute top-0 inset-x-0 h-6 sm:h-7 px-4 sm:px-6 flex justify-between items-center bg-transparent z-20">
                   <span className="text-white text-xs sm:text-sm">9:41</span>
                   <div className="flex items-center gap-1 sm:gap-2">
@@ -173,7 +169,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                   </div>
                 </div>
 
-                {/* App Header */}
                 <div className="pt-8 sm:pt-10 px-3 sm:px-4 pb-2 sm:pb-3">
                   <div className="flex items-center justify-between">
                     <span className="text-white text-lg sm:text-xl font-semibold">Media Hub</span>
@@ -188,7 +183,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                   </div>
                 </div>
 
-                {/* Content Area */}
                 <div className="h-full overflow-y-auto no-scrollbar">
                   <div className="px-3 sm:px-4 py-2 sm:py-3 text-gray-300 text-xs sm:text-sm">
                     {displayText}
@@ -197,7 +191,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                     )}
                   </div>
 
-                  {/* Posts */}
                   <div className="px-3 sm:px-4 space-y-3 sm:space-y-4">
                     {items.map((item, index) => (
                       <motion.div
@@ -207,7 +200,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                         transition={{ delay: index * 0.1 }}
                         className="bg-gray-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl overflow-hidden"
                       >
-                        {/* Post Header */}
                         <div className="p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
                           <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 p-0.5">
                             <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
@@ -223,14 +215,12 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                           </button>
                         </div>
 
-                        {/* Post Content */}
                         <div className="aspect-square bg-gradient-to-br from-purple-500/10 to-blue-500/10 relative">
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-white text-sm sm:text-lg font-medium">{item}</div>
                           </div>
                         </div>
 
-                        {/* Post Actions */}
                         <div className="p-2 sm:p-3 flex items-center justify-between">
                           <div className="flex items-center gap-4 sm:gap-6">
                             <button className="text-white hover:text-gray-300">
@@ -255,7 +245,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                   </div>
                 </div>
 
-                {/* Bottom Navigation */}
                 <div className="absolute bottom-0 inset-x-0 h-12 sm:h-16 bg-gradient-to-t from-black to-transparent flex justify-around items-center px-4 sm:px-6">
                   <button className="text-white">
                     <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="currentColor">
@@ -281,7 +270,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
       case "Design Team":
         return (
           <div className="bg-[#2c2c2c] rounded-lg overflow-hidden">
-            {/* Figma Top Bar */}
             <div className="bg-[#1e1e1e] px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between border-b border-[#383838]">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="flex gap-1 sm:gap-2">
@@ -300,9 +288,7 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
               </div>
             </div>
 
-            {/* Figma Main Interface */}
             <div className="flex h-[400px] sm:h-[500px]">
-              {/* Left Sidebar */}
               <div className="w-8 sm:w-12 bg-[#1e1e1e] flex flex-col items-center py-4 sm:py-6 gap-4 sm:gap-6 border-r border-[#383838]">
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-[#383838] flex items-center justify-center">
                   <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-purple-400" />
@@ -315,7 +301,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                 </div>
               </div>
 
-              {/* Layers Panel */}
               <div className="w-48 sm:w-64 bg-[#252525] border-r border-[#383838] p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <span className="text-gray-300 text-xs sm:text-sm font-medium">Layers</span>
@@ -341,7 +326,6 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                 </div>
               </div>
 
-              {/* Main Canvas */}
               <div className="flex-1 bg-[#202020] p-4 sm:p-6">
                 <div className="bg-[#2c2c2c] rounded-lg p-3 sm:p-4 h-full">
                   <div className="text-gray-300 mb-3 sm:mb-4 pl-3 sm:pl-4 border-l-2 border-purple-500/50 text-xs sm:text-sm">
@@ -362,10 +346,8 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
                         <div className="bg-[#383838] rounded-lg hover:ring-1 hover:ring-purple-500/30 transition-all overflow-hidden">
                           <div className="relative">
                             <div className="h-20 sm:h-24 bg-gradient-to-br from-purple-500/20 to-blue-500/20 group-hover:from-purple-500/30 group-hover:to-blue-500/30 transition-colors">
-                              {/* Figma-style grid overlay */}
                               <div className="absolute inset-0 bg-[#202020] opacity-5 bg-grid-white/[0.2] bg-[length:6px_6px] sm:bg-[length:8px_8px]" />
                             </div>
-                            {/* Component preview overlay */}
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center">
                                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-purple-500/20 flex items-center justify-center">
@@ -421,7 +403,7 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
       transition={{ duration: 0.5 }}
     >
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={() => setIsExpanded(!isExpandedState)}
         className="w-full text-left bg-black/50 px-8 py-6 rounded-xl backdrop-blur-sm ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300"
       >
         <div className="flex items-center justify-between">
@@ -429,7 +411,7 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
             {title}
           </h3>
           <motion.div
-            animate={{ rotate: isExpanded ? 180 : 0 }}
+            animate={{ rotate: isExpandedState ? 180 : 0 }}
             transition={{ duration: 0.3 }}
           >
             <svg
@@ -451,7 +433,7 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
       </button>
 
       <AnimatePresence>
-        {isExpanded && (
+        {isExpandedState && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -469,4 +451,4 @@ const TeamSection = ({ title, description, items }: TeamSectionProps) => {
   );
 };
 
-export default TeamSection; 
+export default TeamSection;

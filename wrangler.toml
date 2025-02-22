@@ -1,0 +1,21 @@
+[build]
+command = "npm run build"
+directory = "dist"
+
+[site]
+bucket = "./dist"
+entry-point = "./"
+
+[build.environment]
+NODE_VERSION = "18.17.1"
+NPM_VERSION = "9.6.7"
+NODE_OPTIONS = "--max_old_space_size=4096"
+
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-XSS-Protection = "1; mode=block"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://ssl.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://firestore.googleapis.com;"

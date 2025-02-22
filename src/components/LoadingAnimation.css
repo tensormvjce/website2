@@ -1,0 +1,102 @@
+.loading-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+  background-color: #000;
+  pointer-events: none;
+}
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background-color: transparent !important;
+}
+
+.puzzle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+.puzzle-piece {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.logo-container {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  background-color: transparent !important;
+  user-select: none;
+}
+
+.logo-container * {
+  pointer-events: none !important;
+  background-color: transparent !important;
+  user-select: none;
+}
+
+.split-logo-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.split-half {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.top-part {
+  z-index: 2;
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.bottom-part {
+  z-index: 1;
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -727,6 +727,26 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
   }
+
+  /* Custom Scrollbar Styles */
+  *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+    width: 0px;
+  }
+
+  *::-webkit-scrollbar-track:hover {
+    background: transparent
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #4f4f4f;
+    border-radius: 14px;
+  }
 }
 
 /* Add this to your global CSS */

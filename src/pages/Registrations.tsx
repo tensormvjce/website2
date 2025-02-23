@@ -80,24 +80,6 @@ const Registrations = () => {
           </p>
         </motion.div>
 
-        {/* Team Photo */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="relative rounded-xl overflow-hidden mb-24 aspect-[21/9] max-w-5xl mx-auto"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-          <img
-            src="/team-photos/2024-25/team.jpg"
-            alt="TENSOR CLUB GROUP"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = 'https://via.placeholder.com/1920x820?text=TENSOR+CLUB+GROUP+PHOTO';
-            }}
-          />
-        </motion.div>
 
         {/* Application Process */}
         <div className="mb-24">

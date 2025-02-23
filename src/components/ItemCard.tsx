@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FirestoreItem } from '../hooks/useFirestoreCollection';
 import ReactMarkdown from 'react-markdown';
-
 
 interface ItemCardProps extends FirestoreItem {
   type: 'blog' | 'project' | 'event';
@@ -10,6 +9,10 @@ interface ItemCardProps extends FirestoreItem {
   status?: 'Open' | 'Closed' | 'Ended';
   author?: string;
   link?: string;
+  contentWriter?: string; // Added for LinkedIn link
+  contentWriterLinkedIn?: string; // Added for LinkedIn URL
+  designer?: string; // Added for LinkedIn link
+  designerLinkedIn?: string; // Added for LinkedIn URL
 }
 
 const ItemCard: React.FC<ItemCardProps> = ({ 
@@ -23,9 +26,13 @@ const ItemCard: React.FC<ItemCardProps> = ({
   author,
   link,
   loading = false,
+  contentWriter,
+  contentWriterLinkedIn,
+  designer,
+  designerLinkedIn,
 }) => {
   // Format date with type safety
-  const formattedDate = React.useMemo(() => {
+  const formattedDate = useMemo(() => {
     if (!date) {
       return '';
     }
@@ -42,7 +49,46 @@ const ItemCard: React.FC<ItemCardProps> = ({
     } catch (error) {
       return '';
     }
-  }, [date, title]);
+  }, [date]);
+
+  // Debugging logs to check props
+  useEffect(() => {
+    console.log('ItemCard Props:', {
+      title: title || 'No title provided',
+      description: description || 'No description provided',
+      date: date || 'No date provided',
+      image: image || 'No image provided',
+      tags: tags || 'No tags provided',
+      type,
+      status: status || 'No status provided',
+      author: author || 'No author provided',
+      link: link || 'No link provided',
+      contentWriter: contentWriter || 'No content writer provided',
+      contentWriterLinkedIn: contentWriterLinkedIn ? `Valid: ${contentWriterLinkedIn}` : 'No content writer LinkedIn provided',
+      designer: designer || 'No designer provided',
+      designerLinkedIn: designerLinkedIn ? `Valid: ${designerLinkedIn}` : 'No designer LinkedIn provided'
+    });
+  }, [title, description, date, image, tags, type, status, author, link, contentWriter, contentWriterLinkedIn, designer, designerLinkedIn]);
+
+  // Validate and format LinkedIn URLs
+  const validateAndFormatLink = (url: string | undefined): string => {
+    if (!url || url.trim() === '') {
+      console.warn('LinkedIn URL is missing or empty, defaulting to #:', url);
+      return '#';
+    }
+    try {
+      const trimmedUrl = url.trim();
+      const urlObj = new URL(trimmedUrl.startsWith('http') ? trimmedUrl : `https://${trimmedUrl}`);
+      if (urlObj.hostname !== 'www.linkedin.com' && urlObj.hostname !== 'linkedin.com') {
+        console.warn('Invalid LinkedIn URL detected, defaulting to #. Expected linkedin.com, got:', urlObj.hostname);
+        return '#';
+      }
+      return trimmedUrl.startsWith('http') ? trimmedUrl : `https://${trimmedUrl}`;
+    } catch (error) {
+      console.error('Invalid URL format, defaulting to #:', url, error);
+      return '#';
+    }
+  };
 
   if (loading) {
     return (
@@ -146,17 +192,46 @@ const ItemCard: React.FC<ItemCardProps> = ({
                 </span>
               )}
             </div>
-            {type === 'project' && author && (
-              <div className="flex items-center mb-2">
-                <span className="text-gray-400 text-sm">{author}</span>
-                {formattedDate && (
-                  <span className="mx-2 text-gray-600">•</span>
-                )}
-                {formattedDate && (
-                  <span className="text-gray-400 text-sm">{formattedDate}</span>
-                )}
-              </div>
-            )}
+            <div className="space-y-2 mb-4">
+              {type === 'project' && author && (
+                <div className="flex items-center">
+                  <span className="text-gray-400 text-sm">{author}</span>
+                  {formattedDate && (
+                    <span className="mx-2 text-gray-600">•</span>
+                  )}
+                  {formattedDate && (
+                    <span className="text-gray-400 text-sm">{formattedDate}</span>
+                  )}
+                </div>
+              )}
+              {/* Designer and Content Writer Links */}
+              {(designer || designerLinkedIn) && (
+                <div className="flex items-center">
+                  <span className="text-gray-400 text-sm">Designer: </span>
+                  <a 
+                    href={validateAndFormatLink(designerLinkedIn)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-400 text-sm ml-1 hover:text-purple-300 transition-colors"
+                  >
+                    {designer || 'Unknown Designer'}
+                  </a>
+                </div>
+              )}
+              {(contentWriter || contentWriterLinkedIn) && (
+                <div className="flex items-center">
+                  <span className="text-gray-400 text-sm">Content Writer: </span>
+                  <a 
+                    href={validateAndFormatLink(contentWriterLinkedIn)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-400 text-sm ml-1 hover:text-purple-300 transition-colors"
+                  >
+                    {contentWriter || 'Unknown Writer'}
+                  </a>
+                </div>
+              )}
+            </div>
             <div className="text-gray-400 mb-4">
               <ReactMarkdown className="prose prose-invert max-w-none">
                 {description.length > 100 ? `${description.substring(0, 100)}...` : description}

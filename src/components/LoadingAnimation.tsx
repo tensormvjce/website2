@@ -13,6 +13,12 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
   const [showLogo, setShowLogo] = useState(false);
 
   useEffect(() => {
+    // Hide navbar when component mounts
+    const navbar = document.querySelector('nav');
+    if (navbar) {
+      navbar.classList.add('hide-navbar');
+    }
+
     // Show logo after a brief delay
     setTimeout(() => setShowLogo(true), 250);
 
@@ -24,6 +30,10 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
           setTimeout(() => {
             setFadeOut(true);
             setTimeout(() => {
+              // Show navbar before unmounting
+              if (navbar) {
+                navbar.classList.remove('hide-navbar');
+              }
               setLoading(false);
               onLoadingComplete();
             }, 650);
@@ -34,13 +44,21 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }
       });
     }, 30);
 
-    return () => clearInterval(timer);
+    // Cleanup function
+    return () => {
+      clearInterval(timer);
+      // Ensure navbar is visible when component unmounts
+      const navbar = document.querySelector('nav');
+      if (navbar) {
+        navbar.classList.remove('hide-navbar');
+      }
+    };
   }, [onLoadingComplete]);
 
   if (!loading) return null;
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black">
+    <div className="fixed inset-0 w-full h-full bg-black z-[99999]">
       {/* Content overlay with explicit z-index */}
       <div 
         className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}

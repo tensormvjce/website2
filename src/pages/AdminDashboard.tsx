@@ -14,7 +14,6 @@ import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { teamData } from '../data/teamData';
 
-
 const AdminDashboard: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState<'blogs' | 'projects' | 'events' | 'posts'>('blogs');
@@ -68,12 +67,14 @@ const AdminDashboard: React.FC = () => {
     date: '',
     image: '',
     designer: '',
+    designerLinkedIn: '',
     contentWriter: '',
+    contentWriterLinkedIn: '',
     tags: [] as string[],
     socialMedia: {
       instagram: { link: '' },
       linkedin: { link: '' }
-    }
+    },
   });
 
   // Get 2024-25 team members
@@ -91,6 +92,10 @@ const AdminDashboard: React.FC = () => {
     console.log('Current User UID:', currentUser?.uid);
     console.log('Is Admin:', isAdmin);
   }, [currentUser, isAdmin]);
+
+  useEffect(() => {
+    console.log('Current Team Members:', currentTeamMembers);
+  }, [currentTeamMembers]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -251,7 +256,9 @@ const AdminDashboard: React.FC = () => {
         date: newPost.date ? new Date(newPost.date).toISOString() : new Date().toISOString(),
         image: newPost.image,
         designer: newPost.designer,
+        designerLinkedIn: newPost.designerLinkedIn,
         contentWriter: newPost.contentWriter,
+        contentWriterLinkedIn: newPost.contentWriterLinkedIn,
         tags: newPost.tags,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -261,12 +268,13 @@ const AdminDashboard: React.FC = () => {
           instagram: newPost.socialMedia.instagram.link ? {
             link: newPost.socialMedia.instagram.link,
           } : null,
-          linkedin: newPost.socialMedia.linkedin.link ? {
-            link: newPost.socialMedia.linkedin.link,
-          } : null
+          linkedin: {
+            link: newPost.socialMedia.linkedin.link
+          }
         }
       };
 
+      console.log('Post Data being saved:', postData);
       await addDoc(collection(db, 'posts'), postData);
       
       setNewPost({
@@ -275,7 +283,9 @@ const AdminDashboard: React.FC = () => {
         date: '',
         image: '',
         designer: '',
+        designerLinkedIn: '',
         contentWriter: '',
+        contentWriterLinkedIn: '',
         tags: [],
         socialMedia: {
           instagram: { link: '' },
@@ -299,6 +309,7 @@ const AdminDashboard: React.FC = () => {
         id: doc.id,
         ...doc.data()
       }));
+      console.log('Fetched Items:', fetchedItems);
       setItems(fetchedItems);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -308,10 +319,8 @@ const AdminDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (viewMode === 'manage') {
-      fetchItems();
-    }
-  }, [activeTab, viewMode]);
+    fetchItems();
+  }, [activeTab]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
@@ -334,7 +343,9 @@ const AdminDashboard: React.FC = () => {
         date: item.date ? new Date(item.date).toISOString().split('T')[0] : '',
         image: item.image || '',
         designer: item.designer || '',
+        designerLinkedIn: item.designerLinkedIn || '',
         contentWriter: item.contentWriter || '',
+        contentWriterLinkedIn: item.contentWriterLinkedIn || '',
         tags: item.tags || [],
         socialMedia: {
           instagram: { link: item.socialMedia?.instagram?.link || '' },
@@ -382,7 +393,9 @@ const AdminDashboard: React.FC = () => {
       const updateData = activeTab === 'posts' ? {
         ...newPost,
         date: newPost.date ? new Date(newPost.date).toISOString() : new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        designerLinkedIn: newPost.designerLinkedIn,
+        contentWriterLinkedIn: newPost.contentWriterLinkedIn
       } : {
         ...newItem,
         date: newItem.date ? new Date(newItem.date).toISOString() : new Date().toISOString(),
@@ -526,74 +539,87 @@ const AdminDashboard: React.FC = () => {
             ) : items.length === 0 ? (
               <p className="text-gray-400 text-center py-8">No items found</p>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-black/30 border border-gray-800 rounded-lg p-4 hover:border-purple-500/50 transition-all"
+                    className="bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/30 transition-all duration-300"
                   >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                        <p className="text-gray-400 mb-2">
-                          {item.description?.substring(0, 200)}
-                          {item.description?.length > 200 ? '...' : ''}
-                        </p>
-                        {activeTab === 'blogs' && item.content && (
-                          <p className="text-gray-400 mt-2 italic">
-                            {item.content?.substring(0, 100)}
-                            {item.content?.length > 100 ? '...' : ''}
-                          </p>
-                        )}
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {item.tags?.map((tag: string) => (
+                    {/* Post Image */}
+                    <div className="aspect-video relative overflow-hidden">
+                      <img
+                        src={item.image || 'https://via.placeholder.com/400x225?text=No+Image'}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://via.placeholder.com/400x225?text=No+Image';
+                        }}
+                      />
+                    </div>
+
+                    {/* Post Content */}
+                    <div className="p-6 space-y-4">
+                      <h3 className="text-xl font-semibold">{item.title}</h3>
+                      <p className="text-gray-400">{item.description}</p>
+
+                      {/* Tags */}
+                      {item.tags && item.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {item.tags.map((tag: string) => (
                             <span
                               key={tag}
-                              className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm"
+                              className="text-xs px-2 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30"
                             >
                               {tag}
                             </span>
                           ))}
                         </div>
-                        <p className="text-sm text-gray-500">
-                          Created: {new Date(item.date).toLocaleDateString()}
-                        </p>
+                      )}
+
+                      {/* Credits */}
+                      <div className="pt-4 border-t border-gray-800 space-y-2">
+                        {item.designer && (
+                          <div className="flex items-center">
+                            <span className="text-gray-400">Designer: </span>
+                            <a
+                              href={item.designerLinkedIn}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-purple-400 ml-2 hover:text-purple-300"
+                            >
+                              {item.designer}
+                            </a>
+                          </div>
+                        )}
+                        {item.contentWriter && (
+                          <div className="flex items-center">
+                            <span className="text-gray-400">Content Writer: </span>
+                            <a
+                              href={item.contentWriterLinkedIn}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-purple-400 ml-2 hover:text-purple-300"
+                            >
+                              {item.contentWriter}
+                            </a>
+                          </div>
+                        )}
                       </div>
-                      
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          className="p-2 text-red-400 hover:text-red-300 transition-colors"
-                          title="Delete"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
+
+                      {/* Actions */}
+                      <div className="flex justify-end space-x-4 mt-4">
                         <button
                           onClick={() => handleEdit(item)}
-                          className="p-2 text-blue-400 hover:text-blue-300 transition-colors"
-                          title="Edit"
+                          className="text-blue-400 hover:text-blue-300"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-                            />
-                          </svg>
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          Delete
                         </button>
                       </div>
                     </div>
@@ -1053,22 +1079,86 @@ const AdminDashboard: React.FC = () => {
                       className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
                     />
                     
-                    {/* Designer and Content Writer */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="Designer"
+                    {/* Designer Dropdown */}
+                    <div>
+                      <label className="block text-gray-300 mb-2">Designer</label>
+                      <select
                         value={newPost.designer}
-                        onChange={(e) => setNewPost(prev => ({ ...prev, designer: e.target.value }))}
+                        onChange={(e) => {
+                          const selectedMember = currentTeamMembers.find(member => member.name === e.target.value);
+                          if (selectedMember) {
+                            setNewPost(prev => ({
+                              ...prev,
+                              designer: selectedMember.name,
+                              designerLinkedIn: selectedMember.linkedin
+                            }));
+                          }
+                        }}
                         className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Content Writer"
+                      >
+                        <option value="">Select a designer</option>
+                        {currentTeamMembers.map((member) => (
+                          <option key={member.name} value={member.name}>
+                            {member.name} - {member.role}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Content Writer Dropdown */}
+                    <div>
+                      <label className="block text-gray-300 mb-2">Content Writer</label>
+                      <select
                         value={newPost.contentWriter}
-                        onChange={(e) => setNewPost(prev => ({ ...prev, contentWriter: e.target.value }))}
+                        onChange={(e) => {
+                          const selectedMember = currentTeamMembers.find(member => member.name === e.target.value);
+                          if (selectedMember) {
+                            setNewPost(prev => ({
+                              ...prev,
+                              contentWriter: selectedMember.name,
+                              contentWriterLinkedIn: selectedMember.linkedin
+                            }));
+                          }
+                        }}
                         className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-                      />
+                      >
+                        <option value="">Select a content writer</option>
+                        {currentTeamMembers.map((member) => (
+                          <option key={member.name} value={member.name}>
+                            {member.name} - {member.role}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Display Selected Designer and Content Writer */}
+                    <div className="mt-4">
+                      {newPost.designer && newPost.designerLinkedIn && (
+                        <div className="flex items-center">
+                          <span className="text-gray-400">Designer: </span>
+                          <a 
+                            href={newPost.designerLinkedIn} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-purple-400 ml-2 hover:text-purple-300"
+                          >
+                            {newPost.designer}
+                          </a>
+                        </div>
+                      )}
+                      {newPost.contentWriter && newPost.contentWriterLinkedIn && (
+                        <div className="flex items-center">
+                          <span className="text-gray-400">Content Writer: </span>
+                          <a 
+                            href={newPost.contentWriterLinkedIn} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-purple-400 ml-2 hover:text-purple-300"
+                          >
+                            {newPost.contentWriter}
+                          </a>
+                        </div>
+                      )}
                     </div>
 
                     {/* Tags Section */}

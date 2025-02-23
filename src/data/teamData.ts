@@ -158,7 +158,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Harshith G Reddy',
         role: 'Member',
-        photo: '',
+        photo: 'https://github.com/user-attachments/assets/bdb48b83-5d38-4180-bf3e-34bb2cd2cc00',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Technical'

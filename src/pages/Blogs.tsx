@@ -2,7 +2,20 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../services/firebase';
 import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
-import ItemCard from '../components/ItemCard';
+import { ArrowRight } from 'lucide-react';
+import {
+  CARD_CLASSES,
+  CARD_INNER_CLASSES,
+  CARD_IMAGE_CLASSES,
+  CARD_IMAGE_INNER_CLASSES,
+  CARD_CONTENT_CLASSES,
+  CARD_TAGS_CLASSES,
+  CARD_TAG_CLASSES,
+  CARD_TITLE_CLASSES,
+  CARD_DESCRIPTION_CLASSES,
+  CARD_FOOTER_CLASSES
+} from '../styles/cardStyles';
+import { Link } from 'react-router-dom';
 
 interface Blog {
   id: string;
@@ -210,7 +223,7 @@ const Blogs: React.FC = () => {
               </div>
             </motion.div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogs.map((blog, index) => (
                 <motion.div
                   key={blog.id}
@@ -220,17 +233,50 @@ const Blogs: React.FC = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="relative group"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <ItemCard
-                    title={blog.title}
-                    description={blog.description}
-                    image={blog.image}
-                    date={blog.date}
-                    tags={blog.tags}
-                    author={blog.author}
-                    link={`/blog/${blog.id}`}
-                    type="blog"
-                  />
+                  <Link to={`/blog/${blog.id}`}>
+                    <div className={CARD_CLASSES}>
+                      <div className={CARD_INNER_CLASSES}>
+                        <div className={CARD_IMAGE_CLASSES}>
+                          <img
+                            src={blog.image}
+                            alt={blog.title}
+                            className={CARD_IMAGE_INNER_CLASSES}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = 'https://via.placeholder.com/800x400?text=Blog+Image';
+                            }}
+                          />
+                        </div>
+                        <div className={CARD_CONTENT_CLASSES}>
+                          <h3 className={CARD_TITLE_CLASSES}>{blog.title}</h3>
+                          <p className="text-sm text-purple-400 mb-3 flex-shrink-0">by {blog.author}</p>
+                          {blog.tags && blog.tags.length > 0 && (
+                            <div className={CARD_TAGS_CLASSES}>
+                              {blog.tags.map((tag, idx) => (
+                                <span key={idx} className={CARD_TAG_CLASSES}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div className={CARD_DESCRIPTION_CLASSES}>{blog.description}</div>
+                          <div className={CARD_FOOTER_CLASSES}>
+                            <div className="flex items-center text-sm text-purple-400">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current mr-2">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              {new Date(blog.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              })}
+                            </div>
+                            <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform text-purple-400" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>

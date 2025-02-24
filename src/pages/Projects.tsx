@@ -25,7 +25,7 @@ interface ProjectCardProps {
   author: string;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ 
+export const ProjectCard: React.FC<ProjectCardProps> = ({ 
   title, 
   description, 
   image, 
@@ -33,6 +33,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   websiteUrl,
   author 
 }) => {
+  // Truncate description to show 50-60 words
+  const truncatedDescription = useMemo(() => {
+    if (!description) return '';
+    const words = description.split(' ');
+    const wordLimit = 55; // Target around 55 words
+    
+    if (words.length <= wordLimit) return description;
+    return words.slice(0, wordLimit).join(' ') + '...';
+  }, [description]);
+
   const handleVisitWebsite = useCallback((): void => {
     if (websiteUrl) {
       window.open(websiteUrl, '_blank', 'noopener,noreferrer');
@@ -43,10 +53,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative group cursor-pointer h-[450px] w-full"
+      className="relative group cursor-pointer h-[500px] w-full" // Increased height
     >
       <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="relative p-6 bg-black/50 backdrop-blur-sm border border-gray-800 rounded-lg hover-glow h-full flex flex-col">
+        {/* Image Section */}
         <div className="aspect-video mb-4 overflow-hidden rounded-lg h-48 flex-shrink-0">
           <img
             src={image}
@@ -58,6 +69,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             }}
           />
         </div>
+
+        {/* Tags Section */}
         <div className="flex items-center space-x-2 flex-wrap gap-2 mb-3 flex-shrink-0">
           {tags.map((tag: string) => (
             <span 
@@ -68,16 +81,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </span>
           ))}
         </div>
+
+        {/* Title and Author */}
         <h2 className="text-xl font-semibold mb-2 glow-text group-hover:text-purple-400 transition-colors line-clamp-2 flex-shrink-0">
           {title}
         </h2>
-        <p className="text-sm text-purple-400 mb-2 flex-shrink-0">by {author}</p>
-        <div className="text-gray-400 terminal-text text-sm mb-4 line-clamp-3 flex-grow">
-          <ReactMarkdown className="prose prose-invert max-w-none">
-            {description}
+        <p className="text-sm text-purple-400 mb-3 flex-shrink-0">by {author}</p>
+
+        {/* Description - Now with more space */}
+        <div className="text-gray-300 terminal-text text-sm mb-4 overflow-y-auto flex-grow">
+          <ReactMarkdown className="prose prose-invert prose-sm max-w-none leading-relaxed">
+            {truncatedDescription}
           </ReactMarkdown>
         </div>
-        <div className="flex items-center justify-between text-sm text-gray-500 mt-auto flex-shrink-0">
+
+        {/* Footer Section */}
+        <div className="flex items-center justify-between text-sm text-gray-500 mt-auto flex-shrink-0 pt-4 border-t border-gray-800">
           {websiteUrl && (
             <button 
               onClick={handleVisitWebsite}
@@ -87,7 +106,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
           )}
-          <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform text-purple-400" />
         </div>
       </div>
     </motion.article>

@@ -1,0 +1,11 @@
+export const CARD_HEIGHT = "h-[600px]";
+export const CARD_CLASSES = `${CARD_HEIGHT} relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300 w-full`;
+export const CARD_INNER_CLASSES = "p-6 flex flex-col h-full";
+export const CARD_IMAGE_CLASSES = "aspect-video mb-4 overflow-hidden rounded-lg h-48 flex-shrink-0";
+export const CARD_IMAGE_INNER_CLASSES = "w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300";
+export const CARD_CONTENT_CLASSES = "flex flex-col h-[calc(100%-theme(space.48)-theme(space.4))]";
+export const CARD_TAGS_CLASSES = "flex flex-wrap gap-2 mb-3";
+export const CARD_TAG_CLASSES = "text-xs text-purple-400 terminal-text px-2 py-1 rounded-full border border-purple-400/30";
+export const CARD_TITLE_CLASSES = "text-xl font-semibold mb-2 glow-text group-hover:text-purple-400 transition-colors line-clamp-2";
+export const CARD_DESCRIPTION_CLASSES = "text-gray-300 terminal-text text-sm mb-4 overflow-y-auto flex-1";
+export const CARD_FOOTER_CLASSES = "pt-4 border-t border-gray-800 flex items-center justify-between flex-shrink-0"; 

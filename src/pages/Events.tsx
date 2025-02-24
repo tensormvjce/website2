@@ -4,6 +4,19 @@ import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import { db } from '../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import ContentLoader from '../components/ContentLoader';
+import {
+  CARD_CLASSES,
+  CARD_INNER_CLASSES,
+  CARD_IMAGE_CLASSES,
+  CARD_IMAGE_INNER_CLASSES,
+  CARD_CONTENT_CLASSES,
+  CARD_TAGS_CLASSES,
+  CARD_TAG_CLASSES,
+  CARD_TITLE_CLASSES,
+  CARD_DESCRIPTION_CLASSES,
+  CARD_FOOTER_CLASSES
+} from '../styles/cardStyles';
+import { ArrowRight } from 'lucide-react';
 
 interface Event {
   id?: string;
@@ -135,82 +148,52 @@ const Events: React.FC = () => {
                 onClick={() => navigate(`/events/${event.slug}`)}
                 className="relative group cursor-pointer"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative bg-black/50 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition-colors duration-300">
-                  <div className="aspect-video">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      onError={handleImageError}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-semibold">{event.title}</h3>
-                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        event.status === 'Open' 
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                          : event.status === 'Ended' 
-                            ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
-                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                      }`}>
-                        {event.status === 'Open' ? 'Registration Open' : 
-                         event.status === 'Ended' ? 'Event Ended' : 
-                         'Registration Closed'}
+                <div className={CARD_CLASSES}>
+                  <div className={CARD_INNER_CLASSES}>
+                    <div className={CARD_IMAGE_CLASSES}>
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className={CARD_IMAGE_INNER_CLASSES}
+                        onError={handleImageError}
+                      />
+                    </div>
+                    <div className={CARD_CONTENT_CLASSES}>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className={CARD_TITLE_CLASSES}>{event.title}</h3>
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          event.status === 'Open' 
+                            ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                            : event.status === 'Ended'
+                              ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                        }`}>
+                          {event.status === 'Open' ? 'Registration Open' : 
+                           event.status === 'Ended' ? 'Event Ended' : 
+                           'Registration Closed'}
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {event.tags?.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs text-purple-400 px-2 py-1 rounded-full border border-purple-400/30 terminal-text"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="text-gray-400 mb-4 line-clamp-2">{event.description}</p>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-purple-400">{event.date}</span>
-                      {event.registrationLink && (
-                        event.status === 'Open' ? (
-                          <a
-                            href={event.registrationLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
-                                     rounded-lg text-white font-medium transition-all duration-300"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            Register
-                          </a>
-                        ) : (
-                          <span className="px-4 py-2 bg-gray-800/50 border border-gray-700 
-                                         rounded-lg text-gray-500 font-medium cursor-not-allowed">
-                            {event.status === 'Ended' ? 'Event Ended' : 'Registration Closed'}
-                          </span>
-                        )
-                      )}
-                    </div>
-                    <div className="flex items-center justify-end mt-2">
-                      <button className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-2 group transition-all duration-300">
-                        Read More
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M13 7l5 5m0 0l-5 5m5-5H6" 
-                          />
-                        </svg>
-                      </button>
+                      <div className={CARD_TAGS_CLASSES}>
+                        {event.tags?.map((tag) => (
+                          <span key={tag} className={CARD_TAG_CLASSES}>{tag}</span>
+                        ))}
+                      </div>
+                      <div className="flex-1 overflow-y-auto">
+                        <p className={CARD_DESCRIPTION_CLASSES}>{event.description}</p>
+                      </div>
+                      <div className={CARD_FOOTER_CLASSES}>
+                        <div className="flex items-center text-sm text-purple-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current mr-2">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {new Date(event.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </div>
+                        <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform text-purple-400" />
+                      </div>
                     </div>
                   </div>
                 </div>

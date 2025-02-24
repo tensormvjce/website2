@@ -4,7 +4,6 @@ import logo from '../logo_white.png';
 interface LoadingAnimationProps {
   onLoadingComplete: () => void;
 }
-
 const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ onLoadingComplete }) => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);

@@ -452,3 +452,4 @@ const TeamSection = ({ title, description, items, isExpanded = false }: TeamSect
 };
 
 export default TeamSection;
+

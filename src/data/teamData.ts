@@ -235,7 +235,6 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Technical'
       },
-
       // Design Team Members
       {
         name: 'Judit',

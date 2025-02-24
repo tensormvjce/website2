@@ -14,6 +14,7 @@ import { previewMembers } from '../data/previewTeamData';
 import PostCard from '../components/PostCard';
 import { ProjectCard } from './Projects';
 
+
 interface Event {
   id: string;
   title: string;

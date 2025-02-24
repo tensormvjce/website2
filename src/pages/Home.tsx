@@ -582,9 +582,11 @@ const Home = () => {
                   </div>
                 ))}
               </div>
-              <h2 className="text-2xl font-bold mb-3">Discover the great minds behind Tensor.</h2>
-              <Link to="/teams" onClick={scrollToTop} className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
-                Meet our team <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-400 ml-2">
+              <h2 className="text-2xl font-bold mb-3">Meet our AI/ML innovators building tomorrow's solutions.</h2>
+              <br></br>
+              <Link to="/teams" onClick={scrollToTop} className="inline-flex items-center px-8 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 
+                       rounded-lg text-white font-medium transition-all duration-300 hover:scale-105">
+                Meet our team <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 stroke-current text-purple-300 ml-2">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
                 </svg>
               </Link>

@@ -89,14 +89,6 @@ export const teamData: TeamYear[] = [
         category: 'Core Team',
         department: 'Media'
       },
-      {
-        name: 'Bikram',
-        role: 'Media Sub-Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQFT52svn2gA4w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1694112777314?e=1744243200&v=beta&t=bVxs7_RzbI6HqFVmj9lXYE9MWCKutDnxfZjfpWWFNII',
-        linkedin: 'https://www.linkedin.com/in/bikram-panda-9740b622a',
-        category: 'Core Team',
-        department: 'Media'
-      },
 
       // Technical Team Members
       {
@@ -311,14 +303,6 @@ export const teamData: TeamYear[] = [
 
       // Content Team Members
       {
-        name: 'Gurbashish Sena Nayak',
-        role: 'Member',
-        photo: '/avatars/default.jpg',
-        linkedin: '',
-        category: 'Sub-Team Members',
-        department: 'Content'
-      },
-      {
         name: 'Angelin gia',
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D5603AQE81h4krdgsng/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1727438134179?e=1744243200&v=beta&t=2gyv2at4gOt5XIzGRtz9ZMUqvtd7Lr3mZAoETAfMFhg',
@@ -376,14 +360,6 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Media'
       },
-      {
-        name: 'Raaghav',
-        role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/09394e01-c1c3-46f6-ac07-f594f41b288f',
-        linkedin: '',
-        category: 'Sub-Team Members',
-        department: 'Media'
-      }
     ]
   },
   {
@@ -453,14 +429,7 @@ export const teamData: TeamYear[] = [
         category: 'Core Team',
         department: 'Media'
       },
-      {
-        name: 'Bikram',
-        role: 'Media Sub-Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQFT52svn2gA4w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1694112777314?e=1744243200&v=beta&t=bVxs7_RzbI6HqFVmj9lXYE9MWCKutDnxfZjfpWWFNII',
-        linkedin: 'https://www.linkedin.com/in/bikram-panda-9740b622a',
-        category: 'Core Team',
-        department: 'Media'
-      },
+
 
       // Sub-Team Members
       // Technical Team Members

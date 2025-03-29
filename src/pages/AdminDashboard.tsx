@@ -399,7 +399,12 @@ const AdminDashboard: React.FC = () => {
       } : {
         ...newItem,
         date: newItem.date ? new Date(newItem.date).toISOString() : new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        // Ensure both status fields are updated for events
+        ...(activeTab === 'events' && {
+          status: newItem.registrationStatus,
+          registrationStatus: newItem.registrationStatus
+        })
       };
 
       await updateDoc(docRef, updateData);

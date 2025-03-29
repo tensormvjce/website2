@@ -42,10 +42,10 @@ const Navbar: React.FC = () => {
     { name: 'Teams', path: '/teams' },
     { name: 'Events', path: '/events' },
     { name: 'Posts', path: '/posts' },
-    { name: 'Blogs', path: '/blogs' },
   ];
 
   const rightNavItems = [
+    { name: 'Blogs', path: '/blogs' },
     { name: 'Projects', path: '/projects' },
     { name: 'Registrations', path: '/registrations' },
     { name: 'About Us', path: '/about' }
@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Left Navigation */}
-          <div className={`hidden md:flex flex-1 items-center justify-end space-x-16 pr-20 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
+          <div className={`hidden md:flex flex-1 items-center justify-end space-x-20 pr-24 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
             {leftNavItems.map((item, index) => (
               <Link
                 key={item.name}
@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Right Navigation */}
-          <div className={`hidden md:flex flex-1 items-center justify-start space-x-16 pl-20 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
+          <div className={`hidden md:flex flex-1 items-center justify-start space-x-20 pl-24 nav-items ${isExpanded ? 'nav-expanded' : 'nav-collapsed'}`}>
             {rightNavItems.map((item, index) => (
               <Link
                 key={item.name}
@@ -132,39 +132,6 @@ const Navbar: React.FC = () => {
                 {item.name}
               </Link>
             ))}
-            
-            {/* Authentication Buttons */}
-            <div className={`flex items-center space-x-4 nav-item-right`} 
-              style={{ '--item-index': rightNavItems.length } as React.CSSProperties & { '--item-index': number }}>
-              {currentUser ? (
-                <div className="flex items-center space-x-4">
-                  <span className="text-white text-sm">
-                    {currentUser.displayName || currentUser.email}
-                  </span>
-                  <button 
-                    onClick={handleLogout}
-                    className="navbar-button text-red-300 hover:text-red-200"
-                  >
-                    Logout
-                  </button>
-                </div>
-              ) : (
-                <button 
-                  onClick={handleLogin}
-                  className="navbar-button text-purple-300 hover:text-purple-200"
-                >
-                  Login
-                </button>
-              )}
-              {isAdmin && (
-                <Link 
-                  to="/admin"
-                  className="navbar-button text-blue-300 hover:text-blue-200"
-                >
-                  Admin Dashboard
-                </Link>
-              )}
-            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -204,45 +171,6 @@ const Navbar: React.FC = () => {
               {item.name}
             </Link>
           ))}
-          
-          {/* Mobile Authentication Buttons */}
-          <div className="flex flex-col items-center space-y-4 mt-8 w-full px-6">
-            {currentUser ? (
-              <>
-                <span className="text-white text-lg mb-2">
-                  {currentUser.displayName || currentUser.email}
-                </span>
-                <button 
-                  onClick={() => {
-                    handleLogout();
-                    toggleMenu();
-                  }}
-                  className="navbar-button text-red-300 hover:text-red-200 w-full"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <button 
-                onClick={() => {
-                  handleLogin();
-                  toggleMenu();
-                }}
-                className="navbar-button text-purple-300 hover:text-purple-200 w-full"
-              >
-                Login
-              </button>
-            )}
-            {isAdmin && (
-              <Link 
-                to="/admin"
-                onClick={toggleMenu}
-                className="navbar-button text-blue-300 hover:text-blue-200 w-full text-center"
-              >
-                Admin Dashboard
-              </Link>
-            )}
-          </div>
         </div>
       </div>
     </nav>

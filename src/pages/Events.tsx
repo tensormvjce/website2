@@ -159,9 +159,9 @@ const Events: React.FC = () => {
                       />
                     </div>
                     <div className={CARD_CONTENT_CLASSES}>
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center justify-between mb-4">
                         <h3 className={CARD_TITLE_CLASSES}>{event.title}</h3>
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-2 ${
                           event.status === 'Open' 
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
                             : event.status === 'Ended'

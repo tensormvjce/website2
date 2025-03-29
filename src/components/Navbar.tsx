@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logo from '../logo_white.png';
-import { useAuth } from '../contexts/AuthContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
   const location = useLocation();
-  const { currentUser, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   // Initial animation
@@ -19,19 +17,6 @@ const Navbar: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  const handleLogin = () => {
-    navigate('/login');
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Logout failed', error);
-    }
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

@@ -85,7 +85,7 @@ export const teamData: TeamYear[] = [
         name: 'Gunashekar',
         role: 'Media Lead',
         photo: 'https://github.com/user-attachments/assets/72b98870-7a43-4c2f-8825-d0b98246bd79',
-        linkedin: 'www.linkedin.com/in/gunashekarnaidu',
+        linkedin: 'https://www.linkedin.com/in/gunashekarnaidu',
         category: 'Core Team',
         department: 'Media'
       },
@@ -424,8 +424,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Gunashekar',
         role: 'Media Lead',
-        photo: 'https://github.com/user-attachments/assets/72b98870-7a43-4c2f-8825-d0b98246bd79',
-        linkedin: 'www.linkedin.com/in/gunashekarnaidu',
+        photo: 'https://github.com/user-attachments/assets/dd740ee9-58e2-4f8b-86ea-935650c7267a',
+        linkedin: 'https://www.linkedin.com/in/gunashekarnaidu',
         category: 'Core Team',
         department: 'Media'
       },

@@ -3,22 +3,22 @@ import { Brain, Rocket, Users, Code, Award, Globe } from 'lucide-react';
 
 const About = () => {
   const stats = [
-    { label: 'Active Members', value: '100+' },
+    { label: 'Active Members', value: '30+' },
     { label: 'Projects Completed', value: '10+' },
-    { label: 'Workshops Conducted', value: '20+' },
-    { label: 'Research Papers', value: '10+' },
+    { label: 'Workshops Conducted', value: '5+' },
+    { label: 'Research Papers', value: '2+' },
   ];
 
   const achievements = [
     {
       icon: <Award className="w-6 h-6" />,
-      title: 'National AI Competition Winners',
-      description: 'First place in the National AI Innovation Challenge 2024'
+      title: 'Club Achievements',
+      description: 'Successfully organized multiple AI workshops and events'
     },
     {
       icon: <Globe className="w-6 h-6" />,
-      title: 'Global Recognition',
-      description: 'Featured in top AI research conferences and publications'
+      title: 'Growing Community',
+      description: 'Building a vibrant AI/ML community within our college'
     },
     {
       icon: <Code className="w-6 h-6" />,

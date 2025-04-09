@@ -84,8 +84,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Gunashekar',
         role: 'Media Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHFg-_JZkHZUg/profile-displayphoto-shrink_400_400/B56ZOldxXfGkAg-/0/1733647867534?e=1744243200&v=beta&t=VsyMQ0b6RQuWefe5UP6fZMuzlbk_xbot7Sb6u8YNLaU',
-        linkedin: 'www.linkedin.com/in/gunashekarnaidu',
+        photo: 'https://i.postimg.cc/Jh9XhyJN/Whats-App-Image-2025-04-09-at-22-33-37-b43909fd.jpg',
+        linkedin: 'https://www.linkedin.com/in/gunashekarnaidu',
         category: 'Core Team',
         department: 'Media'
       },
@@ -424,8 +424,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Gunashekar',
         role: 'Media Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHFg-_JZkHZUg/profile-displayphoto-shrink_400_400/B56ZOldxXfGkAg-/0/1733647867534?e=1744243200&v=beta&t=VsyMQ0b6RQuWefe5UP6fZMuzlbk_xbot7Sb6u8YNLaU',
-        linkedin: 'www.linkedin.com/in/gunashekarnaidu',
+        photo: 'https://i.postimg.cc/Jh9XhyJN/Whats-App-Image-2025-04-09-at-22-33-37-b43909fd.jpg',
+        linkedin: 'https://www.linkedin.com/in/gunashekarnaidu',
         category: 'Core Team',
         department: 'Media'
       },

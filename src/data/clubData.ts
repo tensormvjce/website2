@@ -98,6 +98,7 @@ export const clubData = {
         'Gurbashish Sena Nayak',
         'Angelin Gia',
         'Vanshika Jain',
+        'Sunaina ',
       ],
       overview: 'The Content Team creates articles, blogs, newsletters, and other written content to highlight the club’s activities, events, and achievements.',
       responsibilities: [

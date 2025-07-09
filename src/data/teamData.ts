@@ -326,6 +326,7 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Content'
       },
+      
 
       // Media Team Members
       {
@@ -357,6 +358,14 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D5603AQGGcdbNDhgXmA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731924641621?e=1745452800&v=beta&t=OcbHjRhaya5btsowBqFkC8l_x_gBOFX2WUMW0NgqW_c',
         linkedin: 'https://www.linkedin.com/in/surabhi-m-r-baab98312/',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Sunaina ',
+        role: 'Member',
+        photo: '',
+        linkedin: 'https://www.linkedin.com/in/',
         category: 'Sub-Team Members',
         department: 'Media'
       },

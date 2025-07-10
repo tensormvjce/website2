@@ -53,8 +53,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Angel Susan',
         role: 'Design Lead',
-        photo: 'https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
-        linkedin: '',
+        photo: 'https://iili.io/FE6zBf4.jpg',
+        linkedin: 'https://www.linkedin.com/in/angel-susan-joseph-0837252aa',
         category: 'Core Team',
         department: 'Design'
       },
@@ -240,7 +240,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Z syed zuhaib ahmed',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/9ff1dbff-db71-4608-a7d6-b6a96a75511f',
+        photo: 'https://iili.io/FEic8Sn.md.jpg',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'
@@ -437,8 +437,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Angel Susan',
         role: 'Design Sub-Lead',
-        photo: 'https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
-        linkedin: '',
+        photo: 'https://iili.io/FE6zBf4.jpg',
+        linkedin: 'https://www.linkedin.com/in/angel-susan-joseph-0837252aa',
         category: 'Core Team',
         department: 'Design'
       },
@@ -652,7 +652,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Z syed zuhaib ahmed',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/9ff1dbff-db71-4608-a7d6-b6a96a75511f',
+        photo: 'https://iili.io/FEic8Sn.md.jpg',
         linkedin: '',
         category: 'Sub-Team Members',
         department: 'Design'

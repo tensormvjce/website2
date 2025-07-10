@@ -15,6 +15,332 @@ export interface TeamYear {
 
 export const teamData: TeamYear[] = [
   {
+  
+    year: '2025-26',
+    teamPhoto: '/team-photos/2023-24/team.jpg',
+    members: [
+      // Core Team
+      {
+        name: 'Bahulika',
+        role: 'Club Lead',
+        photo: 'https://github.com/user-attachments/assets/373ea9ff-f387-4c12-b649-9099c98fd33d',
+        linkedin: 'https://www.linkedin.com/in/j-bahulika-8b8237207',
+        category: 'Core Team'
+      },
+      {
+        name: 'Yusha',
+        role: 'Vice-Lead',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHTzBVD38cS_w/profile-displayphoto-shrink_400_400/B56ZOSO4GeGsAk-/0/1733325194494?e=1744243200&v=beta&t=zoG90sRPFjjxa85beK5Ooglep4XcQngYkEORoannzqc',
+        linkedin: '',
+        category: 'Core Team',
+      },
+      {
+        name: 'Rakshitha',
+        role: 'Technical Lead',
+        photo: 'https://github.com/user-attachments/assets/e9a92d4c-ebda-4a5c-aac4-f63790df271c',
+        linkedin: 'https://www.linkedin.com/in/rakshitha-p-j-0262612ab',
+        category: 'Core Team',
+        department: 'Technical'
+      },
+      {
+        name: 'Likith Yadav',
+        role: 'Technical Sub-Lead',
+        photo: 'https://github.com/user-attachments/assets/0cc512c1-bad9-4a74-b3f5-00907b863dc4',
+        linkedin: 'https://www.linkedin.com/in/likithyadavgn/',
+        category: 'Core Team',
+        department: 'Technical'
+      },
+      {
+        name: 'Angel Susan',
+        role: 'Design Lead',
+        photo: 'https://github.com/user-attachments/assets/dcec25ef-fea6-417f-b306-9bdbbed77ac0',
+        linkedin: '',
+        category: 'Core Team',
+        department: 'Design'
+      },
+      {
+        name: 'Ashwin',
+        role: 'Design Sub-Lead',
+        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQHQNZpZ-YbUmg/profile-displayphoto-shrink_400_400/B4EZPih25MGwAk-/0/1734672349026?e=1744243200&v=beta&t=jNQ2u_CduB9b2KQHqh7OWAfXK5JMR7YC5clu6sullpI',
+        linkedin: 'https://www.linkedin.com/in/ashwin-kumar-v-093661302',
+        category: 'Core Team',
+        department: 'Design'
+      },
+      
+      // Technical Team Members
+      {
+        name: 'DIYA R V',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/dfa51dc9-4161-4d9c-8d54-a212d74a078c',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Joshua Royar',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/155966e5-50df-4b05-835e-0f880a35a7b8',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Mohammad Sahif Beary',
+        role: 'Member',
+        photo: 'https://i.ibb.co/TxCgwWYM/PXL-20241127-050057011-PORTRAIT.jpg',
+        linkedin: 'https://www.linkedin.com/in/mohammad-sahif-beary-53983230a',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Harshith G Reddy',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/bdb48b83-5d38-4180-bf3e-34bb2cd2cc00',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Piratla Ankit Rama Datt',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQFYkh7otrbvEw/profile-displayphoto-shrink_200_200/B4EZPA.w1_H0Ak-/0/1734109500473?e=2147483647&v=beta&t=JlTUgFtyO1BcdvggcbL5Ui0xN_k5Rh2PVxCxQ-ACfV0',
+        linkedin: 'https://www.linkedin.com/in/piratla-ankit-rama-datt-302a6b333/',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Sathwik',
+        role: 'Member',
+        photo: 'https://i.ibb.co/3mpRpCNQ/IMG-20250212-WA0021.jpg',
+        linkedin: 'https://www.linkedin.com/in/sathwik-shetty-572b39314',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Aaghaaz Khan',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQGdE7oGmU8KRw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718446071474?e=1744243200&v=beta&t=cabvt8a6veY3sJ1fk0jHG2IDV8CxAQvGgs-7BPB2PQw',
+        linkedin: 'https://www.linkedin.com/in/aaghaaz-khan-778b372a8',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Preetika kour',
+        role: 'Member',
+        photo: '/avatars/default.jpg',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Rishi Anand',
+        role: 'Member',
+        photo: '/avatars/default.jpg',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Srikar T',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/4dfccada-0f7c-4df6-bc20-e44e46d435f3',
+        linkedin: 'https://www.linkedin.com/in/srikar-t-118581286/',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Sankeerth S banagar',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/afa402c0-ed58-4af8-8d81-f0f132e5114d',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      {
+        name: 'Amrutha Sindhu',
+        role: 'Member',
+        photo: 'https://iili.io/FEk8Vtf.jpg',
+        linkedin: 'https://www.linkedin.com/in/amrutha-sindhu-65b5a7279',
+        category: 'Sub-Team Members',
+        department: 'Technical'
+      },
+      // Design Team Members
+      {
+        name: 'Krishnapriya',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/fbe0b01a-bb44-4bae-be75-387ebeb79f0d',
+        linkedin: 'https://www.linkedin.com/in/krishna-priya-36334b2b8',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Suhana',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/c73d071f-7e5e-4a5d-99c4-bff1493b05f3',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Samanvitha R K',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHBaOpZaMZaMQ/profile-displayphoto-shrink_400_400/B56ZQ2vcElH0Ag-/0/1736085193709?e=1744243200&v=beta&t=GFO4tge4VdXbqijZX_oDm5iUPqhGMIGHMCaJGm-0P2A',
+        linkedin: 'https://www.linkedin.com/in/samanvitha-r-k-892b51290/',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Bharath Sai Karnati',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQFkMbqHo-22aA/profile-displayphoto-shrink_400_400/B56ZOsz5keG4Ak-/0/1733771107309?e=1744243200&v=beta&t=kBXjKnQdxtPFlHpnQHH2xJV9LUcd9WKfFCqiT5fGXfU',
+        linkedin: 'https://www.linkedin.com/in/bharathsj3026',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Gouthami B',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/a3376f9e-73c2-470d-9d91-190d42ac0739',
+        linkedin: 'https://www.linkedin.com/in/gouthami-b-476193318',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Z syed zuhaib ahmed',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/9ff1dbff-db71-4608-a7d6-b6a96a75511f',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Om Babu Singh',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/54d9c8f9-6079-424d-b4ad-d2f6c049e20c',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+
+      // Content Team Members
+      {
+        name: 'Angelin gia',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQE81h4krdgsng/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1727438134179?e=1744243200&v=beta&t=2gyv2at4gOt5XIzGRtz9ZMUqvtd7Lr3mZAoETAfMFhg',
+        linkedin: 'https://www.linkedin.com/in/gia-victor-40493032a',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+      {
+        name: 'Vanshika jain',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQHZsVNU2-dJQA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1690277603957?e=1744243200&v=beta&t=H8touRm1wvwlZ0_vGyMD_3IJnHHWH7Dzg_B26iQXjxg',
+        linkedin: 'https://www.linkedin.com/in/vanshika-jain-b97334285',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+      {
+        name: 'Sanjit Kumaar S',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/cab1488f-334f-4047-bfc0-c345d96cb1c3',
+        linkedin: 'https://www.linkedin.com/in/sanjit-ss-b76985228',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+      
+
+      // Media Team Members
+      {
+        name: 'Bhavesh',
+        role: 'Member',
+        photo: 'https://github.com/user-attachments/assets/f73aabb7-d2b4-421a-8fcd-2ba2139f54c1',
+        linkedin: 'https://www.linkedin.com/in/bhavesh-chhabria-21630433b',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Prasanna Rajendran',
+        role: 'Member',
+        photo: '',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Kaviya S',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQHfv94uILvFhw/profile-displayphoto-shrink_400_400/B4EZR.jLZEHMAg-/0/1737289939785?e=1744243200&v=beta&t=ht2LcSssLRvHpZDbO9POD2qVSRK8PdBEmhi51T4AHDE',
+        linkedin: 'https://www.linkedin.com/in/kaviya-sendhil-009681347',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Surabhi M R',
+        role: 'Member',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQGGcdbNDhgXmA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731924641621?e=1745452800&v=beta&t=OcbHjRhaya5btsowBqFkC8l_x_gBOFX2WUMW0NgqW_c',
+        linkedin: 'https://www.linkedin.com/in/surabhi-m-r-baab98312/',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Sunaina ',
+        role: 'Member',
+        photo: 'https://i.ibb.co/tNBZP5m/DSC5742.jpg',
+        linkedin: 'https://i.ibb.co/tNBZP5m/DSC5742.jpg',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Tejashwini Ravi Matti',
+        role: 'Member',
+        photo: 'https://i.ibb.co/8CJv1c7/IMG-20250710-132115.jpg',
+        linkedin: 'https://www.linkedin.com/in/tejashwini-ravi-matti-586004301',
+        category: 'Sub-Team Members',
+        department: 'Design'
+      },
+      {
+        name: 'Syeda Shifa Reyan',
+        role: 'Member',
+        photo: 'https://iili.io/FEemNtV.jpg',
+        linkedin: 'https://www.linkedin.com/in/syeda-shifa-reyan-9b2113301',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+      {
+        name: 'Rishikesh s',
+        role: 'Member',
+        photo: 'https://iili.io/FEerNZG.md.jpg',
+        linkedin: 'https://www.linkedin.com/in/rishikesh-s-8b5845300',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Sanjana Suresh',
+        role: 'Member',
+        photo: 'https://iili.io/FEk9JGS.jpg',
+        linkedin: 'http://linkedin.com/in/Sanjana-suresh-12993a358',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+      {
+        name: 'Keerthi S Ragate',
+        role: 'Member',
+        photo: 'https://iili.io/FEkh7DB.jpg',
+        linkedin: 'https://www.linkedin.com/in/keerthi-s-ragate-81029335a',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
+      {
+        name: 'Ashika Vijaykumar',
+        role: 'Member',
+        photo: 'https://iili.io/FEvBK6G.md.jpg',
+        linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+    ]
+  },
+  {
     year: '2024-25',
     teamPhoto: '/team-photos/2024-25/team.jpg',
     members: [
@@ -134,16 +460,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Mohammad Sahif Beary',
         role: 'Member',
-        photo: '',
-        linkedin: '',
-        category: 'Sub-Team Members',
-        department: 'Technical'
-      },
-      {
-        name: 'Shravik',
-        role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/a559c9b5-84a2-4a9a-9240-9f7917dda376',
-        linkedin: 'https://www.linkedin.com/in/shravik',
+        photo: 'https://i.ibb.co/TxCgwWYM/PXL-20241127-050057011-PORTRAIT.jpg',
+        linkedin: 'https://www.linkedin.com/in/mohammad-sahif-beary-53983230a',
         category: 'Sub-Team Members',
         department: 'Technical'
       },
@@ -166,7 +484,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Sathwik',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/f8146e88-30a4-455a-af60-b174d8d541f6',
+        photo: 'https://i.ibb.co/3mpRpCNQ/IMG-20250212-WA0021.jpg',
         linkedin: 'https://www.linkedin.com/in/sathwik-shetty-572b39314',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -223,7 +541,7 @@ export const teamData: TeamYear[] = [
         name: 'Amrutha Sindhu',
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/321deeb6-4c61-4488-a10b-e19c96e28615',
-        linkedin: '',
+        linkedin: 'https://www.linkedin.com/in/amrutha-sindhu-65b5a7279',
         category: 'Sub-Team Members',
         department: 'Technical'
       },
@@ -361,14 +679,6 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Media'
       },
-      {
-        name: 'Sunaina ',
-        role: 'Member',
-        photo: '',
-        linkedin: 'https://www.linkedin.com/in/',
-        category: 'Sub-Team Members',
-        department: 'Media'
-      },
     ]
   },
   {
@@ -502,5 +812,5 @@ export const teamData: TeamYear[] = [
       }
     ]
   },
-  // Add 2025-26 team data here when available
 ];
+

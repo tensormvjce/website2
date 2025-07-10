@@ -107,6 +107,8 @@ export const clubData = {
         'Sanjana Suresh',
         'Ashika Vijaykumar',
         'Thanu Pal R',
+        'Glain Avila D’Souza',
+        'Dhanush P G',
       ],
       overview: 'The Content Team creates articles, blogs, newsletters, and other written content to highlight the club’s activities, events, and achievements.',
       responsibilities: [

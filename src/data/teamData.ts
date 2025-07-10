@@ -377,6 +377,14 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Content'
       },
+      {
+        name: 'Barath K',
+        role: 'Member',
+        photo: 'https://iili.io/FE4Uas9.jpg',
+        linkedin: 'https://www.linkedin.com/in/barath-kalidoss-7a1324340',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
     ]
   },
   {

@@ -87,6 +87,7 @@ export const clubData = {
         'Rishikesh s',
         'Keerthi S Ragate',
         'Onkar Vishwajeet',
+        'Barath K',
       ],
       overview: 'The Media Team includes photographers and social media handlers, responsible for managing the club’s social media presence and producing high-quality media content.',
       responsibilities: [

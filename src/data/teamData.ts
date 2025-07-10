@@ -82,6 +82,22 @@ export const teamData: TeamYear[] = [
         category: 'Core Team',
         department: 'Content'
       },
+      {
+        name: 'Onkar Vishwajeet',
+        role: 'Media Lead',
+        photo: 'https://iili.io/FESVJ7j.md.png',
+        linkedin: 'https://www.linkedin.com/in/onkar-vishwajeet-242490327',
+        category: 'Core Team',
+        department: 'Media'
+      },
+      {
+        name: 'Aditya Jeevan Naik',
+        role: 'Media Sub-Lead',
+        photo: '',
+        linkedin: '',
+        category: 'Core Team',
+        department: 'Media'
+      },
       
       // Technical Team Members
       {
@@ -112,7 +128,7 @@ export const teamData: TeamYear[] = [
         name: 'Harshith G Reddy',
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/bdb48b83-5d38-4180-bf3e-34bb2cd2cc00',
-        linkedin: '',
+        linkedin: 'https://www.linkedin.com/in/harshith-g-reddy-3b7549353',
         category: 'Sub-Team Members',
         department: 'Technical'
       },
@@ -269,7 +285,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Kaviya S',
         role: 'Member',
-        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQHfv94uILvFhw/profile-displayphoto-shrink_400_400/B4EZR.jLZEHMAg-/0/1737289939785?e=1744243200&v=beta&t=ht2LcSssLRvHpZDbO9POD2qVSRK8PdBEmhi51T4AHDE',
+        photo: 'https://iili.io/FESn14e.jpg',
         linkedin: 'https://www.linkedin.com/in/kaviya-sendhil-009681347',
         category: 'Sub-Team Members',
         department: 'Media'
@@ -335,6 +351,14 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://iili.io/FEvBK6G.md.jpg',
         linkedin: '',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
+      {
+        name: 'Thanu Pal R',
+        role: 'Member',
+        photo: 'https://iili.io/FESaz6x.md.jpg',
+        linkedin: 'https://www.linkedin.com/in/contactthanu',
         category: 'Sub-Team Members',
         department: 'Content'
       },
@@ -469,7 +493,7 @@ export const teamData: TeamYear[] = [
         name: 'Harshith G Reddy',
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/bdb48b83-5d38-4180-bf3e-34bb2cd2cc00',
-        linkedin: '',
+        linkedin: 'https://www.linkedin.com/in/harshith-g-reddy-3b7549353',
         category: 'Sub-Team Members',
         department: 'Technical'
       },
@@ -666,7 +690,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Kaviya S',
         role: 'Member',
-        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQHfv94uILvFhw/profile-displayphoto-shrink_400_400/B4EZR.jLZEHMAg-/0/1737289939785?e=1744243200&v=beta&t=ht2LcSssLRvHpZDbO9POD2qVSRK8PdBEmhi51T4AHDE',
+        photo: 'https://iili.io/FESn14e.jpg',
         linkedin: 'https://www.linkedin.com/in/kaviya-sendhil-009681347',
         category: 'Sub-Team Members',
         department: 'Media'

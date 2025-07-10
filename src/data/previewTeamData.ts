@@ -2,7 +2,7 @@ export const previewMembers = [
   {
     id: 1,
     name: "Vayun",
-    image: "https://media.licdn.com/dms/image/v2/D5603AQFWY2j5mqLOGQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1722917947782?e=1744243200&v=beta&t=0zKXH96Y3weJIixjYCi_22OKw4GbyILyWBfswkYu1jA",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQGoFrrRj_ogdg/profile-displayphoto-shrink_400_400/B56ZZ3rmmgHAAg-/0/1745764641844?e=1757548800&v=beta&t=WRGsBTDo2dKZKpr15jGsbY4saH_WDfjsB60LbFl0A3Q",
   },
   {
     id: 2,

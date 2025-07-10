@@ -66,6 +66,22 @@ export const teamData: TeamYear[] = [
         category: 'Core Team',
         department: 'Design'
       },
+      {
+        name: 'Angelin gia',
+        role: 'Content Lead',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQE81h4krdgsng/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1727438134179?e=1744243200&v=beta&t=2gyv2at4gOt5XIzGRtz9ZMUqvtd7Lr3mZAoETAfMFhg',
+        linkedin: 'https://www.linkedin.com/in/gia-victor-40493032a',
+        category: 'Core Team',
+        department: 'Content'
+      },
+      {
+        name: 'Piratla Ankit Rama Datt',
+        role: 'Content Sub-Lead',
+        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQFYkh7otrbvEw/profile-displayphoto-shrink_200_200/B4EZPA.w1_H0Ak-/0/1734109500473?e=2147483647&v=beta&t=JlTUgFtyO1BcdvggcbL5Ui0xN_k5Rh2PVxCxQ-ACfV0',
+        linkedin: 'https://www.linkedin.com/in/piratla-ankit-rama-datt-302a6b333/',
+        category: 'Core Team',
+        department: 'Content'
+      },
       
       // Technical Team Members
       {
@@ -97,14 +113,6 @@ export const teamData: TeamYear[] = [
         role: 'Member',
         photo: 'https://github.com/user-attachments/assets/bdb48b83-5d38-4180-bf3e-34bb2cd2cc00',
         linkedin: '',
-        category: 'Sub-Team Members',
-        department: 'Technical'
-      },
-      {
-        name: 'Piratla Ankit Rama Datt',
-        role: 'Member',
-        photo: 'https://media.licdn.com/dms/image/v2/D4E03AQFYkh7otrbvEw/profile-displayphoto-shrink_200_200/B4EZPA.w1_H0Ak-/0/1734109500473?e=2147483647&v=beta&t=JlTUgFtyO1BcdvggcbL5Ui0xN_k5Rh2PVxCxQ-ACfV0',
-        linkedin: 'https://www.linkedin.com/in/piratla-ankit-rama-datt-302a6b333/',
         category: 'Sub-Team Members',
         department: 'Technical'
       },
@@ -224,14 +232,6 @@ export const teamData: TeamYear[] = [
 
       // Content Team Members
       {
-        name: 'Angelin gia',
-        role: 'Member',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQE81h4krdgsng/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1727438134179?e=1744243200&v=beta&t=2gyv2at4gOt5XIzGRtz9ZMUqvtd7Lr3mZAoETAfMFhg',
-        linkedin: 'https://www.linkedin.com/in/gia-victor-40493032a',
-        category: 'Sub-Team Members',
-        department: 'Content'
-      },
-      {
         name: 'Vanshika jain',
         role: 'Member',
         photo: 'https://media.licdn.com/dms/image/v2/D5603AQHZsVNU2-dJQA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1690277603957?e=1744243200&v=beta&t=H8touRm1wvwlZ0_vGyMD_3IJnHHWH7Dzg_B26iQXjxg',
@@ -348,7 +348,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Vayun',
         role: 'Club Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQFWY2j5mqLOGQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1722917947782?e=1744243200&v=beta&t=0zKXH96Y3weJIixjYCi_22OKw4GbyILyWBfswkYu1jA',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQGoFrrRj_ogdg/profile-displayphoto-shrink_400_400/B56ZZ3rmmgHAAg-/0/1745764641844?e=1757548800&v=beta&t=WRGsBTDo2dKZKpr15jGsbY4saH_WDfjsB60LbFl0A3Q',
         linkedin: 'https://www.linkedin.com/in/vayunv7/',
         category: 'Core Team'
       },
@@ -689,7 +689,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Vayun',
         role: 'Club Lead',
-        photo: 'https://media.licdn.com/dms/image/v2/D5603AQFWY2j5mqLOGQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1722917947782?e=1744243200&v=beta&t=0zKXH96Y3weJIixjYCi_22OKw4GbyILyWBfswkYu1jA',
+        photo: 'https://media.licdn.com/dms/image/v2/D5603AQGoFrrRj_ogdg/profile-displayphoto-shrink_400_400/B56ZZ3rmmgHAAg-/0/1745764641844?e=1757548800&v=beta&t=WRGsBTDo2dKZKpr15jGsbY4saH_WDfjsB60LbFl0A3Q',
         linkedin: 'https://www.linkedin.com/in/vayunv7/',
         category: 'Core Team'
       },

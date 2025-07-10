@@ -43,6 +43,7 @@ export const clubData = {
         'Gouthami B',
         'Z Syed Zuhaib Ahmed',
         'Om Babu Singh',
+        'Tejashwini Ravi Matti',
       ],
       overview: 'The Design Team develops and maintains the club’s visual brand identity, collaborating with the Tech Team to design and manage the club’s website and Instagram page. They focus on creating a visually appealing, user-friendly experience.',
       responsibilities: [
@@ -83,6 +84,8 @@ export const clubData = {
         'Bhavesh',
         'Prasanna Rajendran',
         'Kaviya S',
+        'Rishikesh s',
+        'Keerthi S Ragate',
       ],
       overview: 'The Media Team includes photographers and social media handlers, responsible for managing the club’s social media presence and producing high-quality media content.',
       responsibilities: [
@@ -99,6 +102,9 @@ export const clubData = {
         'Angelin Gia',
         'Vanshika Jain',
         'Sunaina ',
+        'Syeda Shifa Reyan',
+        'Sanjana Suresh',
+        'Ashika Vijaykumar',
       ],
       overview: 'The Content Team creates articles, blogs, newsletters, and other written content to highlight the club’s activities, events, and achievements.',
       responsibilities: [

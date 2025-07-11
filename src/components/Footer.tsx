@@ -38,7 +38,7 @@ const Footer = () => {
 
   const teamMembers = [
     {
-      image: likith,
+      image: "https://i.ibb.co/nqVQDw7J/my-img.jpg",
       alt: "Likit",
       linkedin: "https://www.linkedin.com/in/likithyadavgn"
     },

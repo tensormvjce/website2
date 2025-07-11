@@ -45,7 +45,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Likith Yadav',
         role: 'Technical Sub-Lead',
-        photo: 'https://github.com/user-attachments/assets/0cc512c1-bad9-4a74-b3f5-00907b863dc4',
+        photo: 'https://i.ibb.co/nqVQDw7J/my-img.jpg',
         linkedin: 'https://www.linkedin.com/in/likithyadavgn/',
         category: 'Core Team',
         department: 'Technical'
@@ -475,7 +475,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Likith Yadav',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/0cc512c1-bad9-4a74-b3f5-00907b863dc4',
+        photo: 'https://i.ibb.co/nqVQDw7J/my-img.jpg',
         linkedin: 'https://www.linkedin.com/in/likithyadavgn/',
         category: 'Sub-Team Members',
         department: 'Technical'
@@ -836,7 +836,7 @@ export const teamData: TeamYear[] = [
       {
         name: 'Likith Yadav',
         role: 'Member',
-        photo: 'https://github.com/user-attachments/assets/0cc512c1-bad9-4a74-b3f5-00907b863dc4',
+        photo: 'https://i.ibb.co/nqVQDw7J/my-img.jpg',
         linkedin: 'https://www.linkedin.com/in/likithyadavgn/',
         category: 'Sub-Team Members',
         department: 'Design'

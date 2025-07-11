@@ -393,6 +393,14 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Content'
       },
+      {
+        name: 'Shashikanth',
+        role: 'Member',
+        photo: 'https://iili.io/FGo95ZX.md.jpg',
+        linkedin: 'https://www.linkedin.com/in/shashikanth-7a891b343',
+        category: 'Sub-Team Members',
+        department: 'Media'
+      },
     ]
   },
   {

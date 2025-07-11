@@ -89,6 +89,7 @@ export const clubData = {
         'Onkar Vishwajeet',
         'Barath K',
         'Aditya Jeevan Naik',
+        'Shashikanth',
       ],
       overview: 'The Media Team includes photographers and social media handlers, responsible for managing the club’s social media presence and producing high-quality media content.',
       responsibilities: [

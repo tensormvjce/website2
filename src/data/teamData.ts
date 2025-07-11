@@ -31,7 +31,7 @@ export const teamData: TeamYear[] = [
         name: 'Yusha',
         role: 'Vice-Lead',
         photo: 'https://iili.io/FEgz3ps.jpg',
-        linkedin: '',
+        linkedin: 'http://www.linkedin.com/in/md-yusha0001',
         category: 'Core Team',
       },
       {
@@ -93,8 +93,8 @@ export const teamData: TeamYear[] = [
       {
         name: 'Aditya Jeevan Naik',
         role: 'Media Sub-Lead',
-        photo: '',
-        linkedin: '',
+        photo: 'https://iili.io/FGKOuiN.md.jpg',
+        linkedin: 'https://www.linkedin.com/in/aditya-jeevan-naik-565a792b5',
         category: 'Core Team',
         department: 'Media'
       },
@@ -385,6 +385,14 @@ export const teamData: TeamYear[] = [
         category: 'Sub-Team Members',
         department: 'Media'
       },
+      {
+        name: 'Likhitha S',
+        role: 'Member',
+        photo: 'https://iili.io/FEDOJCQ.md.jpg',
+        linkedin: 'http://linkedin.com/in/likhitha-s-a13496374',
+        category: 'Sub-Team Members',
+        department: 'Content'
+      },
     ]
   },
   {
@@ -476,7 +484,7 @@ export const teamData: TeamYear[] = [
         name: 'Yusha',
         role: 'Member',
         photo: 'https://iili.io/FEgz3ps.jpg',
-        linkedin: '',
+        linkedin: 'http://www.linkedin.com/in/md-yusha0001',
         category: 'Sub-Team Members',
         department: 'Technical'
       },
@@ -853,7 +861,7 @@ export const teamData: TeamYear[] = [
         name: 'Yusha',
         role: 'Member',
         photo: 'https://iili.io/FEgz3ps.jpg',
-        linkedin: '',
+        linkedin: 'http://www.linkedin.com/in/md-yusha0001',
         category: 'Sub-Team Members',
         department: 'Design'
       }

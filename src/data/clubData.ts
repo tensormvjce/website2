@@ -88,6 +88,7 @@ export const clubData = {
         'Keerthi S Ragate',
         'Onkar Vishwajeet',
         'Barath K',
+        'Aditya Jeevan Naik',
       ],
       overview: 'The Media Team includes photographers and social media handlers, responsible for managing the club’s social media presence and producing high-quality media content.',
       responsibilities: [
@@ -110,6 +111,7 @@ export const clubData = {
         'Thanu Pal R',
         'Glain Avila D’Souza',
         'Dhanush P G',
+        'Likhitha S',
       ],
       overview: 'The Content Team creates articles, blogs, newsletters, and other written content to highlight the club’s activities, events, and achievements.',
       responsibilities: [

@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import logo from "../logo_white.png";
-import likith from "../assets/team/likith1.png";
 import yusha from "../assets/team/yusha.jpg";
 
 const Footer = () => {

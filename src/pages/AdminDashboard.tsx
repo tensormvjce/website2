@@ -79,7 +79,7 @@ const AdminDashboard: React.FC = () => {
 
   // Get 2024-25 team members
   const currentTeamMembers = useMemo(() => {
-    const currentYear = teamData.find(year => year.year === '2024-25');
+    const currentYear = teamData.find(year => year.year === '2025-26');
     return currentYear ? currentYear.members : [];
   }, []);
 
